@@ -1,0 +1,115 @@
+{
+  "GET /v2/phone_numbers": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "pn-fixture-001",
+          "record_type": "phone_number",
+          "phone_number": "+15555550100",
+          "country_iso_alpha2": "US",
+          "status": "active",
+          "tags": ["fixture"],
+          "connection_name": "Fixture Connection",
+          "customer_reference": null,
+          "messaging_profile_id": "mp-fixture-001",
+          "billing_group_id": null,
+          "emergency_enabled": false,
+          "emergency_address_id": null,
+          "emergency_status": "disabled",
+          "call_forwarding_enabled": false,
+          "cnam_listing_enabled": false,
+          "caller_id_name_enabled": false,
+          "call_recording_enabled": false,
+          "t38_fax_gateway_enabled": false,
+          "purchased_at": "2026-01-05T09:30:00.000000Z",
+          "created_at": "2026-01-05T09:30:00.000000Z",
+          "updated_at": "2026-01-05T09:30:00.000000Z",
+          "phone_number_type": "local",
+          "inbound_call_screening": "disabled",
+          "hd_voice_enabled": false,
+          "deletion_lock_enabled": false,
+          "activated_at": "2026-01-05T09:31:00Z"
+        },
+        {
+          "id": "pn-fixture-002",
+          "record_type": "phone_number",
+          "phone_number": "+15555550101",
+          "country_iso_alpha2": "US",
+          "status": "active",
+          "tags": ["fixture", "toll-free"],
+          "connection_name": "Fixture Connection",
+          "customer_reference": null,
+          "messaging_profile_id": null,
+          "billing_group_id": "bg-fixture-001",
+          "emergency_enabled": false,
+          "emergency_address_id": null,
+          "emergency_status": "disabled",
+          "call_forwarding_enabled": true,
+          "cnam_listing_enabled": true,
+          "caller_id_name_enabled": true,
+          "call_recording_enabled": true,
+          "t38_fax_gateway_enabled": false,
+          "purchased_at": "2026-01-06T11:00:00.000000Z",
+          "created_at": "2026-01-06T11:00:00.000000Z",
+          "updated_at": "2026-01-07T08:15:00.000000Z",
+          "phone_number_type": "toll_free",
+          "inbound_call_screening": "disabled",
+          "hd_voice_enabled": true,
+          "deletion_lock_enabled": false,
+          "activated_at": "2026-01-06T11:01:00Z"
+        }
+      ],
+      "meta": {
+        "total_pages": 1,
+        "total_results": 2,
+        "page_number": 1,
+        "page_size": 20
+      }
+    }
+  },
+  "GET /v2/balance": {
+    "status": 200,
+    "body": {
+      "data": {
+        "record_type": "balance",
+        "balance": "25.50",
+        "currency": "USD",
+        "pending": "0.00",
+        "credit_limit": "0.00",
+        "available_credit": "25.50"
+      }
+    }
+  },
+  "GET /v2/number_orders/{id}": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "no-fixture-001",
+        "record_type": "number_order",
+        "phone_numbers_count": 1,
+        "connection_id": "conn-fixture-001",
+        "messaging_profile_id": "mp-fixture-001",
+        "billing_group_id": "bg-fixture-001",
+        "sub_number_orders_ids": ["sno-fixture-001"],
+        "status": "success",
+        "customer_reference": "fixture-order",
+        "created_at": "2026-01-08T10:00:00.000000Z",
+        "updated_at": "2026-01-08T10:02:00.000000Z",
+        "requirements_met": true,
+        "phone_numbers": [
+          {
+            "id": "pn-fixture-100",
+            "record_type": "number_order_phone_number",
+            "phone_number": "+15555550100",
+            "status": "success",
+            "country_iso_alpha2": "US",
+            "order_request_id": "rq-fixture-001",
+            "sub_number_order_id": "sno-fixture-001"
+
+          }
+        ]
+      }
+    }
+  }
+}
