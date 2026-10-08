@@ -46,3 +46,4 @@ Five research delegates timed out with no useful returns; no independent reviewe
 
 - 2026-10-07: [domain apps, background tasks, storage](DECISIONS_2026-10-07_apps_tasks_storage.md) — executed findings on FastMCPApp visibility, TasksExtension, encrypted OAuthProxy storage, and the rejected Telnyx KV store adapter.
 - 2026-10-08: [live Telnyx OAuth acceptance](DECISIONS_2026-10-08_live_oauth.md) — schema scope `admin` rejected live (scopes now from RFC 8414 metadata), introspection rate limit (5/60 s) requires the documented introspection cache, full localhost login + BYOK `execute` verified.
+- 2026-10-08: [Python client, TypeScript application, examples](DECISIONS_2026-10-08_client_app.md) — pre-implementation verification of pinned contracts (14 workspaces, MockLanguageModelV4, @ai-sdk/mcp and ext-apps exports, @telnyx/video export drift) and the user-owned acceptance gates U1–U7.
