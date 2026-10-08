@@ -13,7 +13,5 @@
   // Parallel-worker scope exclusions — each owning worker re-enables strict
   // checking for their subtree when they land it:
   //   host worker:   src/host, tests/e2e
-  //   mcp worker:    tests/contracts is excluded only while src/mcp/tools.ts is
-  //                  an intentional RED import (TS2307). Re-include on landing.
-  "exclude": ["src/host", "tests/e2e", "tests/contracts"]
+  "exclude": ["src/host", "tests/e2e"]
 }
