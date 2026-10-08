@@ -31,7 +31,7 @@ const targetUrl = new URL(target);
 // client; the rest mirror what the transport sends.
 const EXPOSED_HEADERS = "mcp-session-id, mcp-protocol-version, www-authenticate";
 const ALLOWED_HEADERS =
-  "authorization, content-type, accept, mcp-session-id, mcp-protocol-version, last-event-id";
+  "authorization, content-type, accept, mcp-method, mcp-name, mcp-session-id, mcp-protocol-version, last-event-id";
 
 function applyCors(req, res) {
   const origin = req.headers.origin;

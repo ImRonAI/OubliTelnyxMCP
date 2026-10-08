@@ -20,6 +20,7 @@ export function createOubliaiMcpClient({
       type: "http",
       url,
       headers: { Authorization: `Bearer ${token}` },
+      fetch: globalThis.fetch.bind(globalThis),
     },
     capabilities: mcpAppClientCapabilities,
   });
