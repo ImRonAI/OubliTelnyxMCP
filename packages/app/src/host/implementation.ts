@@ -7,8 +7,8 @@ import {
   type Resource,
   type Tool,
 } from "@modelcontextprotocol/client";
-import { getTheme, onThemeChange } from "./theme";
-import { HOST_STYLE_VARIABLES } from "./host-styles";
+import { getTheme, onThemeChange } from "./theme.js";
+import { HOST_STYLE_VARIABLES } from "./host-styles.js";
 
 
 // oubliai: sandbox proxy base URL comes from config (`SANDBOX_PROXY_BASE_URL`,
@@ -133,6 +133,9 @@ async function getUiResource(serverInfo: ServerInfo, uri: string): Promise<UiRes
   }
 
   const content = resource.contents[0];
+  if (!content) {
+    throw new Error(`Resource not found: ${uri}`);
+  }
 
   // Per the MCP App specification, "text/html;profile=mcp-app" signals this
   // resource is indeed for an MCP App UI.
@@ -239,7 +242,7 @@ export async function initializeApp(
   // Schedule tool call result (or cancellation) to be sent to MCP App
   resultPromise.then(
     (result) => {
-      log.info("Sending tool call result to MCP App:", result);
+      log.info("Sending tool call result to MCP App");
       appBridge.sendToolResult(result);
     },
     (error) => {
@@ -321,6 +324,7 @@ export function newAppBridge(
   // alongside displayMode there would race the layout). Height stays
   // flexible (maxHeight) so the view can keep driving it via sendSizeChanged.
   const iframeResizeObserver = new ResizeObserver(([entry]) => {
+    if (!entry) return;
     const width = Math.round(entry.contentRect.width);
     if (width > 0) {
       appBridge.sendHostContextChange({

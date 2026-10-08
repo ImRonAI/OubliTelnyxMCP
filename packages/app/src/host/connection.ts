@@ -123,10 +123,7 @@ export async function readUiResource(
     throw new Error(`Unsupported MIME type: ${content.mimeType}`);
   }
 
-  const html =
-    typeof content.blob === "string"
-      ? atob(content.blob)
-      : String(content.text ?? "");
+  const html = "blob" in content ? atob(content.blob) : content.text;
 
   const record = content as unknown as Record<string, unknown>;
   const contentMeta = readUiMeta(record["_meta"] ?? record["meta"]);
