@@ -377,10 +377,6 @@ export function newAppBridge(
     const style = getComputedStyle(iframe);
     const isBorderBox = style.boxSizing === "border-box";
 
-    // Animate the change for a smooth transition.
-    const from: Keyframe = {};
-    const to: Keyframe = {};
-
     if (width !== undefined) {
       if (isBorderBox) {
         width += parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth);
@@ -390,18 +386,14 @@ export function newAppBridge(
       // width; we honor that as a floor but allow the iframe to expand when
       // the host layout allows. And we use `min(..., 100%)` so that the iframe
       // shrinks with its container.
-      from.minWidth = `${iframe.offsetWidth}px`;
-      iframe.style.minWidth = to.minWidth = `min(${width}px, 100%)`;
+      iframe.style.minWidth = `min(${width}px, 100%)`;
     }
     if (height !== undefined) {
       if (isBorderBox) {
         height += parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
       }
-      from.height = `${iframe.offsetHeight}px`;
-      iframe.style.height = to.height = `${height}px`;
+      iframe.style.height = `${height}px`;
     }
-
-    iframe.animate([from, to], { duration: 300, easing: "ease-out" });
   };
 
   // Handle display mode change requests from the app

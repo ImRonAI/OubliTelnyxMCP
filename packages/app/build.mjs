@@ -40,6 +40,93 @@ const PAGE_HTML = `<!doctype html>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
     <title>Oubliai host</title>
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--color-background-secondary);
+        color: var(--color-text-primary);
+        font-family: var(--font-sans);
+      }
+      #app {
+        display: grid;
+        gap: 20px;
+        width: min(100%, 1280px);
+        margin: 0 auto;
+        padding: 24px;
+      }
+      .host-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      select, input, button {
+        min-height: 40px;
+        border: var(--border-width-regular) solid var(--color-border-secondary);
+        border-radius: var(--border-radius-md);
+        background: var(--color-background-primary);
+        color: var(--color-text-primary);
+        font: inherit;
+      }
+      select, input { padding: 8px 12px; }
+      button {
+        padding: 8px 16px;
+        cursor: pointer;
+        font-weight: var(--font-weight-semibold);
+      }
+      button:focus-visible, select:focus-visible, input:focus-visible {
+        outline: 2px solid var(--color-ring-primary);
+        outline-offset: 2px;
+      }
+      button:disabled {
+        background: var(--color-background-tertiary);
+        color: light-dark(#4b5563, #d1d5db);
+        cursor: not-allowed;
+      }
+      #view:empty { display: none; }
+      #app-frame { display: block; }
+      #media-panel {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        gap: 12px;
+        padding: 20px;
+        border: var(--border-width-regular) solid var(--color-border-primary);
+        border-radius: var(--border-radius-xl);
+        background: var(--color-background-primary);
+        box-shadow: var(--shadow-sm);
+      }
+      #media-panel-title, #media-panel label, #media-panel output {
+        grid-column: 1 / -1;
+      }
+      #media-panel-title {
+        margin: 0;
+        font-size: var(--font-heading-lg-size);
+        line-height: var(--font-heading-lg-line-height);
+      }
+      #media-panel label {
+        color: var(--color-text-secondary);
+        font-size: var(--font-text-sm-size);
+        font-weight: var(--font-weight-medium);
+      }
+      #media-panel output {
+        min-height: var(--font-text-sm-line-height);
+        color: var(--color-text-secondary);
+        font-size: var(--font-text-sm-size);
+      }
+      #media-panel output[data-media-state="denied"],
+      #media-panel output[data-media-state="error"] {
+        color: var(--color-text-danger);
+      }
+      #media-panel output[data-media-state="mic-ready"] {
+        color: var(--color-text-success);
+      }
+      @media (max-width: 560px) {
+        #app { padding: 16px; }
+        #media-panel { grid-template-columns: 1fr; }
+        #media-panel button { width: 100%; }
+      }
+    </style>
   </head>
   <body>
     <div id="app"></div>

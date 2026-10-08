@@ -15,6 +15,19 @@ async function mediaState(page: import("@playwright/test").Page): Promise<MediaD
   });
 }
 
+async function mediaPanelLayout(
+  page: import("@playwright/test").Page,
+): Promise<{ display: string; gap: number; borderRadius: number }> {
+  return page.locator("#media-panel").evaluate((panel) => {
+    const styles = getComputedStyle(panel);
+    return {
+      display: styles.display,
+      gap: Number.parseFloat(styles.gap),
+      borderRadius: Number.parseFloat(styles.borderRadius),
+    };
+  });
+}
+
 test("microphone denial does not mint or connect", async ({ page }) => {
   await page.addInitScript(() => {
     navigator.mediaDevices.getUserMedia = async () => {
@@ -27,6 +40,11 @@ test("microphone denial does not mint or connect", async ({ page }) => {
   await page.locator("#enable-microphone").click();
 
   await expect(page.locator('[data-media-state="denied"]')).toBeVisible();
+  expect(await mediaPanelLayout(page)).toMatchObject({
+    display: "grid",
+    gap: 12,
+    borderRadius: 12,
+  });
   await expect.poll(async () => mediaState(page)).toMatchObject({
     state: "denied",
     connectCalls: 0,
@@ -55,6 +73,10 @@ test("microphone grant mints and starts one voice session", async ({
   });
   await expect(page.locator('[data-media-state="mic-ready"]')).toBeVisible();
   await expect(page.locator("#enable-microphone")).toBeDisabled();
+  await expect(page.locator("#enable-microphone")).toHaveCSS(
+    "color",
+    "rgb(75, 85, 99)",
+  );
   expect(await mediaState(page)).not.toHaveProperty("token");
   await page.screenshot({
     path: "test-results/media-permission-granted.png",

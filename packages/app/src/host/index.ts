@@ -42,6 +42,9 @@ declare global {
 
 const hostState: HostDebugState = { state: "idle", bridgeInitialized: false };
 window.__oubliaiHost = hostState;
+for (const [name, value] of Object.entries(HOST_STYLE_VARIABLES)) {
+  document.documentElement.style.setProperty(name, String(value));
+}
 
 function fail(message: string, banner: HTMLElement): void {
   hostState.state = "error";
@@ -144,6 +147,7 @@ function buildControls(app: HTMLElement): HostControls {
   });
 
   const controls = document.createElement("div");
+  controls.className = "host-controls";
   controls.append(select, themeButton);
   const viewContainer = document.createElement("div");
   viewContainer.id = "view";

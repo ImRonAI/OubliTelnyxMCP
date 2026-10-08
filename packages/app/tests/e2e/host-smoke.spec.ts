@@ -84,6 +84,28 @@ test("official host renders a real $prefab workspace in the two-origin sandbox",
     timeout: 30_000,
   });
 
+  // Then: all rendered pagination controls fit inside the embedded view rather
+  // than being cut off by its fixed viewport.
+  const paginationFits = await viewFrame
+    .getByRole("button", { name: /previous|next/i })
+    .evaluateAll((buttons) =>
+      buttons.every((button) => {
+        const rect = button.getBoundingClientRect();
+        return rect.top >= 0 && rect.bottom <= window.innerHeight;
+      }),
+    );
+  expect(paginationFits, "pagination controls must fit inside the embedded view")
+    .toBe(true);
+  const workspaceFits = await viewFrame.locator("html").evaluate((root) =>
+    root.scrollHeight <= window.innerHeight,
+  );
+  expect(workspaceFits, "workspace must not overflow the embedded view vertically")
+    .toBe(true);
+
+  // Then: the host-owned media panel is visibly integrated alongside the
+  // mounted workspace rather than appearing as an unstyled control run.
+  await expect(page.locator("#media-panel")).toHaveCSS("display", "grid");
+
   await page.screenshot({
     path: "test-results/host-smoke-numbers.png",
     fullPage: true,
