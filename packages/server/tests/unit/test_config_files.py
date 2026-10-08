@@ -32,3 +32,17 @@ def test_create_server_refuses_to_start_without_host_origin_guard(monkeypatch):
     monkeypatch.setattr(fastmcp.settings, "http_host_origin_protection", False)
     with pytest.raises(SystemExit, match="FASTMCP_HTTP_HOST_ORIGIN_PROTECTION"):
         entry.create_server()
+
+
+def test_run_options_carry_browser_cors_from_env(monkeypatch):
+    """`main()` must hand FastMCP the CORS middleware and trusted origins for the browser
+    host; without them the packages/app host cannot reach `/mcp` cross-origin."""
+    monkeypatch.setenv("OUBLIAI_BROWSER_ORIGINS", '["http://localhost:8080"]')
+    options = entry.run_options()
+    assert options["transport"] == "http"
+    assert options["allowed_origins"] == ["http://localhost:8080"]
+    assert len(options["middleware"]) == 1
+
+    monkeypatch.delenv("OUBLIAI_BROWSER_ORIGINS")
+    options = entry.run_options()
+    assert "middleware" not in options and "allowed_origins" not in options

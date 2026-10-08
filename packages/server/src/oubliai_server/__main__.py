@@ -9,15 +9,22 @@ settings, which must be set in the process environment: `fastmcp run` applies
 OAuthProxy state is persisted through `runtime/storage.py` (`OUBLIAI_STORAGE_URL`,
 encrypted with the required `OUBLIAI_STORAGE_ENCRYPTION_KEY`). Background tasks use
 FastMCP's `FASTMCP_DOCKET_*` settings.
+
+Browser hosts (the `packages/app` page) connect to `/mcp` cross-origin; set
+`OUBLIAI_BROWSER_ORIGINS` (JSON list of exact origins) so `main()` adds FastMCP's documented
+CORS middleware and trusts those origins. `fastmcp run fastmcp.json` cannot pass middleware,
+so browser-facing deployments start with `python -m oubliai_server`.
 """
 
 import json
 import os
+from typing import Any
 
 import fastmcp
 from fastmcp import FastMCP
 
 from oubliai_server.auth.provider import build_auth
+from oubliai_server.runtime.cors import browser_cors_middleware, browser_origins_from_env
 from oubliai_server.runtime.storage import ENCRYPTION_KEY_ENV, build_client_storage
 from oubliai_server.server import build_server
 from oubliai_server.spec import load_telnyx_spec
@@ -63,8 +70,18 @@ def create_server() -> FastMCP:
     return build_server(spec, auth=auth, mask_error_details=True)
 
 
+def run_options() -> dict[str, Any]:
+    """Keyword arguments for `FastMCP.run()`; CORS only when browser origins are configured."""
+    options: dict[str, Any] = {"transport": "http"}
+    origins = browser_origins_from_env(os.environ)
+    if origins:
+        options["middleware"] = browser_cors_middleware(origins)
+        options["allowed_origins"] = origins
+    return options
+
+
 def main() -> None:
-    create_server().run(transport="http")
+    create_server().run(**run_options())
 
 
 if __name__ == "__main__":
