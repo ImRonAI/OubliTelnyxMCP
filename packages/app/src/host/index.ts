@@ -61,10 +61,21 @@ interface MountedView {
 
 let mounted: MountedView | undefined;
 
-/** Documented teardown: request graceful shutdown, close, then unmount. */
+/**
+ * Documented teardown: request graceful shutdown, close, then unmount.
+ *
+ * `teardownResource` is awaited so the view can finish, but per the AppBridge
+ * documentation's teardown example the host still unmounts when the request
+ * fails (e.g. a view that registers no `ui/resource-teardown` handler answers
+ * "Method not found").
+ */
 async function unmount(view: MountedView): Promise<void> {
   if (view.initialized) {
-    await view.bridge.teardownResource({});
+    try {
+      await view.bridge.teardownResource({});
+    } catch (error) {
+      log.warn("Teardown failed:", error);
+    }
   }
   await view.bridge.close();
   view.iframe.remove();
