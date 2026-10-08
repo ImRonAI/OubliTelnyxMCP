@@ -149,6 +149,7 @@ def test_list_workspace_builds_prefab_app_wired_to_backends():
     assert payload["$prefab"] == {"version": "0.3"}
     text = json.dumps(payload)
     assert '"type": "DataTable"' in text
+    assert '"paginated": false' in text
     assert '"type": "Dialog"' in text
     assert '"type": "Form"' in text
     assert "Test note" in text

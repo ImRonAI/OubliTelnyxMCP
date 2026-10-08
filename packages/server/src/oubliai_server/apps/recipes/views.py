@@ -174,7 +174,7 @@ def list_workspace(
             ],
             rows=STATE.rows,
             search=True,
-            paginated=True,
+            paginated=False,
             page_size=25,
             on_row_click=row_click,
         )
