@@ -46,3 +46,31 @@ def test_run_options_carry_browser_cors_from_env(monkeypatch):
     monkeypatch.delenv("OUBLIAI_BROWSER_ORIGINS")
     options = entry.run_options()
     assert "middleware" not in options and "allowed_origins" not in options
+
+
+def test_env_example_names_every_required_variable_and_no_values():
+    """`.env.example` is the deployment checklist: it must list every variable
+    `create_server` requires plus the browser-CORS and Host/Origin guard settings,
+    and it must not carry secret values."""
+    example = (PACKAGE_ROOT / ".env.example").read_text()
+    names = {
+        line.split("=", 1)[0]
+        for line in example.splitlines()
+        if line and not line.startswith("#") and "=" in line
+    }
+    for required in entry.REQUIRED_ENV:
+        assert required in names, required
+    for setting in (
+        "OUBLIAI_BROWSER_ORIGINS",
+        "FASTMCP_HTTP_HOST_ORIGIN_PROTECTION",
+        "FASTMCP_HTTP_ALLOWED_HOSTS",
+        "OUBLIAI_STORAGE_URL",
+        "FASTMCP_DOCKET_URL",
+        "FASTMCP_STATELESS_HTTP",
+    ):
+        assert setting in names, setting
+    secrets = ("OUBLIAI_TELNYX_CLIENT_SECRET", "OUBLIAI_JWT_SIGNING_KEY", entry.ENCRYPTION_KEY_ENV)
+    for line in example.splitlines():
+        key, _, value = line.partition("=")
+        if key in secrets:
+            assert value == "", f"{key} must be left blank in .env.example"

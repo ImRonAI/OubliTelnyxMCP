@@ -24,7 +24,7 @@ DENO_NO_PACKAGE_JSON=1 ../../.venv/bin/python -m pytest -q
 ```
 `packages/client` has no dev extra or tests yet. If these commands don't match a package's current manifest, trust the manifest. Don't invent output.
 
-Run over HTTP from `packages/server`, using `fastmcp run fastmcp.json` (`python -m oubliai_server` is equivalent):
+Run over HTTP from `packages/server` with `python -m oubliai_server` (`fastmcp run fastmcp.json` runs the same factory but cannot pass the browser CORS middleware; see `OUBLIAI_BROWSER_ORIGINS` below). Variable checklist: `packages/server/.env.example`.
 ```bash
 OUBLIAI_BASE_URL=https://mcp.example.com OUBLIAI_TELNYX_CLIENT_ID=... OUBLIAI_TELNYX_CLIENT_SECRET=... \
 OUBLIAI_JWT_SIGNING_KEY=... OUBLIAI_ALLOWED_CLIENT_REDIRECT_URIS='["https://claude.ai/api/mcp/auth_callback"]' \
