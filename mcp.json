@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "oubliai-telnyx": {
+      "url": "http://127.0.0.1:8000/mcp",
+      "transport": "http",
+      "auth": "oauth",
+      "description": "Oubliai Telnyx MCP server (local development URL; replace with the deployed OUBLIAI_BASE_URL + /mcp)"
+    }
+  }
+}

@@ -1,0 +1,225 @@
+# Tool Search
+Source: https://gofastmcp.com/servers/transforms/tool-search
+
+Replace large tool catalogs with on-demand search
+
+<VersionBadge />
+
+When a server exposes hundreds or thousands of tools, sending the full catalog to an LLM wastes tokens and degrades tool selection accuracy. Search transforms solve this by replacing the tool listing with a search interface — the LLM discovers tools on demand instead of receiving everything upfront.
+
+## How It Works
+
+When you add a search transform, `list_tools()` returns just two synthetic tools instead of the full catalog:
+
+* **`search_tools`** finds tools matching a query and returns their full definitions
+* **`call_tool`** executes a discovered tool by name
+
+The original tools are still callable. They're hidden from the listing but remain fully functional — the search transform controls *discovery*, not *access*.
+
+Both synthetic tools search across tool names, descriptions, parameter names, and parameter descriptions. A search for `"email"` would match a tool named `send_email`, a tool with "email" in its description, or a tool with an `email_address` parameter.
+
+Search results are returned in the same JSON format as `list_tools`, including the full input schema, so the LLM can construct valid calls immediately without a second round-trip.
+
+## Search Strategies
+
+FastMCP provides two search transforms, plus an experimental third. They share the same interface — two synthetic tools, same configuration options — but differ in how they match queries to tools.
+
+### Regex Search
+
+`RegexSearchTransform` matches tools against a regex pattern using case-insensitive `re.search`. It has zero overhead and no index to build, making it a good default when the LLM knows roughly what it's looking for.
+
+```python theme={"theme":{"light":"snazzy-light","dark":"dark-plus"}}
+from fastmcp import FastMCP
+from fastmcp.server.transforms.search import RegexSearchTransform
+
+mcp = FastMCP("My Server", transforms=[RegexSearchTransform()])
+
+@mcp.tool
+def search_database(query: str, limit: int = 10) -> list[dict]:
+    """Search the database for records matching the query."""
+    ...
+
+@mcp.tool
+def delete_record(record_id: str) -> bool:
+    """Delete a record from the database by its ID."""
+    ...
+
+@mcp.tool
+def send_email(to: str, subject: str, body: str) -> bool:
+    """Send an email to the given recipient."""
+    ...
+```
+
+The LLM's `search_tools` call takes a `pattern` parameter — a regex string:
+
+```python theme={"theme":{"light":"snazzy-light","dark":"dark-plus"}}
+# Exact substring match
+result = await client.call_tool("search_tools", {"pattern": "database"})
+# Returns: search_database, delete_record
+
+# Regex pattern
+result = await client.call_tool("search_tools", {"pattern": "send.*email|notify"})
+# Returns: send_email
+```
+
+Results are returned in catalog order. If the pattern is invalid regex, the search returns an empty list rather than raising an error.
+
+### BM25 Search
+
+`BM25SearchTransform` ranks tools by relevance using the [BM25 Okapi](https://en.wikipedia.org/wiki/Okapi_BM25) algorithm. It's better for natural language queries because it scores each tool based on term frequency and document rarity, returning results ranked by relevance rather than filtering by match/no-match.
+
+```python theme={"theme":{"light":"snazzy-light","dark":"dark-plus"}}
+from fastmcp import FastMCP
+from fastmcp.server.transforms.search import BM25SearchTransform
+
+mcp = FastMCP("My Server", transforms=[BM25SearchTransform()])
+
+# ... define tools ...
+```
+
+The LLM's `search_tools` call takes a `query` parameter — natural language:
+
+```python theme={"theme":{"light":"snazzy-light","dark":"dark-plus"}}
+result = await client.call_tool("search_tools", {
+    "query": "tools for deleting things from the database"
+})
+# Returns: delete_record ranked first, search_database second
+```
+
+BM25 builds an in-memory index from the searchable text of all tools. The index is created lazily on the first search and automatically rebuilt whenever the tool catalog changes — for example, when tools are added, removed, or have their descriptions updated. The staleness check is based on a hash of all searchable text, so description changes are detected even when tool names stay the same.
+
+### Jev Search (Experimental)
+
+<Warning>
+  `JevSearchTransform` is experimental. It lives in `fastmcp.experimental.transforms` and its ranking parameters may change as we learn what works on real catalogs.
+</Warning>
+
+`JevSearchTransform` ranks tools with [TypeSafe's Jev](https://docs.typesafe.ai), a model that returns calibrated probabilities over options you define instead of generated text. It reads the query and the tool descriptions for meaning, so `"archive last week's invoices"` finds `archive_invoices` without sharing a token with it, and a request that no tool serves comes back empty instead of returning the least-wrong match.
+
+<Tip>
+  Jev search requires the `jev` extra and a TypeSafe API key in `TYPESAFE_API_KEY`. Install it with `pip install "fastmcp[jev]"`. A missing key is an error when the transform is constructed.
+</Tip>
+
+```python theme={"theme":{"light":"snazzy-light","dark":"dark-plus"}}
+from fastmcp import FastMCP
+from fastmcp.experimental.transforms.jev_search import JevSearchTransform
+
+mcp = FastMCP("My Server", transforms=[JevSearchTransform()])
+
+# ... define tools ...
+```
+
+The LLM's `search_tools` call takes a natural-language `query`, the same as BM25:
+
+```python theme={"theme":{"light":"snazzy-light","dark":"dark-plus"}}
+result = await client.call_tool("search_tools", {
+    "query": "show me the flow runs that failed in the last hour"
+})
+# Returns the best-fitting tool definitions first, or nothing when none fits
+```
+
+A search is a few Jev requests. On a 187-tool catalog generated from the Prefect OpenAPI spec, each of five queries completed in 0.6 to 1.1 seconds end to end:
+
+1. **Wide pass.** One request per chunk of the catalog. The query is the state, each tool name is an option, and its one-line summary is the option's description. Each chunk's top `shortlist` goes forward. If more than `3 * shortlist` candidates survive, they are ranked again in chunks until the close read fits.
+2. **Close read.** One request over the candidates with each tool's full description and parameters. A Choice question decides which candidate fits best and sets the order. One yes/no question per candidate asks whether that tool does what the query asks; candidates below `fit_threshold` are dropped, which is how an off-topic query returns nothing.
+
+A catalog no larger than `3 * shortlist` skips the wide pass.
+
+| Option          | Default            | Meaning                                                                                                                                                                                                                                                                             |
+| --------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `model`         | `jev-latest`       | TypeSafe model. Pin a versioned id once `fit_threshold` is tuned.                                                                                                                                                                                                                   |
+| `api_key`       | `TYPESAFE_API_KEY` | TypeSafe API key.                                                                                                                                                                                                                                                                   |
+| `client`        | none               | A ready `AsyncTypeSafeClient` to use instead of building one.                                                                                                                                                                                                                       |
+| `shortlist`     | 8                  | Candidates each wide-pass request carries forward; with `close_read=True`, it must be at most half of `chunk_size` so repeated passes remain bounded. The close read sees at most three times this or 255 tools, whichever is smaller.                                              |
+| `fit_threshold` | 0.3                | Minimum "does this tool do it" probability for a tool to be returned.                                                                                                                                                                                                               |
+| `chunk_size`    | 150                | Tools per wide-pass request, at most 255.                                                                                                                                                                                                                                           |
+| `close_read`    | `True`             | Re-read the shortlist with full descriptions in a second request. `False` asks the fit question of every tool in the wide pass instead: one round trip, summaries only. On the 187-tool Prefect catalog it was 0.06s faster and six points worse at returning the right tool first. |
+| `timeout`       | 10                 | Seconds per API attempt.                                                                                                                                                                                                                                                            |
+| `summary_chars` | 160                | Description characters per tool in the wide pass.                                                                                                                                                                                                                                   |
+| `detail_chars`  | 1200               | Rendered characters per tool in the close read.                                                                                                                                                                                                                                     |
+
+`fit_threshold` comes from TypeSafe's skill-suggestion cookbook; the other defaults were chosen for this transform and none were tuned on your catalog. Log what `search_tools` returns for real queries before relying on the threshold. Tool descriptions are model input: a description written to argue for its own selection can move the ranking, so treat catalogs from third-party servers accordingly.
+
+### Which to Choose
+
+Use **regex** when your LLM is good at constructing targeted patterns and you want deterministic, predictable results. Regex is also simpler to debug — you can see exactly what pattern was sent.
+
+Use **BM25** when your LLM tends to describe what it needs in natural language, or when your tool catalog has nuanced descriptions where relevance ranking adds value. BM25 handles partial matches and synonyms better because it scores on individual terms rather than requiring a single pattern to match.
+
+Use **Jev** when queries and tool descriptions rarely share vocabulary, when the catalog has lookalike tools that only a full read separates, or when returning nothing for an unserved request matters. It costs a network call per search and needs an API key.
+
+## Configuration
+
+All search transforms accept the same configuration options.
+
+### Limiting Results
+
+By default, search returns at most 5 tools. Adjust `max_results` based on your catalog size and how much context you want the LLM to receive per search:
+
+```python theme={"theme":{"light":"snazzy-light","dark":"dark-plus"}}
+mcp.add_transform(RegexSearchTransform(max_results=10))
+mcp.add_transform(BM25SearchTransform(max_results=3))
+```
+
+With regex, results stop as soon as the limit is reached (first N matches in catalog order). With BM25, all tools are scored and the top N by relevance are returned.
+
+### Pinning Tools
+
+Some tools should always be visible regardless of search. Use `always_visible` to pin them in the listing alongside the synthetic tools:
+
+```python theme={"theme":{"light":"snazzy-light","dark":"dark-plus"}}
+mcp.add_transform(RegexSearchTransform(
+    always_visible=["help", "status"],
+))
+
+# list_tools returns: help, status, search_tools, call_tool
+```
+
+Pinned tools appear directly in `list_tools` so the LLM can call them without searching. They're excluded from search results to avoid duplication.
+
+### Custom Tool Names
+
+The default names `search_tools` and `call_tool` can be changed to avoid conflicts with real tools:
+
+```python theme={"theme":{"light":"snazzy-light","dark":"dark-plus"}}
+mcp.add_transform(RegexSearchTransform(
+    search_tool_name="find_tools",
+    call_tool_name="run_tool",
+))
+```
+
+## The `call_tool` Proxy
+
+The `call_tool` proxy forwards calls to the real tool. When a client calls `call_tool(name="search_database", arguments={...})`, the proxy resolves `search_database` through the server's normal tool pipeline — including transforms and middleware — and executes it.
+
+The proxy rejects attempts to call the synthetic tools themselves. `call_tool(name="call_tool")` raises an error rather than recursing.
+
+<Note>
+  Tools discovered through search can also be called directly via `client.call_tool("search_database", {...})` without going through the proxy. The proxy exists for LLMs that only know about the tools returned by `list_tools` and need a way to invoke discovered tools through a tool they can see.
+</Note>
+
+## Auth and Visibility
+
+Search results respect the full authorization pipeline. Tools filtered by middleware, visibility transforms, or component-level auth checks won't appear in search results.
+
+App-only tools are excluded too. A [MCP app](/apps/overview) can declare backend tools that only its UI may call, and normally the host keeps those from the model. A search result is tool output rather than an advertised listing, so no host filtering applies to it — the exclusion happens here instead. The `call_tool` proxy enforces the same boundary, since it executes a name the model supplies.
+
+The search tool queries `list_tools()` through the complete pipeline at search time, so the same filtering that controls what a client sees in the listing also controls what they can discover through search.
+
+```python theme={"theme":{"light":"snazzy-light","dark":"dark-plus"}}
+from fastmcp.server.transforms import Visibility
+from fastmcp.server.transforms.search import RegexSearchTransform
+
+mcp = FastMCP("My Server")
+
+# ... define tools ...
+
+# Disable admin tools globally
+mcp.add_transform(Visibility(False, tags={"admin"}))
+
+# Add search — admin tools won't appear in results
+mcp.add_transform(RegexSearchTransform())
+```
+
+Session-level visibility changes (via `ctx.disable_components()`) are also reflected immediately in search results.
+

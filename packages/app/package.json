@@ -1,0 +1,13 @@
+{
+  "name": "oubliai-app",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "ai": "7.0.127",
+    "@ai-sdk/mcp": "2.0.66",
+    "@modelcontextprotocol/ext-apps": "2.0.3"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

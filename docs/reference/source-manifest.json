@@ -1,0 +1,733 @@
+{
+  "generatedAt": "2026-10-05T16:36:52.488Z",
+  "entries": [
+    {
+      "path": "docs/architecture/AGENTS.md",
+      "sha256": "5afd256692bc3d90fb7c82818f2b8e2cb5fea4e35185b5a6cf78ed6bb807e169",
+      "bytes": 1283,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/architecture/SDK_BROWSER_PROOF.png",
+      "sha256": "12f3b53efdd30595177fb8ad3268588a6cc733571c29173fdde475e3a99414e5",
+      "bytes": 47083,
+      "kind": "local-copy",
+      "origin": ".omo/ulw-research/build-verdict/browser-render-proof.png"
+    },
+    {
+      "path": "docs/architecture/SDK_PROBE_RESULT.json",
+      "sha256": "5d5560d8e28987fbe972013db1ce21433dafb25c072372969cb52541462b16f7",
+      "bytes": 6140,
+      "kind": "local-copy",
+      "origin": ".omo/ulw-research/build-verdict/probe-js-result.json"
+    },
+    {
+      "path": "docs/architecture/VERIFIED_DECISIONS.md",
+      "sha256": "9dc04f9ba14a1b26d8e47a363eac4efeea3ca0ee89f1f71d39e47a7c89b698df",
+      "bytes": 5585,
+      "kind": "local-copy",
+      "origin": ".omo/ulw-research/build-verdict/SYNTHESIS.md"
+    },
+    {
+      "path": "docs/reference/AGENTS.md",
+      "sha256": "e27258a44341ebe24eb5b01d55c767be76b2f7c2453e9ec958fc4797cde36a70",
+      "bytes": 1536,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/SOURCE_INDEX.md",
+      "sha256": "13b2cba4848c4222eb867144b2d09545e9686b4382bf8d0f72c2c996b844cc5f",
+      "bytes": 14896,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/ai-sdk/AGENTS.md",
+      "sha256": "f733621fcdca65515f5d2c6cd76d3e5ad9e55f3bef38a927c8aa7913b5eccf0d",
+      "bytes": 17265,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/ai-sdk/agent-public-types.d.ts",
+      "sha256": "eab9564389e285bcca100600120083fe45741e7a39bf21efa98bdabfd9b28d92",
+      "bytes": 426978,
+      "kind": "local-copy",
+      "origin": ".omo/ulw-research/build-verdict/probe-js/node_modules/ai/dist/index.d.ts"
+    },
+    {
+      "path": "docs/reference/ai-sdk/agent-release.json",
+      "sha256": "5864a68d58bd8caa46b91fbb0f1e39ae3ba0f3179f38e00581f4428fc7bf1110",
+      "bytes": 3259,
+      "kind": "local-copy",
+      "origin": ".omo/ulw-research/build-verdict/probe-js/node_modules/ai/package.json"
+    },
+    {
+      "path": "docs/reference/ai-sdk/mcp-apps.md",
+      "sha256": "863674fd1cb3a5e2736a756f69543ea37364dae5fc11ea3bfd188df256016aa1",
+      "bytes": 9116,
+      "kind": "fetched",
+      "origin": "https://ai-sdk.dev/docs/ai-sdk-core/mcp-apps.md"
+    },
+    {
+      "path": "docs/reference/ai-sdk/mcp-public-types.d.ts",
+      "sha256": "16d1b812130cb053686520a86b0192b60e57bc616c7ea018626c67bc580a6b1e",
+      "bytes": 39333,
+      "kind": "local-copy",
+      "origin": ".omo/ulw-research/build-verdict/probe-js/node_modules/@ai-sdk/mcp/dist/index.d.ts"
+    },
+    {
+      "path": "docs/reference/ai-sdk/mcp-release.json",
+      "sha256": "9aa2bdef1b2a5c1e7a954e95a7f62b8269bcac6df604364fe4cf4e2ba772d380",
+      "bytes": 2055,
+      "kind": "local-copy",
+      "origin": ".omo/ulw-research/build-verdict/probe-js/node_modules/@ai-sdk/mcp/package.json"
+    },
+    {
+      "path": "docs/reference/ai-sdk/mcp-tools.md",
+      "sha256": "d807a523ad5c5b822cf64e729dc780d31e2b05565895fc6aff941571cc133e6e",
+      "bytes": 26254,
+      "kind": "fetched",
+      "origin": "https://ai-sdk.dev/docs/ai-sdk-core/mcp-tools.md"
+    },
+    {
+      "path": "docs/reference/ai-sdk/model-provider.md",
+      "sha256": "40054579d740d330a90f0fb1a52c5c9a30e68f7852823938e867247c62d5dcfd",
+      "bytes": 1050891,
+      "kind": "fetched",
+      "origin": "https://ai-sdk.dev/providers/openai-compatible-providers"
+    },
+    {
+      "path": "docs/reference/ai-sdk/research-package-lock.json",
+      "sha256": "06efcaa14a46f75e39271c7426bd87b25ffdfb2e1374d1d774ddb59fb33c4f81",
+      "bytes": 60329,
+      "kind": "local-copy",
+      "origin": ".omo/ulw-research/build-verdict/probe-js/package-lock.json"
+    },
+    {
+      "path": "docs/reference/contracts/AGENTS.md",
+      "sha256": "a9000ed119b1d84176e00bbb34d02747a99f57c5d2b8bb1fd572a3ce7f3ec4fe",
+      "bytes": 1546,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/contracts/FAST_MCP_AND_UI.md",
+      "sha256": "2f0daf825818c6907d3145e081bccb84d33ad30a8be74da55aa3104ec324c268",
+      "bytes": 874,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/deno/AGENTS.md",
+      "sha256": "5a5ce28843348517e5ac73da1eaafebfaaede7cea3e8fdfd96824b6ad4ad0996",
+      "bytes": 1541,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/deno/environment.md",
+      "sha256": "f97e225921929b23868896af83a2f69fd92df2dd617f1b98d8f9d5ee9541530d",
+      "bytes": 99905,
+      "kind": "fetched",
+      "origin": "https://docs.deno.com/runtime/reference/env_variables/"
+    },
+    {
+      "path": "docs/reference/fastmcp/AGENTS.md",
+      "sha256": "7f19d37233643f5c5018bdc58488e642679132b2739a809678bf6ebbf7b61f9c",
+      "bytes": 1544,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/fastmcp/client/AGENTS.md",
+      "sha256": "7ea8b9c687083ee004b466c2591184ec83f7a8c031547bd97502a88e270aa0c0",
+      "bytes": 1551,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/fastmcp/client/client.md",
+      "sha256": "20d0ebcd095db022f1b99bb3314fadefd5fbac054ffc5b67d7967f1ed785553f",
+      "bytes": 21269,
+      "kind": "fetched",
+      "origin": "https://gofastmcp.com/clients/client.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/client/elicitation.md",
+      "sha256": "4f203dab18cf9445e34e9b9cf506dee9bb30fece64e110e877864574561f6e9d",
+      "bytes": 6909,
+      "kind": "fetched",
+      "origin": "https://gofastmcp.com/clients/elicitation.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/client/tasks.md",
+      "sha256": "abb70bdf5e42706fccccb766f743d7ae709eb381d589680f26fedbf1225d39e5",
+      "bytes": 6702,
+      "kind": "fetched",
+      "origin": "https://gofastmcp.com/clients/tasks.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/client/tools.md",
+      "sha256": "9c3bc7140c167410397e2f86a37f8f7ca24fd9345cc1119cfc77ed64bed06cf9",
+      "bytes": 7901,
+      "kind": "fetched",
+      "origin": "https://gofastmcp.com/clients/tools.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/llms-full.txt",
+      "sha256": "0acba930e67a2db88819fad5b1257d76ea478df50bc564562440d15cc4957d74",
+      "bytes": 2918704,
+      "kind": "local-copy",
+      "origin": "fastmcp-llms-full.txt"
+    },
+    {
+      "path": "docs/reference/fastmcp/llms.txt",
+      "sha256": "89709aaf0a84b78d0097465c28e31bb0234ed87ae6472763a2d1777f2692e593",
+      "bytes": 64969,
+      "kind": "local-copy",
+      "origin": "fastmcp-llms.txt"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/AGENTS.md",
+      "sha256": "f7b72e0db9c7807b1ff44e88e193df937ce8dafc298e682deb3024fdeedb5da1",
+      "bytes": 1550,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/apps-overview.md",
+      "sha256": "be3a367f5697c45bd1ce8ef16eed2ad6bdebc4e1e795a4fb79d538c6a931b0da",
+      "bytes": 3176,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/apps-prefab.md",
+      "sha256": "096520c75e550b08544453d67204c4bd60c1858601140c385b1f5f7f07066c97",
+      "bytes": 12078,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/auth.md",
+      "sha256": "1ae9f6c218906be10f5ed1884858c38e00b5c513fb1919f6d9c34cd84bd88c1e",
+      "bytes": 17162,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/authorization.md",
+      "sha256": "45e61f5755e0e993617d2b8d1a6a5dfd391efa0e6dadef9710a135bc9a7484fa",
+      "bytes": 22082,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/chatgpt.md",
+      "sha256": "b902c1984b1b5c5738a1325c665a508ffd6336bcf43b76fdc2c7d04713438f01",
+      "bytes": 5075,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/code-mode.md",
+      "sha256": "5744c44200fec405405e7fcbf4ac39e27037d871d20f75e79ac01063bbe3e3ad",
+      "bytes": 18669,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/completions.md",
+      "sha256": "76bf2068470a01d635cba980d3e5d21b44eed8f7b2c58d113664569e2430440b",
+      "bytes": 8082,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/composition.md",
+      "sha256": "310e064fc2a8532348101037bdf4fc4a7113fa09ad13e159a387bbc1611f191b",
+      "bytes": 6933,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/custom-provider.md",
+      "sha256": "afbe116d21832c70c96b7822f0649a5a83918098b6e52bf7916da4779963e874",
+      "bytes": 8551,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/dependency-injection.md",
+      "sha256": "ae947151d4eb16049f038b0d52a7a87bd8581ba9e463cd2577007a41e1d8ff9f",
+      "bytes": 17593,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/elicitation.md",
+      "sha256": "cc82913657ec5e6ad8350ecd00737276ccda69ed520888eaa7eb10d23af888ee",
+      "bytes": 30205,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/extensions.md",
+      "sha256": "f7202f61601ff733d5494122eab9cabda80b33b3d3a39654c1717e713a71d3dd",
+      "bytes": 9567,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/fastmcp-app.md",
+      "sha256": "81be07822a5812569ea562b2b678da23794790b816b9d27193e40f650ff30d55",
+      "bytes": 16152,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/fastmcp-json.md",
+      "sha256": "67f3bbe223c310622b42ef2f3af126e47b5323f07f9f99bd89aa7bb9aa978bb3",
+      "bytes": 24325,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/http-deployment.md",
+      "sha256": "a9e83450031a4effab84accac85505e76e16c1d9a54da1938eed8c2596fce3d3",
+      "bytes": 43186,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/icons.md",
+      "sha256": "e44bfebefea9f5fbcbabc6d4a92d72481333a3626b45d34127e0ae5b694f619c",
+      "bytes": 6358,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/lifespan.md",
+      "sha256": "8f33dbb8274efa5977ec442e2b59c34ddc912c7326d03a1626769106041fd399",
+      "bytes": 4005,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/middleware.md",
+      "sha256": "78c73c516ee45f4f5ff428bab2ceb01a5f0b663e216721472e0b7c74ef6df2c4",
+      "bytes": 40565,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/namespace.md",
+      "sha256": "2d46d4e9eb573727d07192fe95bd3e493f0b5a61f3de672d662cdc8432cd695a",
+      "bytes": 1706,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/openapi-integration.md",
+      "sha256": "70fe7fea2d915dd4210847a98c207953244bd9e089d6ab11aae21f09edfad3be",
+      "bytes": 21270,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/pagination.md",
+      "sha256": "04b4bc019d121ef7288b7802c185e4ec948a589747ec3d727f2393ec9e165e06",
+      "bytes": 4436,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/prompts-as-tools.md",
+      "sha256": "448db0a197bd4b73c1a0ed575f03347f8b4b036da9ad4bff4b93798ba50b5d5d",
+      "bytes": 4380,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/proxy-provider.md",
+      "sha256": "0d3f36e30c2bcdc690be431ef7f0e4bd06dc19cf56ad36031456437995ca5956",
+      "bytes": 18055,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/resources-as-tools.md",
+      "sha256": "2316ea5886585412f8be51f54b0582a0b375b6f458a735f6d71ae7983a58cb4d",
+      "bytes": 5059,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/sampling.md",
+      "sha256": "20794be92ade5131df740c0d7f267e60ed909d3ae604d1e95a5cdfd008f11af1",
+      "bytes": 7094,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/server.md",
+      "sha256": "6dcdd9374007f29ac14bec993cb309254117e9e533465a3727229abe52b1f3cb",
+      "bytes": 13540,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/sessions.md",
+      "sha256": "31fa630976d4ad6653f7aba5ef01875db4abe0fdd28ed0242dcf320e305f4638",
+      "bytes": 8725,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/settings.md",
+      "sha256": "4396b845379a415c80c674bc1a1fbbe8677c436abfbee47719a6040185a4d634",
+      "bytes": 22697,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/skills-provider.md",
+      "sha256": "377f13a3dd728374a98c904640d2d8d67f7cc6c5f633be86cd1395d2dfc0233e",
+      "bytes": 12314,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/storage-backends.md",
+      "sha256": "bd718a28b7b6c83d0f94bc19bcdad3d0e0ee2b1dbde9a9eba8c2a8730f0d7f88",
+      "bytes": 11871,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/tasks.md",
+      "sha256": "1f89d54579b903ea21a0d39469da666b2a709572ececbfa8310906bed257e389",
+      "bytes": 17907,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/telemetry.md",
+      "sha256": "91599eb7686922725f987e6248fb9a1f2ae7231ba4a0dc6397ef0e8f8ce32218",
+      "bytes": 19530,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/testing.md",
+      "sha256": "4aceed81e5702c7cbc0dc1d23e79a0112ba2d2932750072cbfed50c1ca0b91ef",
+      "bytes": 3823,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/tool-fingerprinting.md",
+      "sha256": "de0415ef9f554ba8ca78eef008bf3283b0992e4befe7e77cf97c8d6269c1de0c",
+      "bytes": 5967,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/tool-search.md",
+      "sha256": "c5ba1d19ea00ad2d7ebde6f9a66b2333f691512aa2b70147741b398cfefe9083",
+      "bytes": 15162,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/tool-transformation.md",
+      "sha256": "38e1e9ea8d443347aa37aa983e402b7044b065f4c86fed02568a710f30932635",
+      "bytes": 8770,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/versioning.md",
+      "sha256": "293a638e78ef7157cc7f519765179f3fa2e0c7a4c706fc693bbd111df5db8c33",
+      "bytes": 14303,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/visibility.md",
+      "sha256": "246e81192343864e0effd9d48c40b01edd76953d13b7de193d78dfab7918c1de",
+      "bytes": 19176,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/fastmcp/pages/whats-new.md",
+      "sha256": "f0e3226c2fab4b87031951acfa1f04189b9679eb4066af38f467b28f2d839a10",
+      "bytes": 15375,
+      "kind": "local-copy",
+      "origin": "docs/fastmcp/*.md"
+    },
+    {
+      "path": "docs/reference/mcp-apps/AGENTS.md",
+      "sha256": "713887bf052e30986972c8d338e9614214b6860eec138dad7f577e6193decff5",
+      "bytes": 1545,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/mcp-apps/app-bridge-public-types.d.ts",
+      "sha256": "99612e208c68b77961bf357f92e507b60c8d3e779398540f22e85f0df56017ba",
+      "bytes": 66959,
+      "kind": "local-copy",
+      "origin": ".omo/ulw-research/build-verdict/probe-js/node_modules/@modelcontextprotocol/ext-apps/dist/src/app-bridge.d.ts"
+    },
+    {
+      "path": "docs/reference/mcp-apps/app-bridge.md",
+      "sha256": "80c079ce74ac1399821fdea0313903041dc492f83b3e8bc9a3e458a2e304835e",
+      "bytes": 1299388,
+      "kind": "fetched",
+      "origin": "https://apps.extensions.modelcontextprotocol.io/api/classes/app-bridge.AppBridge.html"
+    },
+    {
+      "path": "docs/reference/mcp-apps/build.md",
+      "sha256": "6620ca600296d6ddaa6ac48f2f43723ebb4952bb75c7d3657d8c1b91db38fd92",
+      "bytes": 672702,
+      "kind": "fetched",
+      "origin": "https://modelcontextprotocol.io/extensions/apps/build"
+    },
+    {
+      "path": "docs/reference/mcp-apps/official-host.ts",
+      "sha256": "02cf4551885418515181bee74062ff79c8fd8ea47e99d177a9d23bb0dd6f6a72",
+      "bytes": 14668,
+      "kind": "local-copy",
+      "origin": ".omo/ulw-research/build-verdict/probe-js/basic-host/src/implementation.ts"
+    },
+    {
+      "path": "docs/reference/mcp-apps/official-sandbox.ts",
+      "sha256": "41badf3e939ff62e952d30ebe3a5731d7f8c54f2f6021f47ef759ea857d0d88a",
+      "bytes": 5487,
+      "kind": "local-copy",
+      "origin": ".omo/ulw-research/build-verdict/probe-js/basic-host/src/sandbox.ts"
+    },
+    {
+      "path": "docs/reference/mcp-apps/official-serving.ts",
+      "sha256": "f011ddcd56a33022e2c6c5a173fb03eb59ebbb81310f0cc4a6fd57cbd6ff2629",
+      "bytes": 5645,
+      "kind": "local-copy",
+      "origin": ".omo/ulw-research/build-verdict/probe-js/basic-host/serve.ts"
+    },
+    {
+      "path": "docs/reference/prefab/AGENTS.md",
+      "sha256": "4c6b1744113dc0eb39f9ed66c043ffe5ad7e5e5445f3d14f21148a838954da6b",
+      "bytes": 1543,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/prefab/app.md",
+      "sha256": "7b387691b543c42145ad8f73a51ebbdd04c9da65aab7a888a51c84b9ca294ae9",
+      "bytes": 7859,
+      "kind": "fetched",
+      "origin": "https://prefab.prefect.io/docs/reference/app.md"
+    },
+    {
+      "path": "docs/reference/prefab/themes.md",
+      "sha256": "723701261e9339d28886d32ba1459dc7b3e5f4e5b0aa9ea23b18bedfcd866ab9",
+      "bytes": 46080,
+      "kind": "fetched",
+      "origin": "https://prefab.prefect.io/docs/styling/themes.md"
+    },
+    {
+      "path": "docs/reference/research-sources.json",
+      "sha256": "5d70ca5d865f66f9012adf9b9583a4a555c50e886e29dddcb0178a2f491c4e2a",
+      "bytes": 4214,
+      "kind": "local-copy",
+      "origin": ".omo/ulw-research/build-verdict/sources.json"
+    },
+    {
+      "path": "docs/reference/source-manifest.json",
+      "sha256": "7e23429b4e883a520e635bfd9b05f71c77127bc6d57cc8363b34607be3b5564c",
+      "bytes": 22537,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/telnyx/AGENTS.md",
+      "sha256": "8e68436825ff71da2a527504c49cc4286805d37e1e46482e20bc0fafda6a9104",
+      "bytes": 1543,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/telnyx/auth.md",
+      "sha256": "0fa9c6cd7b91e0f14b1bcae1b024856e271dd42d2b7dfa4b5a3d6f5a27e7b29c",
+      "bytes": 8175,
+      "kind": "local-copy",
+      "origin": "docs/telnyx-auth.md"
+    },
+    {
+      "path": "docs/reference/telnyx/domains/AGENTS.md",
+      "sha256": "9fdb7d42b81ea49d7421ab275de3795843c9928afa078c035a4550a86b13d16c",
+      "bytes": 1551,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/telnyx/domains/ai.md",
+      "sha256": "85139aa4b7f3e65a299f5b3fb7eb94bdde07430505727f9da09d6d9deda9e322",
+      "bytes": 33146,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/telnyx/domains/email.md",
+      "sha256": "5e894e78d17ae21144d0af074952b50e528fb9a5bb10f98df595dd7ebc3ca527",
+      "bytes": 7707,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/telnyx/domains/fax.md",
+      "sha256": "a4b37c5d41ad24973e824c8b57ac508b5e2abcdf93f7e09de8dd4607ff275c42",
+      "bytes": 1018,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/telnyx/domains/meetings.md",
+      "sha256": "cbf461b01b952628b8ba3fb8009d559dc4c7896a85c0cc1f7aad90675a018c41",
+      "bytes": 1597,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/telnyx/domains/messaging.md",
+      "sha256": "3df567da666ec689057b198d3e1ac5afbb8a15bd9fe2c75e5f06c4a3c89f32f7",
+      "bytes": 7937,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/telnyx/domains/numbers.md",
+      "sha256": "f86291cb09e82009e000fef10a937c65cb554b660aec8ba7513fb7cbdfd888d9",
+      "bytes": 12826,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/telnyx/domains/platform.md",
+      "sha256": "23e83df250d215af5622af523463532b4e903eba7b75cbdcb83a75573d890dca",
+      "bytes": 60694,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/telnyx/domains/rag.md",
+      "sha256": "0b2925a920d455dd91d93697739c24e87a3343f7c42436d4c3da2fbefac9fd43",
+      "bytes": 4288,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/telnyx/domains/speech.md",
+      "sha256": "6ceed1946eb29220b20e1dff4e30f34dce063be50a92019394315bf21834b9c5",
+      "bytes": 1907,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/telnyx/domains/storage.md",
+      "sha256": "18b6b5de3f4ee5157cf96c272cfba131afc6cb47983d46d4bdade5765f910be9",
+      "bytes": 3658,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/telnyx/domains/training.md",
+      "sha256": "d0d0aaf1242d853ba63c47941bde89c41aa72fd6bba21b0ae67d4ae8f2d497d6",
+      "bytes": 195,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/telnyx/domains/verify.md",
+      "sha256": "8fb24376c345d1a1cbdc84b161951e1afc47ff06ef9ae3ab8ee09f902472218b",
+      "bytes": 2525,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/telnyx/domains/video.md",
+      "sha256": "fc8396199d6400f84b44ec448ec2c222c6580fa210fabad162e0aa116cbfddc0",
+      "bytes": 192,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/telnyx/domains/voice.md",
+      "sha256": "60d9aa36340aee9eb321fd7223f70779dc1358ad06a44b6101228a2045dada71",
+      "bytes": 5334,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/telnyx/oauth-authorization-server.json",
+      "sha256": "c5e0b0c3f63c1293aa4e270db4626f383df1308a9512915c5e1bf161f1eaf11d",
+      "bytes": 2515,
+      "kind": "local-copy",
+      "origin": "docs/telnyx-oauth-as-metadata.json"
+    },
+    {
+      "path": "docs/reference/telnyx/oauth-protected-resource.json",
+      "sha256": "0bae57e107dc2d11abb2e7b23e488e83bb0769405c16c43f9371a5f1816f1541",
+      "bytes": 999,
+      "kind": "local-copy",
+      "origin": "docs/telnyx-oauth-prm.json"
+    },
+    {
+      "path": "docs/reference/telnyx/openapi.json",
+      "sha256": "34a17d54462cbdd699725b06ccb668ca449858bc2ccd9252aad7aec184b7fdf8",
+      "bytes": 7244539,
+      "kind": "local-copy",
+      "origin": "openapi.json"
+    },
+    {
+      "path": "docs/reference/telnyx/operation-index.json",
+      "sha256": "754072f16aea01a679846d6f18543eedbfbebdcf5b951e2319c404a08b4f78ef",
+      "bytes": 462226,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/telnyx/sdk/AGENTS.md",
+      "sha256": "0dd45007750cd3a1f30b6cb5b2079a996f1c40ecac543722665307796ff9a303",
+      "bytes": 1547,
+      "kind": "generated",
+      "origin": "derived from openapi/placement/contract scripts"
+    },
+    {
+      "path": "docs/reference/telnyx/sdk/network.md",
+      "sha256": "405ef4403e1e55c67cd53af5e4b2daa47e5f606c477bced6d1fb05ebfb0fdaec",
+      "bytes": 984831,
+      "kind": "fetched",
+      "origin": "https://developers.telnyx.com/docs/development/webrtc/js-sdk/how-to/configure-network-firewall"
+    },
+    {
+      "path": "docs/reference/telnyx/sdk/video.md",
+      "sha256": "f47ceaf1c0034e5b31d524dca194c777f04cc228083bbbfb7b77f54e903c399c",
+      "bytes": 1105172,
+      "kind": "fetched",
+      "origin": "https://developers.telnyx.com/docs/video/javascript-sdk"
+    },
+    {
+      "path": "docs/reference/telnyx/sdk/voice.md",
+      "sha256": "d85c0521cd3300e6222761ce81c338e9e0b63065ecf1248a62b605e7f8069614",
+      "bytes": 466813,
+      "kind": "fetched",
+      "origin": "https://github.com/team-telnyx/webrtc/tree/main/packages/js"
+    }
+  ]
+}

@@ -1,0 +1,983 @@
+<!DOCTYPE html><html lang="en" class="scroll-smooth"><head>
+<meta charset="UTF-8" /><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%230c0d11%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%277%27 fill=%27%2334d399%27/%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Complete specification · Oubliai build dossier</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  if (window.tailwind) tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', 'system-ui', 'sans-serif'],
+          display: ['Outfit', 'Inter', 'sans-serif'],
+          mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+        },
+        colors: {
+          ink: {
+            950: '#070809', 900: '#0c0d11', 850: '#101218', 800: '#15171f',
+            700: '#1c1f29', 600: '#262a36', 500: '#404657', 400: '#6b7186',
+            300: '#9aa0b4', 200: '#c4c8d6', 100: '#e6e8ef',
+          }
+        },
+        animation: {
+          'fade-in': 'fadeIn .5s ease-out',
+          'fade-in-up': 'fadeInUp .6s ease-out',
+          'glow': 'glow 4s ease-in-out infinite',
+          'pulse-dot': 'pulseDot 2.2s ease-in-out infinite',
+        },
+        keyframes: {
+          fadeIn:   { '0%':{opacity:0}, '100%':{opacity:1} },
+          fadeInUp: { '0%':{opacity:0, transform:'translateY(8px)'}, '100%':{opacity:1, transform:'translateY(0)'} },
+          glow:     { '0%,100%':{opacity:0.5}, '50%':{opacity:0.85} },
+          pulseDot: { '0%,100%':{transform:'scale(1)', opacity:1}, '50%':{transform:'scale(1.4)', opacity:0.6} },
+        },
+      }
+    }
+  }
+</script>
+
+<meta name="description" content="Every source-plan section, including all domain references, feature dispositions, dependencies, acceptance criteria and verification tasks."><style>
+:root{--bg:#070809;--nav:#0c0d11;--surface:#101218;--raised:#15171f;--line:#262a36;--fg:#e6e8ef;--body:#c4c8d6;--muted:#9aa0b4;--accent:#34d399;--warning:#fcd34d;--space:4px;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--body);font:16px/1.8 Inter,system-ui,sans-serif}a{color:var(--accent);text-underline-offset:4px}a:hover{color:#a7f3d0}a:focus-visible,input:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px}h1,h2,h3,h4{font-family:Outfit,Inter,system-ui,sans-serif;color:var(--fg);line-height:1.2;letter-spacing:-.025em}h1{font-size:clamp(32px,4vw,48px);margin:16px 0}h2{font-size:27px;margin:0 0 24px}h3{font-size:20px;margin:36px 0 12px}h4{font-size:18px}p,ul,ol{max-width:76ch}li{margin:8px 0}p{margin:16px 0 24px}strong{color:var(--fg)}code{font:12px/1.6 'JetBrains Mono',ui-monospace,monospace;color:#a7f3d0;background:var(--raised);border:1px solid var(--line);border-radius:4px;padding:2px 5px;overflow-wrap:anywhere}pre{margin:24px 0;padding:24px;background:#0a0b0f;border:1px solid var(--line);border-radius:10px;overflow:auto;max-width:100%;font:13px/1.8 'JetBrains Mono',monospace}pre code{border:0;padding:0;background:none;overflow-wrap:normal;white-space:pre}.skip{position:absolute;left:16px;top:-100px;z-index:10}.skip:focus{top:8px;background:var(--nav);padding:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:256px;padding:28px 20px;background:var(--nav);border-right:1px solid var(--line);overflow-y:auto}.brand{font:600 22px Outfit,system-ui;color:var(--fg);letter-spacing:-.04em;text-decoration:none}.brand em{color:var(--accent);font-style:normal}.small{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}.sidebar .small{margin:8px 0 28px}.sidebar nav a{display:flex;gap:12px;padding:10px 12px;margin:4px 0;border-radius:6px;color:var(--body);text-decoration:none;font-size:13px;line-height:1.5;border:1px solid transparent}.sidebar nav a span{font:11px 'JetBrains Mono',monospace;color:var(--muted);padding-top:3px}.sidebar nav a:hover{background:var(--raised)}.sidebar nav a[aria-current]{background:#123127;border-color:#225542;color:#a7f3d0}.side-footer{margin-top:32px;border-top:1px solid var(--line);padding:20px 12px;font-size:12px;color:var(--muted)}.status{display:inline-block;border:1px solid #6b5520;background:#2a2110;color:var(--warning);font-size:11px;padding:4px 9px;border-radius:5px}.layout{margin-left:256px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:64px;padding:16px 40px;border-bottom:1px solid var(--line);background:var(--bg);position:sticky;top:0;z-index:2}.topbar p{margin:0;font-size:12px;color:var(--muted)}.topbar input{width:240px;border:1px solid var(--line);background:var(--nav);border-radius:6px;color:var(--fg);padding:9px 12px;font:13px Inter,system-ui}.content{max-width:1160px;margin:auto;padding:48px 48px 64px;min-width:0}.hero{padding-bottom:36px;border-bottom:1px solid var(--line);margin-bottom:40px;background:radial-gradient(ellipse at top right,rgba(52,211,153,.055),transparent 65%)}.eyebrow{font:11px 'JetBrains Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}.lead{font-size:18px;line-height:1.7;color:var(--muted);max-width:72ch}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:28px}.stats div{padding:16px 12px;border:1px solid var(--line);border-radius:6px;background:var(--nav)}.stats strong{font:600 24px Outfit,system-ui;display:block}.stats span{font-size:11px;color:var(--muted)}.note{border:1px solid var(--line);border-left:3px solid var(--warning);background:var(--nav);padding:16px 20px;border-radius:5px;margin:24px 0;font-size:14px}.toc{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:36px}.toc a{font-size:12px;padding:5px 10px;border:1px solid var(--line);border-radius:5px;text-decoration:none;color:var(--body)}.chapter-section{padding:12px 0 36px;scroll-margin-top:90px;min-width:0}.chapter-section+.chapter-section{padding-top:36px;border-top:1px solid var(--line)}.chapter-section>.eyebrow{margin-bottom:12px}.table-wrap{max-width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:24px 0;background:var(--nav)}table{border-collapse:collapse;width:100%;font-size:13px;line-height:1.65}th,td{text-align:left;vertical-align:top;padding:14px 16px;border-bottom:1px solid var(--line);min-width:145px}th{background:var(--raised);font-weight:600;color:var(--fg);font-size:11px;text-transform:uppercase;letter-spacing:.05em}tr:last-child td{border-bottom:0}table code{font-size:11px}.task-list li{margin-top:16px}input[type=checkbox]{accent-color:var(--accent)}blockquote{margin:20px 0;padding:12px 20px;border-left:3px solid var(--accent);background:var(--nav);font-size:14px}details{border:1px solid var(--line);border-radius:6px;background:var(--nav);padding:12px 16px;margin:12px 0}summary{cursor:pointer;color:var(--fg);font-weight:500;overflow-wrap:anywhere}.pager{border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;padding-top:28px;margin-top:32px}.pager a{text-decoration:none;font-size:13px}.footer{font-size:12px;color:var(--muted);margin-top:32px}.empty{padding:24px;border:1px dashed var(--line);border-radius:8px}.source-links{display:flex;flex-wrap:wrap;gap:16px;margin-top:20px;font-size:12px}[hidden]{display:none!important}
+@media(max-width:1100px){.content{padding:36px 28px}.topbar{padding:16px 28px}.stats{grid-template-columns:repeat(3,1fr)}}@media(max-width:900px){.sidebar{position:relative;width:auto;padding:20px;border-right:0;border-bottom:1px solid var(--line)}.sidebar .small{margin:4px 0 12px}.sidebar nav{display:flex;flex-wrap:wrap;gap:4px}.sidebar nav a{padding:7px 9px;font-size:12px;margin:0}.side-footer{display:none}.layout{margin:0}.topbar{position:relative;flex-wrap:wrap}.topbar input{width:100%}.content{padding:32px 20px}.stats{grid-template-columns:repeat(2,1fr)}.lead{font-size:16px}th,td{padding:12px;min-width:130px}h2{font-size:24px}.pager{flex-wrap:wrap}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}@media print{html,body{background:white!important;color:#111!important}.sidebar,.topbar,.toc,.pager{display:none}.layout{margin:0}.content{padding:0;max-width:none}.hero{background:none}.chapter-section{break-inside:auto}.chapter-section h2{break-after:avoid}h1,h2,h3,strong{color:#111}.table-wrap{overflow:visible}table{font-size:10px}th,td{min-width:0;padding:6px}pre{white-space:pre-wrap;background:#f5f5f5;color:#111}code{color:#064e3b;background:#f4f4f4}.chapter-section[hidden]{display:block!important}.note,blockquote{background:#f8f8f8;color:#111}.stats div{background:white}.stats span,.footer,.lead{color:#444}}
+ .content h1{font-size:clamp(32px,4vw,48px);font-weight:600;line-height:1.15}.content h2{font-size:27px;font-weight:600;line-height:1.25}.content h3{font-size:20px;font-weight:600;line-height:1.4}.content h4{font-size:18px;font-weight:600}.content a{color:var(--accent)}.content a:hover{color:#a7f3d0}.content ul{list-style:disc;padding-left:24px}.content ol{list-style:decimal;padding-left:24px}.content pre{font-family:'JetBrains Mono',ui-monospace,monospace}.content code{font-family:'JetBrains Mono',ui-monospace,monospace}.content li>p{margin-bottom:12px}.content p,.content li,.content a{overflow-wrap:anywhere}
+.sidebar{width:224px;padding:24px 16px}.layout{margin-left:224px}.content{max-width:none;width:100%;margin:0;padding:40px clamp(24px,2.5vw,48px) 64px}.content p,.content ul,.content ol,.lead{max-width:none}.chapter-select{display:none;background:var(--raised);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:10px 12px;font:14px Inter,system-ui;width:100%}.chapter-select:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media(max-width:900px){.sidebar{width:auto;padding:16px 20px}.layout{margin-left:0}.content{padding:28px 20px 48px}.content h2{font-size:24px}.chapter-select{display:block}.js .sidebar nav{display:none}.sidebar nav{overflow-x:auto;flex-wrap:nowrap}.sidebar nav a{flex:0 0 auto}.topbar{padding:12px 20px}.topbar label{width:100%}.topbar input{width:100%}}
+@media print{.layout{margin:0}.content{padding:0;width:100%}.chapter-select{display:none}}
+</style></head><body><a class="skip" href="#main">Skip to content</a><aside class="sidebar"><a class="brand" href="index.html">oubliai<em>.</em></a><div class="small">Telnyx × FastMCP / Build dossier</div><select class="chapter-select" aria-label="Choose chapter"><option value="index.html" >01 · Product overview</option><option value="server.html" >02 · Server &amp; chaining</option><option value="client.html" >03 · Client &amp; facilitator</option><option value="app.html" >04 · App &amp; embedding</option><option value="inventory.html" >05 · Telnyx tool inventory</option><option value="features.html" >06 · FastMCP feature coverage</option><option value="roadmap.html" >07 · Build order &amp; verification</option><option value="transparency.html" >08 · Evidence &amp; limitations</option><option value="complete.html" selected>09 · Complete specification</option></select><nav aria-label="Chapters"><a href="index.html" ><span>01</span>Product overview</a><a href="server.html" ><span>02</span>Server &amp; chaining</a><a href="client.html" ><span>03</span>Client &amp; facilitator</a><a href="app.html" ><span>04</span>App &amp; embedding</a><a href="inventory.html" ><span>05</span>Telnyx tool inventory</a><a href="features.html" ><span>06</span>FastMCP feature coverage</a><a href="roadmap.html" ><span>07</span>Build order &amp; verification</a><a href="transparency.html" ><span>08</span>Evidence &amp; limitations</a><a href="complete.html" aria-current="page"><span>09</span>Complete specification</a></nav><div class="side-footer"><span class="status">Plan · not implemented</span><p>Source-grounded architecture.<br>Native framework first.<br>Compatibility gates explicit.</p><a href="source-plan.md">Markdown source</a></div></aside><div class="layout"><header class="topbar"><p>09 / 9 &nbsp; Complete specification</p><label><span class="small">Find on this page </span><input id="search" type="search" placeholder="Filter sections…" aria-label="Filter sections on this page"></label></header><main id="main" class="content"><section class="hero" id="00-chapter"><div class="eyebrow">Implementation plan / October 2026</div><h1>The full build specification.</h1><p class="lead">Every source-plan section, including all domain references, feature dispositions, dependencies, acceptance criteria and verification tasks.</p><div class="source-links"><a href="complete.html">Read every implementation detail</a><a href="transparency.html">Evidence & limitations</a><a href="source-plan.md" download>Download Markdown</a></div></section><div class="note"><strong>Read this as a plan.</strong> Framework primitives and source definitions are distinguished from proposed integration work. No live product completion is implied.</div><nav class="toc" aria-label="On this page"><a href="#01-tl-dr-for-humans">TL;DR (For humans)</a><a href="#02-scope">Scope</a><a href="#03-must-have">Must have</a><a href="#04-evidence-keys-and-reading-order">Evidence keys and reading order</a><a href="#05-1-server-first-use-the-openapi-integration-as-the-implementation">1. Server first: use the OpenAPI integration as the implementation</a><a href="#06-2-context-discipline-a-small-catalog-bounded-results">2. Context discipline: a small catalog, bounded results</a><a href="#07-3-byok-state-and-the-store">3. BYOK, state and the Store</a><a href="#08-4-client-second-make-the-server-usable-by-applications">4. Client second: make the server usable by applications</a><a href="#09-5-facilitator-present-in-the-workspace-executed-by-an-existing-agent-runtime">5. Facilitator: present in the workspace, executed by an existing agent runtime</a><a href="#10-6-app-last-native-generative-ui-reusable-domain-views-official-embedding">6. App last: native Generative UI, reusable domain views, official embedding</a><a href="#11-must-not-have-guardrails-anti-slop-scope-boundaries">Must NOT have (guardrails, anti-slop, scope boundaries)</a><a href="#12-native-fastmcp-feature-disposition">Native FastMCP feature disposition</a><a href="#13-concrete-telnyx-tools-and-domain-ui">Concrete Telnyx tools and domain UI</a><a href="#14-native-fastmcp-feature-coverage-table">Native FastMCP feature coverage table</a><a href="#15-verification-strategy">Verification strategy</a><a href="#16-execution-strategy">Execution strategy</a><a href="#17-parallel-execution-waves">Parallel execution waves</a><a href="#18-dependency-matrix">Dependency matrix</a><a href="#19-todos">Todos</a><a href="#20-final-verification-wave">Final verification wave</a><a href="#21-commit-strategy">Commit strategy</a><a href="#22-success-criteria">Success criteria</a></nav><div id="no-results" class="empty" hidden>No matching sections. Clear the search to restore the full chapter.</div><section class="chapter-section" id="01-tl-dr-for-humans"><div class="eyebrow">01 / Section</div><h2>TL;DR (For humans)</h2>
+<p><strong>What you&#39;ll get:</strong> A bring-your-own-key Telnyx workspace: one remote server, a reusable client, and interactive generative views that can be embedded in another application&#39;s UI. It covers communications including fax/email/video and external meeting bots, AI agents/voice/inference/training/RAG, and storage, with a facilitator using an existing agent runtime.</p>
+<p><strong>Why this approach:</strong> Build on FastMCP&#39;s OpenAPI provider rather than duplicating the Telnyx API. Native discovery and bounded code execution keep the full catalog out of the model&#39;s initial context; the native generator remains directly visible so hosts can render its UI.</p>
+<p><strong>What it will NOT do:</strong> Invent a new agent loop, queue, UI interpreter or authentication protocol. It will not put a meeting bot in Telnyx Rooms or claim host microphone access, OAuth compatibility, or assistant-to-widget delivery without the corresponding test evidence.</p>
+<p><strong>Effort:</strong> XL — full-platform integration, not a small wrapper.
+<strong>Risk:</strong> High — native primitives are documented, but cross-runtime facilitator UI delivery, resource-bound OAuth and live media require early compatibility proofs.
+<strong>Decisions to sanity-check:</strong> User-account credentials; four model-visible tools; one embeddable workspace; no default duplicate Telnyx MCP proxy; explicit separation of ordinary runtime persistence from the requested Telnyx KV adapter.</p>
+<p>Your next move: review the compatibility gates and ordered build. Implementation belongs to a separate worker session; this document does not claim implementation has started.</p>
+<hr>
+<blockquote>
+<p>TL;DR (machine): XL / high integration risk; 6 waves, 27 implementation tasks, 4 final verification tasks; server -&gt; client/facilitator -&gt; domain workflows -&gt; Generative UI/embed -&gt; release evidence.</p>
+</blockquote>
+</section><section class="chapter-section" id="02-scope"><div class="eyebrow">02 / Section</div><h2>Scope</h2>
+</section><section class="chapter-section" id="03-must-have"><div class="eyebrow">03 / Section</div><h2>Must have</h2>
+<p><strong>Product:</strong> an embeddable Telnyx communications and AI workspace, backed by one remote FastMCP server. A user brings their Telnyx credentials; an external agent or the workspace facilitator discovers and operates that account. The same tools power chat, interactive forms, dashboards, voice/video controls, and other applications embedding the workspace.</p>
+<p>This document replaces <code>.omo/plans/telnyx-fastmcp-server.md</code> and all of its additive amendments. It is a build plan, not a claim that a server or UI already exists. Research baseline: local <code>openapi.json</code>, installed FastMCP 4.0.10, MCP 2.2.0, Prefab 0.20.2, and official documentation retrieved during this rewrite. Pin the compatible baseline; do not silently track <code>main</code> or claim a documentation example is a live integration test.</p>
+<p>User decisions: domain <code>oubliai.com</code>; plan endpoint <code>https://oubliai.com/mcp</code> (no assumption of a separately approved subdomain); API-key and OAuth entry paths; Code Mode enabled; at most four model-visible tools; special/hidden endpoints registered but disabled; first-class communications, video, external meeting bot, facilitator, AI agents/voice/inference/training/RAG, and storage UI. Meetings bot is for Zoom/Google Meet/Teams/Webex, <strong>not</strong> Telnyx Rooms. Store means both a catalog UI and the requested Telnyx KV storage adapter.</p>
+</section><section class="chapter-section" id="04-evidence-keys-and-reading-order"><div class="eyebrow">04 / Section</div><h2>Evidence keys and reading order</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Primary source</th>
+<th>What it proves / limits</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>E1</td>
+<td><code>openapi.json</code>, <code>paths</code>, <code>components</code>, <code>webhooks</code>; original <code>fastmcp-llms.txt</code> and <code>fastmcp-llms-full.txt</code></td>
+<td>Endpoint/schema inventory, not successful execution or account entitlement. Use <code>(method,path)</code> as operation identity, not operationId alone.</td>
+</tr>
+<tr>
+<td>E2</td>
+<td><a href="https://gofastmcp.com/integrations/openapi">https://gofastmcp.com/integrations/openapi</a> ; local <code>docs/fastmcp/openapi-integration.md</code>; installed <code>fastmcp/server/providers/openapi/{provider,components,routing}.py</code></td>
+<td><code>OpenAPIProvider</code>, <code>from_openapi</code>, ordered RouteMap, name/component hooks, flattened schemas, client-based requests.</td>
+</tr>
+<tr>
+<td>E3</td>
+<td><a href="https://gofastmcp.com/servers/transforms/code-mode">https://gofastmcp.com/servers/transforms/code-mode</a> ; <code>docs/fastmcp/code-mode.md</code>; installed <code>fastmcp/experimental/transforms/code_mode.py</code></td>
+<td>Native Search/GetSchemas/execute, bounded Monty execution, intermediates stay in execution. Experimental API; does not promise persistent workflow execution.</td>
+</tr>
+<tr>
+<td>E4</td>
+<td><a href="https://gofastmcp.com/apps/generative">https://gofastmcp.com/apps/generative</a> ; installed <code>fastmcp/apps/generative.py:53-159</code></td>
+<td>Native generator takes <code>code</code> and optional <code>data</code>; registers renderer metadata and component lookup. No built-in LLM, tool-result-reference resolver, or Telnyx client inside the sandbox.</td>
+</tr>
+<tr>
+<td>E5</td>
+<td><a href="https://gofastmcp.com/apps/fastmcp-app">https://gofastmcp.com/apps/fastmcp-app</a> ; <code>docs/fastmcp/fastmcp-app.md</code></td>
+<td>Provider composition; model/app visibility; function-reference CallTool resolution. Visibility is not a substitute for authorization.</td>
+</tr>
+<tr>
+<td>E6</td>
+<td><a href="https://modelcontextprotocol.io/extensions/apps/build">https://modelcontextprotocol.io/extensions/apps/build</a> ; <a href="https://apps.extensions.modelcontextprotocol.io/api/classes/app-bridge.AppBridge.html">https://apps.extensions.modelcontextprotocol.io/api/classes/app-bridge.AppBridge.html</a> ; <a href="https://github.com/modelcontextprotocol/ext-apps/tree/main/examples/basic-host">https://github.com/modelcontextprotocol/ext-apps/tree/main/examples/basic-host</a></td>
+<td>Official embedding bridge and example sandbox host; tool/resource forwarding; input/result notifications. Use this rather than hand-rolled postMessage plumbing.</td>
+</tr>
+<tr>
+<td>E7</td>
+<td><a href="https://prefab.prefect.io/docs/styling/themes">https://prefab.prefect.io/docs/styling/themes</a> ; <a href="https://prefab.prefect.io/docs/reference/app">https://prefab.prefect.io/docs/reference/app</a> ; installed <code>prefab_ui/app.py:123-176</code>, <code>prefab_ui/themes/base.py:113-222</code></td>
+<td>Theme/CSS/mode/assets; explicit token mapping is possible. Arbitrary parent-app CSS does not automatically enter an iframe.</td>
+</tr>
+<tr>
+<td>E8</td>
+<td><code>docs/fastmcp/{tasks,sessions,storage-backends,http-deployment,auth,authorization}.md</code>; <a href="https://gofastmcp.com/clients/client">https://gofastmcp.com/clients/client</a></td>
+<td>Native task extension, Docket backends, user state, auth, client. Neither Telnyx KV nor EventStore is a substitute for Docket&#39;s queue.</td>
+</tr>
+<tr>
+<td>E9</td>
+<td><code>docs/telnyx-oauth-as-metadata.json</code>; <a href="https://api.telnyx.com/.well-known/oauth-authorization-server">https://api.telnyx.com/.well-known/oauth-authorization-server</a></td>
+<td>Telnyx advertises OAuth/DCR/PKCE; does not prove issuance for Oubliai&#39;s resource/audience.</td>
+</tr>
+<tr>
+<td>E10</td>
+<td><a href="https://developers.telnyx.com/api-reference/assistants/assistant-chat-beta">https://developers.telnyx.com/api-reference/assistants/assistant-chat-beta</a> ; <code>openapi.json</code> assistant chat / MCP server / integration secret schemas</td>
+<td>Existing assistant runtime and chat API. End-to-end MCP tool use, credential propagation and UI-result forwarding still need the compatibility gate.</td>
+</tr>
+<tr>
+<td>E11</td>
+<td><code>openapi.json</code> <code>/meeting_sessions*</code>; <code>/Users/tims-stuff/.agents/skills/telnyx-meeting-bot/SKILL.md</code>; <a href="https://github.com/team-telnyx/ai/blob/main/guides/meeting-bot.md">https://github.com/team-telnyx/ai/blob/main/guides/meeting-bot.md</a></td>
+<td>Third-party meeting lifecycle, assistant attachment, transcript/artifact contracts; not Telnyx Room bot integration.</td>
+</tr>
+<tr>
+<td>E12</td>
+<td><a href="https://github.com/team-telnyx/webrtc/tree/main/packages/js">https://github.com/team-telnyx/webrtc/tree/main/packages/js</a> ; <a href="https://developers.telnyx.com/docs/development/webrtc/js-sdk/how-to/configure-network-firewall">https://developers.telnyx.com/docs/development/webrtc/js-sdk/how-to/configure-network-firewall</a> ; installed <code>fastmcp/apps/config.py:21-82</code></td>
+<td>Browser audio SDK and requested microphone permissions; host grants/network/device remain runtime conditions.</td>
+</tr>
+</tbody></table></div>
+</section><section class="chapter-section" id="05-1-server-first-use-the-openapi-integration-as-the-implementation"><div class="eyebrow">05 / Section</div><h2>1. Server first: use the OpenAPI integration as the implementation</h2>
+<ol>
+<li>Load the pinned spec once at startup. Build one canonical operation inventory; generate tools with <code>OpenAPIProvider</code>. Do not write 1,382 endpoint wrappers or a second generic HTTP executor.</li>
+<li>Retain all source operations in the inventory, including OAuth protocol, hidden, experimental, alternate-host, SSE and WebSocket entries. Each has exactly one implementation disposition: native provider, native provider with documented normalization, narrow protocol adapter, or registered-disabled with reason. Count source paths and operations separately. Disabled is accounted-for, <strong>not working</strong>. Release reports callable coverage and disabled coverage separately.</li>
+<li>The normalization layer is data-only and justified per exception: resolve effective server URL, version-prefix duplicates, duplicate/truncated names, and route metadata. Preserve the original spec. Use an explicit reviewed names map with collision checks; namespace+suffix lengths must fit host limits. Do not indiscriminately prepend <code>/v2</code> to already-versioned paths. Do not assume the supplied HTTP client honors path/operation <code>servers</code> overrides.</li>
+<li>Reuse an async HTTP client per verified upstream origin and lifecycle; inject request-scoped credentials without mutating shared headers. RouteMap decides component type, component hooks attach source metadata/tags/annotations, and authorization runs at execution. Classify SQL/query POSTs and action endpoints explicitly: HTTP verb alone does not establish permission or safety.</li>
+<li>Preserve output validation by default; record narrowly scoped exceptions supported by a failing contract test. Multipart, file bytes, downloaded PDF/audio, SSE and WebSockets get wire-format tests and official SDK/protocol adapters where the generic provider is insufficient. A WSS operation does not become callable merely by flipping Visibility.</li>
+<li>Keep all ordinary Telnyx tools behind a native discovery transform; no duplicated proxy to Telnyx&#39;s hosted MCP. Original operation names stay traceable in the inventory even where an MCP-safe name differs.</li>
+</ol>
+</section><section class="chapter-section" id="06-2-context-discipline-a-small-catalog-bounded-results"><div class="eyebrow">06 / Section</div><h2>2. Context discipline: a small catalog, bounded results</h2>
+<p>Target default model-visible surface: <strong><code>search</code>, <code>get_schema</code>, <code>execute</code>, <code>generate_prefab_ui</code></strong>. Use native CodeMode with native Search/GetSchemas on the operations provider/child server; keep the native generator outside that transform so its <code>_meta.ui.resourceUri</code> is directly advertised. Component lookup and domain backend tools remain discoverable behind Code Mode; UI-only backends remain available to authenticated app actions, not model discovery. The catalog/Store is a workspace page and resource, not a fifth pinned tool. Verify this composition before building domain UIs.</p>
+<ul>
+<li>Search: top five brief matches by default, with family tags; fetch compact schema only for chosen tools. Full schema is available explicitly. Do not expose ListTools over the full catalog as a routine model tool.</li>
+<li>Execute: native Monty limits, 30 seconds/100 MB baseline and 25 nested calls per execution; return selected fields, counts, IDs, or short summaries. No waiting an hour for a meeting inside execute.</li>
+<li>UI: model generates the view and queries; native <code>CallTool</code> actions fetch pages into UI state. Avoid model-mediated copying of datasets into <code>data</code>. <code>data</code> remains useful for small already-available values. Do not invent a hidden data-reference API.</li>
+<li>Polling: the client/worker handles progress, meeting events, and task polling; do not add every tick/transcript fragment to the LLM conversation. Explicit user questions determine what gets summarized into model context.</li>
+<li>Measure initial tool schema bytes, search result size, selected-schema size, output size, and model calls per scenario. A fixed small catalog is achievable; <strong>zero context impact is not</strong>. No false universal token or host tool-count limit.</li>
+<li>Keep UI entry metadata, task capability, and multi-round input results intact. If a nested call cannot preserve them, use a direct invocation by the application/client. A &lt;=4 model listing does not prohibit the client from calling a known backend tool by name.</li>
+</ul>
+</section><section class="chapter-section" id="07-3-byok-state-and-the-store"><div class="eyebrow">07 / Section</div><h2>3. BYOK, state and the Store</h2>
+<p>BYOK means Telnyx requests use the connected user&#39;s credential and account. It does not mean the Oubliai backend cannot process their data, nor that a valid key proves all scopes or features. Do not infer a stable account ID from the key text. Any key-derived principal identifies that credential only until a documented account identity is available.</p>
+<ul>
+<li><strong>Key path:</strong> native FastMCP TokenVerifier extension point with a documented verification request; distinguish invalid credentials from entitlement/429/transient failures. Use a backend connection identity for the embedded app; never expose an account-wide key to generated code or a shared frontend bundle.</li>
+<li><strong>OAuth path:</strong> reuse FastMCP&#39;s OAuthProxy/RemoteAuthProvider and verifiers, not a new authorization server. First test Telnyx issuer/audience/resource behavior. Use RemoteAuthProvider only if tokens are issued for this resource. Otherwise use OAuthProxy with its documented upstream-token storage/access pattern and a registered Telnyx client. Never disable audience verification to force it to work, and never forward an Oubliai access token as a Telnyx key.</li>
+<li><strong>Scopes:</strong> source from actual grants and documented operation requirements. The earlier guessed method-to-scope table is not authoritative. Narrow denied operations remain denied through search, execute, direct calls and UI.</li>
+<li><strong>Runtime state:</strong> native memory backends for local development; native Redis/Valkey-backed Docket and key-value stores for multi-worker sessions/events/work. Partition cache entries by principal, authorization, arguments and version. No cache of mutations; no blind retry after an ambiguous write.</li>
+<li><strong>TelnyxKVStore:</strong> keep the explicitly requested adapter as an account-owned document/preferences store through the native AsyncKeyValue interface. Contract-test get/put/delete/batch/expiration semantics. Namespace creation is an explicit setup action, not a side effect of the first read. Do not advertise atomic claims/CAS, transactional isolation, task durability or Redis equivalence without a documented primitive and tests. No unauthenticated fallback into another user&#39;s store.</li>
+<li><strong>Catalog Store:</strong> browse domains, operation details and supported profiles; activate permitted registered-disabled features only after their adapter is validated. Favorites affect workspace navigation, not the four-tool model list. One catalog, no separate marketplace backend.</li>
+</ul>
+</section><section class="chapter-section" id="08-4-client-second-make-the-server-usable-by-applications"><div class="eyebrow">08 / Section</div><h2>4. Client second: make the server usable by applications</h2>
+<p>Ship a small Python integration package built on <code>fastmcp.Client</code>; preserve native tools/resources/prompts/completion, OAuth/bearer auth, protocol negotiation, structured results, progress/log handlers, elicitation/sampling handlers, caching, task lifecycle, notifications and teardown. Use native FastMCP CLI for inspect/list/call and remote bridging; do not build another CLI framework to duplicate it. Include ClientGroup as an optional integration example, not automatic Telnyx proxying.</p>
+<p><strong>Benefit to server:</strong> repeatable conformance tests, connection lifecycle, capability negotiation, bounded retries where documented, accurate handling of task and input-required results. <strong>Benefit to app:</strong> tool metadata plus UI resource loading, backend-only credentials, explicit pending/error states, and an interface shared by human clicks and agent calls. FastMCP Client is not a browser renderer or an LLM agent.</p>
+</section><section class="chapter-section" id="09-5-facilitator-present-in-the-workspace-executed-by-an-existing-agent-runtime"><div class="eyebrow">09 / Section</div><h2>5. Facilitator: present in the workspace, executed by an existing agent runtime</h2>
+<p>When Claude or another MCP host connects, that host&#39;s agent already provides orchestration. Do not start a redundant facilitator behind every tool call.</p>
+<p>For the standalone/embedded workspace, include a facilitator chat backed by a <strong>Telnyx AI Assistant</strong> in the user&#39;s account: use native assistant chat and its MCP/tool configuration, with documented integration-secret authentication. The facilitator selects tools, explains results, generates Prefab UI code, and requests user input. Use native Missions for autonomous/durable agent workflows where their documented run semantics fit; use FastMCP Tasks for server-side operations. No bespoke LLM planning/tool-calling loop, invented message bus, or recursive facilitator calling itself.</p>
+<p>Before acceptance, prove the complete path: workspace user -&gt; native assistant conversation -&gt; Oubliai MCP authenticated as that user -&gt; Telnyx operation -&gt; assistant reply/UI. Also prove that the generator tool result (or its validated UI artifact) can reach AppBridge. The existence of a chat endpoint does not prove this entire chain. If native assistant chat omits the required tool/UI payload, record that as a blocking integration gap; do not silently replace it with a homemade runtime or claim generative UI is complete. Existing-app integrations may instead attach their existing agent and pass its actual tool-call stream/results to AppBridge.</p>
+<p>The facilitator is also available as an assistant selection for <strong>external meeting sessions</strong>, using Telnyx&#39;s native <code>assistant</code> attachment. It is never silently attached to a Telnyx Video Room. Session controls and the meeting observer are separate from the conversational model.</p>
+<p>Specific current evidence: <code>openapi.json:101530-101577</code> defines AssistantChatReq (<code>content</code>, <code>conversation_id</code>, optional <code>stream</code>) and AssistantChatResponse (<code>content</code> only). The stream description promises <code>delta</code>, <code>done</code> and <code>error</code>, not MCP App resource/tool-result events. Thus native facilitator text chat is documented, while automatic native-assistant-to-generative-widget delivery is a <strong>compatibility gate, not a confirmed feature</strong>. Do not label this gate green from successful text chat alone.</p>
+</section><section class="chapter-section" id="10-6-app-last-native-generative-ui-reusable-domain-views-official-embedding"><div class="eyebrow">10 / Section</div><h2>6. App last: native Generative UI, reusable domain views, official embedding</h2>
+<p>Use the existing <code>GenerativeUI</code> provider unchanged where possible, <code>FastMCPApp</code> for domain backend/UI organization, and Prefab for reusable tables/forms/charts/controls. One workspace with domain pages replaces the earlier proliferation of separately deployed apps. A common list/detail/form pattern provides access to the long tail of operations; tested domain recipes cover common workflows. Do not infer semantic charts from field names or rebuild Prefab&#39;s component framework.</p>
+<p><strong>Actual generation flow:</strong> the host/facilitator discovers the relevant Telnyx tools and Prefab components; writes Prefab Python using the documented imports; invokes the directly advertised generator; the host forwards partial arguments; the native renderer displays the preview; server-side sandbox execution validates the complete result. UI actions call tools directly and populate state. Streamed preview requires host support; final render remains the required fallback. Native generator needs Prefab, Deno for server validation, and browser Pyodide/CSP assets.</p>
+<p><strong>Embedding into another application:</strong> provide a small framework-neutral browser adapter built around official <code>@modelcontextprotocol/ext-apps</code> AppBridge and its basic-host example. The application&#39;s backend uses the FastMCP client; the browser receives the tool UI resource/metadata, forwards input/result lifecycle through AppBridge, and routes UI tool/resource requests back to that user&#39;s backend connection. Use official sandbox/origin checks, not new postMessage conventions. Expose mount/unmount/theme/auth-connection callbacks; a React wrapper is thin convenience, not a second app implementation. Product code for this adapter is application glue, not a new protocol.</p>
+<p>The official AppBridge reference explicitly supports <code>new AppBridge(null, hostInfo, capabilities)</code> with host-provided <code>oncalltool</code> handlers, as well as a connected JS MCP client with automatic forwarding. Use the former for the Python FastMCP-backed embed; preserve native <code>sendToolInput</code>, partial-input, final-result and teardown notifications. Do not hand a Python Client object to the JavaScript constructor or invent a browser FastMCP Python runtime.</p>
+<p><strong>Matching design systems:</strong> accept the integrator&#39;s color, surface, typography, radius, spacing and light/dark tokens at mount. Map them to MCP host context/styles and Prefab <code>Theme</code>/document CSS; send changes through the native host-context mechanism. Use semantic tokens in recipes, inherit host mode, bundle or authorize fonts. Default to host styling when present. A finite token mapping yields first-render consistency; arbitrary proprietary components/layout rules do not transfer automatically across an iframe. Test the same domain view in two differently themed host fixtures, including a runtime theme switch.</p>
+<p><strong>Audio/video:</strong> real-time connections use Telnyx&#39;s existing browser SDKs in a stable developer-authored media surface; generated UI controls the surrounding workflow. Do not regenerate the live PeerConnection with each model turn. <code>ResourcePermissions(microphone/camera)</code> requests access; actual grant, autoplay, ICE and SDK compatibility need host tests. Own-host browser support is a test target, not a guarantee without testing. Provide phone-supervisor fallback where supported. A recording player is not proof of live media.</p>
+</section><section class="chapter-section" id="11-must-not-have-guardrails-anti-slop-scope-boundaries"><div class="eyebrow">11 / Section</div><h2>Must NOT have (guardrails, anti-slop, scope boundaries)</h2>
+<ul>
+<li>No custom discovery engine, schema flattener, LLM loop, workflow queue, iframe protocol, UI interpreter or replacement auth system when a documented framework feature exists.</li>
+<li>No simultaneous activation of every auth provider, every cache store and competing transforms merely to tick a feature box. Account for framework alternatives explicitly below.</li>
+<li>No proxy to Telnyx&#39;s original MCP in the default product; no bot inside Telnyx&#39;s own video rooms.</li>
+<li>No automatic domain/DNS changes, namespace creation, purchases, messages or outbound calls during planning or generic live verification. Controlled test recipients/accounts are explicit integration-test prerequisites.</li>
+<li>No claims that absent OpenAPI endpoints prove a platform feature impossible; no claims that registered tools prove complete live coverage; no promise of exactly-once remote writes from local claims alone.</li>
+<li>No assumption that all webhooks use the same signing contract, all paginated endpoints use the same cursor, all inference models accept the same inputs, or every account has all products enabled.</li>
+<li>No hard-coded default LLM model from an old example; use the user&#39;s configured available model/assistant.</li>
+<li>No fabricated full-domain identity resolution: a common inbox is an application view over provider records/events with explicit source IDs and explicit contact links, not a native Telnyx cross-channel conversation API.</li>
+</ul>
+</section><section class="chapter-section" id="12-native-fastmcp-feature-disposition"><div class="eyebrow">12 / Section</div><h2>Native FastMCP feature disposition</h2>
+</section><section class="chapter-section" id="13-concrete-telnyx-tools-and-domain-ui"><div class="eyebrow">13 / Section</div><h2>Concrete Telnyx tools and domain UI</h2>
+<p>Names below are <strong>actual source operationIds</strong>, not invented friendly tool names. FastMCP may normalize/truncate them; the generated mapping exposes the exact registered MCP name. These examples describe each area&#39;s working surface; <code>docs/operations.json</code> generated in task 1 supplies the exhaustive operation-by-operation inventory. UI writes invoke these same tools, not a parallel REST implementation.</p>
+<p>Recounted from the local source with all OpenAPI HTTP methods: <strong>933 paths, 1,382 operations, 96 top-level webhook definitions</strong>. <code>/ai/</code> alone has <strong>176 operations</strong>; the previous &quot;112 AI ops&quot; was a path/operation mix-up. Meetings have <strong>15 operations</strong>, email inboxes <strong>27</strong>, video room/session/participant/recording/composition prefixes together <strong>25</strong>, and fax plus fax applications <strong>11</strong>. Counts are source snapshot counts, not account availability.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Concrete tool examples from source</th>
+<th>Workspace experience / boundary</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Phone/SIP/Call Control</td>
+<td><code>DialCall</code>, <code>RetrieveCallStatus</code>, <code>AnswerCall</code>, <code>BridgeCall</code>, <code>SpeakCall</code>, <code>TransferCall</code>, <code>HangupCall</code>, <code>StartCallTranscription</code>, <code>StartCallStreaming</code>, <code>StartCallRecord</code>, <code>SwitchSupervisorRole</code>, <code>ListConnectionActiveCalls</code></td>
+<td>Call console, status/transcript, recordings, supervisor controls; asynchronous events determine actual call state. SIP applications/connections/TeXML/conferences remain fully covered by inventory.</td>
+</tr>
+<tr>
+<td>AI Voice</td>
+<td><code>CallStartAIAssistant</code>, <code>CallJoinAIAssistant</code>, <code>CallStopAIAssistant</code>, <code>CallAddMessagesToAIAssistant</code>, <code>CallStartConversationRelay</code>, <code>CallStopConversationRelay</code></td>
+<td>Assistant selection, conversation controls, text injection; acceptance does not prove playback. Barge/whisper routing tested on actual call topology.</td>
+</tr>
+<tr>
+<td>WebRTC</td>
+<td><code>FindTelephonyCredentials</code>, <code>CreateTelephonyCredential</code>, <code>GetTelephonyCredential</code>, <code>UpdateTelephonyCredential</code>, <code>CreateTelephonyCredentialToken</code>, <code>DeleteTelephonyCredential</code></td>
+<td>Stable browser softphone via official SDK; JWT minting stays backend-side. Mic permissions/ICE/host acceptance tested.</td>
+</tr>
+<tr>
+<td>SMS/MMS</td>
+<td><code>SendMessage</code>, <code>CreateGroupMmsMessage</code>, <code>GetGroupMmsMessages</code>, <code>CreateLongCodeMessage</code>, <code>CreateNumberPoolMessage</code>, <code>SendAlphanumericSenderIdMessage</code></td>
+<td>Composer, media, per-channel records/status, messaging-profile/registration configuration; available message history verified rather than fabricated.</td>
+</tr>
+<tr>
+<td>WhatsApp</td>
+<td><code>SendWhatsappMessage</code>, <code>ListWabas</code>, <code>ListWhatsappTemplates</code>, <code>PostWhatsappTemplate</code>, <code>GetWhatsappConversationWindow</code>, <code>GetWhatsappCallingSettings</code></td>
+<td>Templates/media/conversation-window-aware controls, WABA and phone setup. Calling settings alone are not proof of arbitrary WhatsApp call control. Handle versioned-path aliases carefully.</td>
+</tr>
+<tr>
+<td>RCS</td>
+<td><code>SendRCSMessage</code>, <code>GenerateRCSDeeplink</code>, <code>ListRcsAgents</code>, <code>CreateRcsAgent</code>, <code>ListRcsAgentCarrierApprovals</code>, <code>SubmitRcsAgent</code>, <code>LaunchRcsAgent</code>, <code>ListRCSCapabilitiesOfAPhoneNumber</code></td>
+<td>Rich message composition, agents/brands/test numbers and carrier approvals; show actual availability.</td>
+</tr>
+<tr>
+<td><strong>E-fax</strong></td>
+<td><code>SendFax</code>, <code>ListFaxes</code>, <code>ViewFax</code>, <code>CancelFax</code>, <code>RefreshFax</code>, <code>DeleteFax</code>; <code>ListFaxApplications</code>, <code>CreateFaxApplication</code>, <code>GetFaxApplication</code>, <code>UpdateFaxApplication</code>, <code>DeleteFaxApplication</code></td>
+<td>First-class inbox/outbox, PDF upload/preview/download, pages/status/routing; resend is another explicit send, not automatic timeout retry.</td>
+</tr>
+<tr>
+<td>Email sending/domains</td>
+<td><code>CreateEmailMessage</code>, <code>CreateEmailMessageBatch</code>, <code>ListEmailMessages</code>, <code>CancelScheduledEmailMessage</code>, <code>RescheduleEmailMessage</code>, <code>CreateEmailTemplate</code>, <code>RenderEmailTemplate</code>, <code>createEmailDomain</code>, <code>listEmailDomainDnsRecords</code>, <code>verifyEmailDomainDnsRecords</code>, <code>createEmailDomainWebhook</code></td>
+<td>Send/schedule/templates and domain DNS setup. Ownership/inbound verification required; preserve existing MX. Email events/validation/blocks/unsubscribe groups included.</td>
+</tr>
+<tr>
+<td>Agentic email inbox</td>
+<td><code>CreateEmailInbox</code>, <code>ListEmailInboxes</code>, <code>GetEmailInbox</code>, <code>ListEmailInboxMessages</code>, <code>ListEmailInboxThreads</code>, <code>GetEmailInboxThread</code>, <code>ReplyToEmailInboxMessage</code>, <code>ReplyAllToEmailInboxMessage</code>, <code>ForwardEmailInboxMessage</code>, <code>CreateEmailReplyDraft</code>, <code>SendEmailDraft</code>, <code>AddEmailInboxMessageLabels</code>, <code>AddEmailInboxFilterEntries</code></td>
+<td>Thread/read/search/triage/draft/reply. Facilitation uses native agent runtime plus authenticated tools. Domain webhook names/signing verified separately; absent top-level email webhook schemas are not filled in by guessing.</td>
+</tr>
+<tr>
+<td>Verify</td>
+<td><code>CreateVerificationSms</code>, <code>CreateVerificationCall</code>, <code>CreateFlashcallVerification</code>, <code>CreateWhatsappVerification</code>, <code>RetrieveVerification</code>, <code>VerifyVerificationCodeById</code>, <code>VerifyVerificationCodeByPhoneNumber</code></td>
+<td>Channel picker, create/check status, profile management; no inferred additional OTP transports.</td>
+</tr>
+<tr>
+<td>Numbers and routing support</td>
+<td><code>ListAvailablePhoneNumbers</code>, <code>ListPhoneNumbers</code>, <code>CreateNumberOrder</code>, associated order/number configuration and porting operations in inventory</td>
+<td>Search/order/configure/port, routing to channel applications; task/poll where provider creates asynchronous jobs.</td>
+</tr>
+<tr>
+<td>Telnyx Video Rooms</td>
+<td><code>ListRooms</code>, <code>CreateRoom</code>, <code>ViewRoom</code>, <code>UpdateRoom</code>, <code>CreateRoomClientToken</code>, <code>RefreshRoomClientToken</code>, <code>ListRoomSessions</code>, <code>MuteParticipantInSession</code>, <code>UnmuteParticipantInSession</code>, <code>KickParticipantInSession</code>, <code>EndSession</code>, <code>ListRoomRecordings</code>, <code>CreateRoomComposition</code></td>
+<td>Rooms/participants/recordings and native Video SDK join controls. <strong>No Meeting Bot participant inside these rooms.</strong> Post-recording STT/inference is an explicit workflow, not a native Room transcript claim.</td>
+</tr>
+<tr>
+<td>External meeting bot (all 15)</td>
+<td><code>listMeetingSessions</code>, <code>createMeetingSession</code>, <code>retrieveMeetingSession</code>, <code>updateMeetingSession</code>, <code>deleteMeetingSession</code>, <code>sendChatMeetingSession</code>, <code>speakMeetingSession</code>, <code>stopSpeakingMeetingSession</code>, <code>listMeetingSessionArtifacts</code>, <code>createMeetingSessionArtifact</code>, <code>retrieveMeetingSessionArtifact</code>, <code>listMeetingSessionEvents</code>, <code>listMeetingSessionRecordings</code>, <code>deleteMeetingSessionRecordingMedia</code>, <code>listMeetingSessionTranscript</code></td>
+<td>Zoom/Meet/Teams/Webex attendance, admission state, assistant attachment, live transcript/chat/speak, artifacts/recordings. Stop participation is distinct from delete recording media.</td>
+</tr>
+<tr>
+<td>AI Assistants and testing</td>
+<td><code>get_assistants_public_assistants_get</code>, <code>create_new_assistant_public_assistants_post</code>, <code>import_assistants_public_assistants_import_post</code>, <code>get_assistant_tests_public_assistants_tests_get</code>, <code>create_assistant_test_public_assistants_tests_post</code>, <code>ListTestSuiteRuns</code>, <code>TriggerTestSuiteRuns</code>; all assistant CRUD/version/tools endpoints</td>
+<td>Assistant editor, supported voice/tools/knowledge setup, import, versions/tests and results. Use exact schema; no made-up Assistant SDK method names.</td>
+</tr>
+<tr>
+<td>Facilitator conversation</td>
+<td><code>assistant_chat_public_assistants__assistant_id__chat_post</code>, <code>assistant_sms_chat_assistants__assistant_id__chat_sms_post</code>, <code>create_new_conversation_public_conversations_post</code>, <code>get_conversations_public_conversations_get</code></td>
+<td>User-owned assistant chat; explicit outbound SMS separate from ordinary chat. UI event delivery gap described above must be resolved.</td>
+</tr>
+<tr>
+<td>Missions</td>
+<td><code>get_public_missions_missions</code>, <code>post_public_missions_missions</code>, <code>post_public_missions_missions_mission_id_runs</code>, <code>get_public_missions_missions_mission_id_runs_run_id</code>, <code>post_public_missions_missions_mission_id_runs_run_id_cancel</code>, <code>GetMissionRunEvent</code>, <code>GetMissionRunStep</code>, <code>UpdateMissionRunStep</code>, <code>ListMissionRunAgents</code></td>
+<td>Native mission/run/plan/events/knowledge/tools/MCP configuration, pause/resume/cancel where specified. Do not replace native orchestration with custom scheduler.</td>
+</tr>
+<tr>
+<td>AI inference</td>
+<td><code>create_openai_chat_completion</code>, <code>list_openai_models</code>, <code>create_openai_embeddings</code>, <code>list_openai_embedding_models</code>, <code>create_anthropic_message</code>, <code>chat_public_openai_responses_completions_post</code>, <code>chat_public_responses_completions_post</code>, <code>PostSummary</code>, <code>create_typesafe_systemone</code></td>
+<td>Model/inference playground, structured/streaming requests per actual endpoint support. Old hidden model/chat paths remain accounted for and disabled as agreed.</td>
+</tr>
+<tr>
+<td>Training / fine-tuning</td>
+<td><code>get_finetuningjob_public_finetuning_get</code>, <code>create_new_finetuningjob_public_finetuning_post</code>, <code>get_finetuningjob_public_finetuning__job_id__get</code>, <code>cancel_new_finetuningjob_public_finetuning_post</code></td>
+<td>Documented job creation/list/status/cancel and input requirements; not an invented general model-training platform.</td>
+</tr>
+<tr>
+<td>RAG / collections</td>
+<td><code>ListCollections</code>, <code>CreateCollection</code>, <code>GetCollection</code>, <code>UpdateCollection</code>, <code>GetCollectionSettings</code>, <code>ListCollectionSources</code>, <code>SearchCollectionDocuments</code>; source/settings mutations in inventory</td>
+<td>Collection/source management and retrieval grounded in returned documents; ingestion progress/failure visible.</td>
+</tr>
+<tr>
+<td>Embeddings / clustering</td>
+<td><code>PostEmbedding</code>, <code>PostEmbeddingUrl</code>, <code>GetTasksByStatus</code>, <code>GetEmbeddingTask</code>, <code>GetEmbeddingBuckets</code>, <code>GetBucketName</code>, <code>PostEmbeddingSimilaritySearch</code>, <code>compute_new_cluster_public_text_clusters_post</code>, <code>GetClusterImage</code></td>
+<td>URL/bucket embedding jobs, status/similarity search, cluster output. <code>GetClusterImage</code> is not automatically an interactive graph API.</td>
+</tr>
+<tr>
+<td>Memory / insights / integrations</td>
+<td><code>ListMemoryProfiles</code>, <code>RecallMemories</code>, <code>RememberFact</code>, <code>IngestSession</code>, <code>ForgetProfile</code>, <code>ListMemorySources</code>, <code>aggregate_conversation_insights</code>, <code>create_insight_group</code>, <code>create_mcp_server</code>, <code>list_mcp_servers</code>, <code>list_integrations_public_integrations_get</code></td>
+<td>Agent memory and insight configuration; tools/MCP server/integration-secret management scoped to user.</td>
+</tr>
+<tr>
+<td>Speech / voices</td>
+<td><code>generateSpeech</code>, <code>listVoices</code>, <code>listSttProviders</code>, <code>audio_public_audio_transcriptions_post</code>, <code>submitSttRequest</code>, <code>getSttRequest</code>, <code>listVoiceClones</code>, <code>createVoiceCloneFromUpload</code>, <code>getVoiceCloneSample</code>, <code>listVoiceDesigns</code>, <code>createVoiceDesign</code>, <code>getVoiceDesignSample</code>; pronunciation dictionaries</td>
+<td>TTS playback/STT upload and batch jobs, voice design/clone/library; special WebSocket operations disabled until adapter tests pass.</td>
+</tr>
+<tr>
+<td>KV / SQL</td>
+<td><code>ListKvNamespaces</code>, <code>CreateKvNamespace</code>, <code>GetKvNamespace</code>, <code>ListKvKeys</code>, <code>GetKvKey</code>, <code>PutKvKey</code>, <code>DeleteKvKey</code>, <code>DeleteKvNamespace</code>; <code>ListSqlDatabases</code>, <code>CreateSqlDatabase</code>, <code>GetSqlDatabase</code>, <code>QuerySqlDatabase</code>, <code>DeleteSqlDatabase</code></td>
+<td>Namespace/key editor and SQL console; requested FastMCP store adapter uses documented primitives only.</td>
+</tr>
+<tr>
+<td>CloudFS / media / migrations / buckets</td>
+<td><code>ListCloudfsFilesystems</code>, <code>CreateCloudfsFilesystem</code>, <code>UpdateCloudfsFilesystem</code>, <code>RotateCloudfsMetaToken</code>, <code>CreatePresignedObjectUrl</code>, <code>GetBucketUsage</code>, <code>GetStorageAPIUsage</code>, <code>ListMigrations</code>, <code>CreateMigration</code>, <code>StopMigration</code>; full <code>/media</code> operations</td>
+<td>Assets for fax/MMS/speech, filesystem management, migration progress, usage. S3 object list/put/get is a separate official protocol adapter, not generated from absent OpenAPI entries.</td>
+</tr>
+<tr>
+<td>Remaining platform</td>
+<td>Every account/billing/network/wireless/notification/registration/integration operation in E1</td>
+<td>Common catalog/operation inspector and generated forms; scope is not dropped merely because it is not a named custom dashboard.</td>
+</tr>
+</tbody></table></div>
+<p>Meeting-specific contract: retain last transcript cursor when a timeout returns null next cursor; use event seq for event paging; <code>joined_at</code>/actual status establish attendance; <code>deleteMeetingSession</code> stops/cancels but retains record; artifact generation is asynchronous and not blanket-idempotent, with the documented segment cap. Assistant sessions have their own restrictions (including <code>barge_in: true</code> rejection); validate current schema/docs rather than reusing a scribe payload. The <code>unknown</code> platform enum is not proof of support for Telnyx Rooms or arbitrary URLs.</p>
+<p>The unified Inbox links source records and verified events across channels. It does not promise historical content that Telnyx does not expose, automatic identity matching across email/phone, or a native common messaging data model. UI badges distinguish synchronized, partial, unavailable and permission-denied data.</p>
+</section><section class="chapter-section" id="14-native-fastmcp-feature-coverage-table"><div class="eyebrow">14 / Section</div><h2>Native FastMCP feature coverage table</h2>
+<p>&quot;All features&quot; means every documented public feature family has a purpose, supported profile, or explicit incompatibility; it does not mean activating mutually exclusive deployments at once. No invented extension is needed to demonstrate extension support: TasksExtension already does that.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature family</th>
+<th>Included use / profile</th>
+<th>Acceptance evidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OpenAPIProvider / from_openapi</td>
+<td>Canonical REST tools; RouteMap, route_map_fn, component hook, mcp_names, tags</td>
+<td>Source-to-tool mapping and wire contracts per serialization class</td>
+</tr>
+<tr>
+<td>Tools / structured content / annotations / binary content</td>
+<td>Full API catalog plus narrow documented SDK adapters</td>
+<td>Input/output/error/media tests; no binary decoded as text</td>
+</tr>
+<tr>
+<td>Resources / templates / prompts</td>
+<td>Domain instructions, source schemas, webhook catalog, workflow recipes and account views</td>
+<td>List/read/get and authorization tests</td>
+</tr>
+<tr>
+<td>Completions</td>
+<td>Prompt/template domain, event and account ID suggestions</td>
+<td>Known prefix + empty/denied cases; no claim of universal tool-argument autocomplete</td>
+</tr>
+<tr>
+<td>Context / dependency injection / lifespan</td>
+<td>Request credential, client/store lifecycles, progress/log access</td>
+<td>Concurrent identity isolation and client teardown</td>
+</tr>
+<tr>
+<td>CodeMode / Search / GetSchemas</td>
+<td>Default three execution/discovery tools</td>
+<td>Catalog-size, chained-call and denial tests</td>
+</tr>
+<tr>
+<td>BM25SearchTransform / RegexSearchTransform</td>
+<td>Alternative no-CodeMode compatibility profile, not stacked on default</td>
+<td>Native two-tool search/call behavior; same policy</td>
+</tr>
+<tr>
+<td>GetTags / ListTools / custom discovery factories</td>
+<td>Native optional catalog views available to app/admin client; full ListTools not model default</td>
+<td>Catalog paging and unchanged model tool budget</td>
+</tr>
+<tr>
+<td>Namespace / ToolTransform / visibility</td>
+<td>Conflict-free composition, narrowly justified ergonomic transforms, permitted per-user selection</td>
+<td>Names remain traceable; direct calls cannot bypass disabled state</td>
+</tr>
+<tr>
+<td>Versioning / VersionFilter / fingerprinting</td>
+<td>Pin upgrade behavior and native schema fingerprint checks</td>
+<td>Real compatibility change fixture, not fabricated Telnyx webhook versions</td>
+</tr>
+<tr>
+<td>ResourcesAsTools / PromptsAsTools</td>
+<td>Optional tool-only-host profile with generated utilities behind discovery</td>
+<td>Read/get parity without increasing default model listing</td>
+</tr>
+<tr>
+<td>Local / aggregate / FastMCP provider / composition</td>
+<td>One root, shared components, one operations child, domain FastMCPApp providers</td>
+<td>Mount/lifespan/policy propagation</td>
+</tr>
+<tr>
+<td>Filesystem / skills providers</td>
+<td>Native loading for reviewed recipes/skills; explicit allowed roots</td>
+<td>Only configured content accessible; missing directory handled</td>
+</tr>
+<tr>
+<td>ProxyProvider / ClientGroup</td>
+<td>Optional integration profile for an integrator&#39;s existing services</td>
+<td>Local upstream stand-in; no default duplicate Telnyx MCP</td>
+</tr>
+<tr>
+<td>Custom provider / custom transform / custom sandbox</td>
+<td>Native extension points remain available; no speculative implementation</td>
+<td>Compatibility fixture documents extension contract; built-in implementations preferred</td>
+</tr>
+<tr>
+<td>Elicitation (form/URL where supported) / sampling / roots</td>
+<td>Native supported protocol flow for user input; client handlers; server-owned inference separately</td>
+<td>Negotiated modes tested; unsupported mode yields explicit result, not guessed API</td>
+</tr>
+<tr>
+<td>Background tasks / task extension</td>
+<td>Long-running jobs and observer workers through native TasksExtension/Docket</td>
+<td>Start/status/result/cancel/restart; nested-call limitations tested</td>
+</tr>
+<tr>
+<td>Session state / UserSession / SessionId</td>
+<td>User preferences and app conversation/session handles</td>
+<td>Same principal reconnect and cross-principal rejection</td>
+</tr>
+<tr>
+<td>Storage backends / wrappers</td>
+<td>Memory local; native persistent stores and encryption/prefix wrappers where needed; requested KV adapter limited to proven semantics</td>
+<td>TTL, expiry, tenant partition, no credential fallback</td>
+</tr>
+<tr>
+<td>HTTP / Streamable HTTP / ASGI / custom routes</td>
+<td>Remote default, health/readiness and authenticated app endpoints; signed channel webhooks</td>
+<td>Real HTTP negotiation, stream/progress, route auth</td>
+</tr>
+<tr>
+<td>EventStore / SSE resume / stateless configuration</td>
+<td>Native compatible transport configuration; separate from durable job execution</td>
+<td>Reconnect/replay tests on supported protocol; no universal persistence claim</td>
+</tr>
+<tr>
+<td>stdio / legacy SSE / remote bridge</td>
+<td>Compatibility test profiles, not separate production servers</td>
+<td>Native transport examples and graceful capability fallback</td>
+</tr>
+<tr>
+<td>JWT/introspection/static/custom token verification</td>
+<td>Appropriate verified key/OAuth credentials</td>
+<td>Expired, wrong-audience, wrong-user and transient-validation cases</td>
+</tr>
+<tr>
+<td>RemoteAuthProvider / OAuthProxy / MultiAuth</td>
+<td>Both user entry modes; choose OAuth route from actual audience test</td>
+<td>Full resource discovery and token exchange test with correct audience</td>
+</tr>
+<tr>
+<td>OIDC/full OAuth/third-party auth providers / identity assertion</td>
+<td>Framework-provided optional deployment adapters; not separate user-account system for BYOK</td>
+<td>Config fixtures only unless explicitly deployed; no Telnyx identity-assertion claim</td>
+</tr>
+<tr>
+<td>Authorization / scopes / roles / step-up</td>
+<td>Documented scopes; roles only if integrator actually supplies a role model</td>
+<td>Check lists and execution in all paths; step-up where supported</td>
+</tr>
+<tr>
+<td>Middleware logging / timing / errors / rate limits</td>
+<td>Native classes, shortest sufficient stack; no payload secrets</td>
+<td>Error fidelity, telemetry and load tests</td>
+</tr>
+<tr>
+<td>Retry / caching / response limits</td>
+<td>Read/idempotent retry only; principal-aware safe reads; preserve valid schemas</td>
+<td>Ambiguous write not repeated; private result not shared; oversized result readable through paging</td>
+</tr>
+<tr>
+<td>Ping / dereferencing / tool injection</td>
+<td>Compatibility profiles only where needed; dereference once</td>
+<td>No hidden fifth model tool or duplicated schema expansion</td>
+</tr>
+<tr>
+<td>OpenTelemetry / icons / pagination / cache hints</td>
+<td>Native observability/metadata; component lists paginated, upstream pages separately handled</td>
+<td>Trace IDs without payloads; schema/metadata tests</td>
+</tr>
+<tr>
+<td>FastMCPApp / Prefab / custom HTML / permissions</td>
+<td>Domain workspace and stable SDK media surfaces</td>
+<td>Actual action, denied action, teardown and host capability test</td>
+</tr>
+<tr>
+<td>GenerativeUI / component search / sandbox</td>
+<td>Native rendering and runtime component reference</td>
+<td>Generator is directly visible with resource metadata; streaming/final render tests</td>
+</tr>
+<tr>
+<td>Approval / Choice / FormInput / FileUpload</td>
+<td>Native interaction providers used in relevant domain workflows</td>
+<td>UI action reaches intended endpoint once; rejected/cancelled input stays rejected</td>
+</tr>
+<tr>
+<td>CLI / fastmcp.json / inspect / install / generate-cli / testing</td>
+<td>Reuse native commands and project schema; examples for integrators</td>
+<td>Configuration loads; native CLI works; no unsolicited edits to user&#39;s client config</td>
+</tr>
+<tr>
+<td>Hosted deployment / sandboxed-agent patterns / client-only package</td>
+<td>Document compatible deployment/integration options, not extra hosting products</td>
+<td>Reproducible local/container run; documented dependencies</td>
+</tr>
+</tbody></table></div>
+<p>Client-specific coverage: native HTTP/in-memory/stdio transports and negotiation; tool results including errors/media; resource/template/prompt/completion operations; progress/log notifications; form and URL elicitation where negotiated; sampling and roots handlers; task polling/cancellation; bearer/OAuth/M2M/CIMD auth as supported integration profiles; response-cache isolation; ClientGroup; UI extension capability advertised by our embedding client. These are native client responsibilities; they are not all server tools.</p>
+</section><section class="chapter-section" id="15-verification-strategy"><div class="eyebrow">15 / Section</div><h2>Verification strategy</h2>
+<p>Test decision: TDD with pytest/pytest-asyncio and the installed HTTP client&#39;s mock transport; browser integration with the official basic-host fixture and Playwright. Existing framework behavior gets characterization tests first, rather than rewriting it. The commands below refer to tests to be created during implementation, not tests claimed to exist now.</p>
+<p>Evidence directory: <code>.omo/evidence/telnyx-fastmcp/</code>; each task writes its RED/GREEN results and relevant HTTP/browser artifacts. No production code is written by this planning run.</p>
+<p>Three mandatory end-to-end scenario families:</p>
+<ol>
+<li><strong>Happy:</strong> user A discovers a Telnyx operation, executes it via the native framework, renders a generated view, and acts from that view. Exactly four default model tools; request uses A&#39;s upstream credential; AppBridge receives real UI metadata and final content.</li>
+<li><strong>Edge:</strong> expired credential, denied operation, empty page, malformed deepObject/body, 429, ambiguous mutation timeout, pending meeting admission, interrupted job and disabled feature. The UI reports the actual condition; no cross-user data or automatic duplicate mutation.</li>
+<li><strong>Adjacent regression:</strong> user B sees no A data; plain MCP clients can call tools without Apps; native resources/prompts/completion/tasks retain their semantics; a theme change does not recreate an active media connection.</li>
+</ol>
+<p>Completion gates: every source operation has an audited disposition; every normal enabled operation is represented by a working adapter and validated schema/wire contract; every requested domain has UI/actions and failure coverage. All supplied spec webhooks are represented as reference resources; real receiver handlers require the actual channel signing contract. Do not equate a row count with implemented behavior.</p>
+<p>Performance gates: default visible tool count &lt;=4 and initial serialized tool listing &lt;=32 KiB; default search returns &lt;=5 candidates; compact schema fetch and result projections avoid full-catalog responses; normal summary outputs &lt;=32 KiB with explicit pagination/artifact handling rather than corrupting schemas. Measure cold startup and warm discovery on fixed fixture hardware, plus concurrent two-tenant load, and set a recorded regression baseline before optimization. Never present bytes/4 as a measured tokenizer count.</p>
+<p>Run <code>uv run pytest tests/unit tests/integration -q</code>, <code>uv run pytest tests/e2e -q</code>, <code>uv run ruff check src tests</code>, <code>uv run basedpyright src</code>, and browser package <code>npm run test:e2e</code> / <code>npm run build</code>. Live product tests are separate and report <code>verified</code>, <code>blocked: credential/entitlement/recipient</code>, or <code>not run</code>. A skipped or mock-only telephony/media/OAuth test never counts as a live pass. Agent-executed QA must not silently purchase, message or dial real recipients.</p>
+</section><section class="chapter-section" id="16-execution-strategy"><div class="eyebrow">16 / Section</div><h2>Execution strategy</h2>
+</section><section class="chapter-section" id="17-parallel-execution-waves"><div class="eyebrow">17 / Section</div><h2>Parallel execution waves</h2>
+<p>Order follows the requested architecture: validate native contracts -&gt; OpenAPI server -&gt; reusable client/facilitator -&gt; domain operations -&gt; embedded Generative UI -&gt; release verification. The small risk probes happen first so downstream work does not build on false assumptions.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Wave</th>
+<th>Tasks</th>
+<th>Parallel subagents and exclusive ownership</th>
+<th>Deliverable</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0: contract proofs</td>
+<td>1-4</td>
+<td>Spec analyst (1), framework/discovery analyst (2), auth/facilitator analyst (3), embedding analyst (4)</td>
+<td>Evidence-backed contracts; integration blockers visible before feature work</td>
+</tr>
+<tr>
+<td>1: server</td>
+<td>5-9</td>
+<td>Provider/wire lane (5-6 sequential); auth lane (7); lifecycle/state lane (8); lead assembles (9)</td>
+<td>BYOK Streamable HTTP server and four-tool surface</td>
+</tr>
+<tr>
+<td>2: client/facilitator</td>
+<td>10-13</td>
+<td>Client lane (10-11 sequential); facilitator lane (12); store lane (13)</td>
+<td>Reusable client and existing-runtime facilitator; no custom model loop</td>
+</tr>
+<tr>
+<td>3: domains</td>
+<td>14-19</td>
+<td>Communications lane (14-15); realtime/meetings lane (16-17); AI/storage lane (18-19)</td>
+<td>Tested operations/workflows for all requested areas</td>
+</tr>
+<tr>
+<td>4: app/embedding</td>
+<td>20-24</td>
+<td>Embed/theme lane (20-21); recipes lane (22); media lane (23); lead integrates workspace (24)</td>
+<td>Host-themed Generative UI workspace plus live media surfaces</td>
+</tr>
+<tr>
+<td>5: delivery</td>
+<td>25-27</td>
+<td>Packaging/docs lane (25); coverage/perf lane (26); QA lead (27 after both)</td>
+<td>Reproducible release with honest compatibility/coverage report</td>
+</tr>
+</tbody></table></div>
+<p>Use subagents for disjoint modules and independent verification, not for five competing implementations of the same server. The lead owns composition files and shared contracts. Each delegate receives its task, exact dependency outputs, allowed paths, binary stop condition and required evidence. Server/client/app share one catalog and authorization policy. Reviewers are read-only. No mandated agent-specific comments in product source.</p>
+</section><section class="chapter-section" id="18-dependency-matrix"><div class="eyebrow">18 / Section</div><h2>Dependency matrix</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Todo</th>
+<th>Depends on</th>
+<th>Blocks</th>
+<th>Can parallelize with</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1-4</td>
+<td>none</td>
+<td>5-24</td>
+<td>each other</td>
+</tr>
+<tr>
+<td>5</td>
+<td>1,2</td>
+<td>6,9,14-19</td>
+<td>7,8</td>
+</tr>
+<tr>
+<td>6</td>
+<td>5</td>
+<td>9,14-19</td>
+<td>7,8</td>
+</tr>
+<tr>
+<td>7</td>
+<td>3</td>
+<td>9-24</td>
+<td>5,6,8</td>
+</tr>
+<tr>
+<td>8</td>
+<td>1,2,3</td>
+<td>9,13,16-19</td>
+<td>5-7</td>
+</tr>
+<tr>
+<td>9</td>
+<td>5-8</td>
+<td>10-24</td>
+<td>none (assembly)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>9</td>
+<td>11,12,20</td>
+<td>13</td>
+</tr>
+<tr>
+<td>11</td>
+<td>10</td>
+<td>17,27</td>
+<td>12,13</td>
+</tr>
+<tr>
+<td>12</td>
+<td>3,9,10</td>
+<td>24,27</td>
+<td>11,13</td>
+</tr>
+<tr>
+<td>13</td>
+<td>1,7,8,9</td>
+<td>19,24</td>
+<td>10-12</td>
+</tr>
+<tr>
+<td>14-15</td>
+<td>6,7,9,10</td>
+<td>22,24</td>
+<td>16-19</td>
+</tr>
+<tr>
+<td>16</td>
+<td>6-11</td>
+<td>17,23,24</td>
+<td>14,15,18,19</td>
+</tr>
+<tr>
+<td>17</td>
+<td>11,12,16</td>
+<td>22,24</td>
+<td>14,15,18,19</td>
+</tr>
+<tr>
+<td>18</td>
+<td>6-10,12</td>
+<td>22,24</td>
+<td>14-17,19</td>
+</tr>
+<tr>
+<td>19</td>
+<td>6-10,13</td>
+<td>22,24</td>
+<td>14-18</td>
+</tr>
+<tr>
+<td>20</td>
+<td>4,10</td>
+<td>21,23,24</td>
+<td>22</td>
+</tr>
+<tr>
+<td>21</td>
+<td>20</td>
+<td>24,27</td>
+<td>22,23</td>
+</tr>
+<tr>
+<td>22</td>
+<td>14-19</td>
+<td>24</td>
+<td>20,21,23</td>
+</tr>
+<tr>
+<td>23</td>
+<td>16,20</td>
+<td>24,27</td>
+<td>21,22</td>
+</tr>
+<tr>
+<td>24</td>
+<td>12-23</td>
+<td>25-27</td>
+<td>none (assembly)</td>
+</tr>
+<tr>
+<td>25-26</td>
+<td>24</td>
+<td>27</td>
+<td>each other</td>
+</tr>
+<tr>
+<td>27</td>
+<td>25,26</td>
+<td>F1-F4</td>
+<td>none</td>
+</tr>
+</tbody></table></div>
+</section><section class="chapter-section" id="19-todos"><div class="eyebrow">19 / Section</div><h2>Todos</h2>
+<blockquote>
+<p>Implementation + Test = ONE todo. Never separate.</p>
+</blockquote>
+<ul>
+<li><p><input disabled="" type="checkbox"> 1. Pin the source inventory and establish coverage accounting</p>
+<ul>
+<li>Files: <code>pyproject.toml</code>, <code>uv.lock</code>, <code>src/oubliai/catalog.py</code>, <code>tests/contracts/test_inventory.py</code>, <code>docs/operations.json</code> (generated from the untouched root <code>openapi.json</code>). Read local instructions first; preserve user files.</li>
+<li>Native basis: E1/E2. Count all HTTP methods supported by OpenAPI, resolve effective server/path metadata, retain webhook definitions separately. Record input SHA-256 and dependency versions. Map <code>(method,path)</code> to original operationId and MCP name; deterministic collision resolution with explicit map, no silent overwrites.</li>
+<li>Depends: none; Wave 0 spec lane. Acceptance/QA: <code>uv run pytest tests/contracts/test_inventory.py -q</code> proves every source operation appears once and detects an injected duplicate-name collision, non-local reference and alternate-host case. Emit actual counts instead of copying previous claimed counts.</li>
+<li>Evidence: <code>task-01-inventory.json</code> + test output. Commit only if requested: <code>test(catalog): pin complete source inventory</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 2. Prove the native four-tool discovery and UI boundary</p>
+<ul>
+<li>Files: <code>tests/contracts/test_discovery_composition.py</code>, <code>tests/contracts/test_nested_calls.py</code>. References: E2-E5/E8 and installed CodeMode source.</li>
+<li>Wave 0 framework lane, depends none. Assemble a tiny in-memory operations child with CodeMode Search/GetSchemas/execute, and a parent directly serving GenerativeUI. Put Prefab component lookup in the discoverable catalog using native provider scoping. No custom search/execute implementation.</li>
+<li>QA: <code>uv run pytest tests/contracts/test_discovery_composition.py tests/contracts/test_nested_calls.py -q</code>: listing is exactly four, search/schema resolve real underlying tools, chained arithmetic/mock API calls return a projection, directly advertised generator has <code>ui.resourceUri</code>. Negative: denied/app-only tool stays inaccessible to model; nested task/input-required/UI metadata behavior is recorded rather than presumed. If native composition cannot meet the four-tool and metadata contract, stop and report the incompatibility before app work.</li>
+<li>Evidence: <code>task-02-catalog.json</code>, <code>task-02-nested-results.json</code>. Commit if requested: <code>test(fastmcp): establish discovery and app contracts</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 3. Prove BYOK/OAuth and native facilitator integration contracts</p>
+<ul>
+<li>Files: <code>tests/contracts/test_auth_contract.py</code>, <code>tests/contracts/test_facilitator_contract.py</code>, <code>docs/compatibility.md</code>. References: E8-E10 and exact AssistantChat/MCP server configuration schemas.</li>
+<li>Wave 0 auth lane, depends none. Verify correct resource/audience handling, per-user upstream credential retrieval and scope interpretation. Verify native Telnyx Assistant chat can invoke the four-tool MCP surface and return usable tool/UI events or artifact references to the workspace. Prefer documented native runtime, not a custom loop.</li>
+<li>QA: <code>uv run pytest tests/contracts/test_auth_contract.py tests/contracts/test_facilitator_contract.py -q</code>: local issuer and transport fixtures prove good/wrong audience, isolated credentials and assistant tool-result forwarding. Authorized native service integration is separately required for live readiness; an unavailable auth flow/tool event remains a named blocker. Do not create shared credentials or register external clients silently.</li>
+<li>Evidence: <code>task-03-auth.json</code>, <code>task-03-facilitator.json</code> with redacted live or blocked status. Commit if requested: <code>test(auth): verify user-scoped native agent path</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 4. Prove official AppBridge, native renderer and host-token theming</p>
+<ul>
+<li>Files: <code>web/tests/contracts/embed.spec.ts</code>, two minimal host fixture pages, <code>web/package.json</code>. References: E4-E7, official basic-host.</li>
+<li>Wave 0 embedding lane. Reuse official AppBridge/sandbox example with mock MCP-backed data and the real Prefab renderer. Test direct generator metadata, final rendering, partial input if supported, tool-action round trip, and host theme variables. Do not rewrite the renderer.</li>
+<li>QA: <code>npm --prefix web run test:contracts</code>: two fixture themes visibly/computationally differ in configured colors/fonts/radius, action invokes expected mock, denied mic and blocked CDN show explicit fallback. Capture screenshots and computed styles; no real media claim from fake devices.</li>
+<li>Evidence: <code>task-04-{light,dark}.png</code>, <code>task-04-capabilities.json</code>; clean browser teardown. Commit if requested: <code>test(embed): verify native app host contract</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 5. Compose the canonical OpenAPI providers and domain catalog</p>
+<ul>
+<li>Files: <code>src/oubliai/openapi.py</code>, <code>src/oubliai/catalog.py</code>, <code>tests/unit/test_openapi.py</code>. Depends 1-2; Wave 1 provider lane. References E1/E2.</li>
+<li>Use OpenAPIProvider and documented hooks. Partition only where effective origin/serialization requires it. Register ordinary operations once, attach family/source/tags/annotations, and retain disabled special entries with explicit status. Maintain separate app catalog resources and webhook reference schemas. No per-endpoint generated Python wrapper files.</li>
+<li>QA: <code>uv run pytest tests/unit/test_openapi.py -q</code>: mapping reconciles to inventory; required parameters/deepObject/empty bodies output schemas remain valid; collision and duplicate-v2 fixtures fail safely. Disabled WSS/x402 cannot be executed accidentally.</li>
+<li>Evidence: <code>task-05-coverage.json</code>. Commit if requested: <code>feat(server): compose native OpenAPI catalog</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 6. Validate HTTP/media adapters and upstream execution semantics</p>
+<ul>
+<li>Files: <code>src/oubliai/transport.py</code>, small <code>src/oubliai/adapters/</code> only for evidenced exceptions, <code>tests/contracts/test_wire.py</code>. Depends 5; Wave 1 provider lane. References E1/E2/E12 and official channel SDKs.</li>
+<li>Reuse async HTTP pooling and native SDKs; keep exact schema content types. Cover JSON/deepObject/array/form/multipart/octet/PDF/audio/SSE; support separate SDK route for WebRTC/S3/video where documented. Implement read/idempotent retries only with endpoint-specific rules; no blanket 5-rps platform assumption.</li>
+<li>QA: <code>uv run pytest tests/contracts/test_wire.py -q</code>: mock records exact host/path/query/body/content-type; binary round-trip hashes match; 429/read timeout handled; ambiguous POST timeout is not blindly resent; external origin cannot receive another credential.</li>
+<li>Evidence: <code>task-06-wire.json</code>; Commit if requested: <code>feat(transport): cover documented serialization gaps</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 7. Implement native auth composition and execution-time authorization</p>
+<ul>
+<li>Files: <code>src/oubliai/auth.py</code>, <code>tests/integration/test_identity.py</code>. Depends 3; Wave 1 auth lane. References E8-E10.</li>
+<li>Wire chosen native verifier/OAuth provider/MultiAuth path from the contract gate. Keep upstream connection credentials distinct from app sessions. Fail closed on absent principal. Scope data is reviewed against actual grants/operation requirements; do not manufacture scopes. Request-specific client auth never mutates a global default key.</li>
+<li>QA: <code>uv run pytest tests/integration/test_identity.py -q</code>: two simultaneous users on search, execute, direct calls, resources and UI actions reach only their account; wrong audience/expired/missing scopes denied; 429 during verification isn&#39;t reported as successful authentication.</li>
+<li>Evidence: <code>task-07-isolation.json</code>. Commit if requested: <code>feat(auth): enforce BYOK across execution surfaces</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 8. Configure native lifecycle, stores, tasks and observability</p>
+<ul>
+<li>Files: <code>src/oubliai/runtime.py</code>, <code>tests/integration/test_runtime.py</code>. Depends 1-3; Wave 1 state lane. References E8.</li>
+<li>Native composable lifespans own clients, stores, TasksExtension and teardown. Use native logging/timing/errors, bounded rate controls and private read caches only where isolation proven. Persistent Docket backend for workers; shared request-state keys for multi-round requests; EventStore for supported replay separately. Emit metadata/trace IDs without credential/payload logging.</li>
+<li>QA: <code>uv run pytest tests/integration/test_runtime.py -q</code>: TTL/expiry, task progress/cancel, restart/resume and user isolation; malformed state rejected. Redis integration fixtures prove multi-worker behavior. Distinguish Docket redelivery from exactly-once Telnyx side effects.</li>
+<li>Evidence: <code>task-08-runtime.json</code>; Commit if requested: <code>feat(runtime): configure native persistence and tasks</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 9. Assemble and exercise the remote server</p>
+<ul>
+<li>Files: <code>src/oubliai/server.py</code>, <code>fastmcp.json</code>, <code>tests/e2e/test_server_http.py</code>. Depends 5-8; Wave 1 lead.</li>
+<li>One factory and one ASGI composition; follow native HTTP deployment/lifespan/auth route mounting. Default four-tool discovery composition from task 2, correct icons/instructions/resources/prompts, per-domain disabled statuses, health/readiness. Additional application HTTP routes require their own verified authentication; custom_route does not inherit MCP auth.</li>
+<li>QA: <code>uv run pytest tests/e2e/test_server_http.py -q</code>; <code>uv run fastmcp inspect fastmcp.json</code> after checking native CLI options. Spawn uvicorn on a test-owned port, <code>curl --fail http://127.0.0.1:$PORT/health</code>, real FastMCP Client lists/calls via HTTP and confirms &lt;=4 tools. Missing auth and forbidden Host fail as configured; stop owned PID.</li>
+<li>Evidence: <code>task-09-http.json</code>, <code>task-09-teardown.txt</code>. Commit if requested: <code>feat(server): expose Streamable HTTP application</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 10. Deliver the reusable native FastMCP client</p>
+<ul>
+<li>Files: <code>src/oubliai/client.py</code>, <code>examples/client.py</code>, <code>tests/integration/test_client.py</code>. Depends 9; Wave 2 client lane. References E8 + official client docs.</li>
+<li>Thin configuration/context manager around Client, not a second MCP implementation. Preserve raw ToolResult metadata and structured content. Integrator supplies per-user connection/auth and handlers. Prefer existing native CLI/remote bridge for terminal usage.</li>
+<li>QA: <code>uv run pytest tests/integration/test_client.py -q</code>: HTTP tools/resources/prompts/completion, auth renewal fixture, cancellation, concurrent users and deterministic close; malformed result/connection loss returns actual error.</li>
+<li>Evidence: <code>task-10-client.json</code>. Commit if requested: <code>feat(client): package reusable native client integration</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 11. Wire client interactivity and capability profiles</p>
+<ul>
+<li>Files: <code>src/oubliai/client_handlers.py</code>, <code>tests/integration/test_capabilities.py</code>, <code>examples/client_group.py</code>. Depends 10; Wave 2 client lane.</li>
+<li>Native elicitation, sampling, roots, logs, progress, tasks and notifications. Explicit auto/legacy profiles; unsupported capability shown honestly. ClientGroup opt-in only. App extension/resource support exposed by the host backend. Prompt changes/results only when meaningful, not every polling tick.</li>
+<li>QA: <code>uv run pytest tests/integration/test_capabilities.py -q</code>: approved/declined input; task completion/cancel; requested sample/roots handled; no credentials/data in log messages; unsupported protocol branch deterministic.</li>
+<li>Evidence: <code>task-11-capabilities.json</code>. Commit if requested: <code>feat(client): preserve native interactive capabilities</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 12. Connect the workspace facilitator to Telnyx&#39;s native agent runtime</p>
+<ul>
+<li>Files: <code>src/oubliai/facilitator.py</code>, <code>resources/facilitator.md</code>, <code>tests/integration/test_facilitator.py</code>. Depends 3,9,10; Wave 2 facilitator lane. References E10 plus inventory&#39;s assistant/MCP/integration-secret operations.</li>
+<li>Configure/select a user-owned Telnyx Assistant and conversation; configure its MCP server/tool auth through documented secret fields. It uses the same compact discovery surface and policies. Expose conversation lifecycle to client and UI; relay verified native tool/UI events according to task 3&#39;s contract. Existing-host-agent mode bypasses this service. Exclude facilitator entry methods from its own execution catalog to prevent recursion.</li>
+<li>QA: <code>uv run pytest tests/integration/test_facilitator.py -q</code>: authenticated discovery-&gt;operation-&gt;reply/UI trace; two-user conversations cannot mix; rejected tool remains rejected; runtime lacking the required payload is explicitly blocked, not emulated with a handwritten LLM loop.</li>
+<li>Evidence: <code>task-12-facilitator.json</code>. Commit if requested: <code>feat(agent): integrate native Telnyx facilitator</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 13. Implement the requested Telnyx KV store adapter narrowly</p>
+<ul>
+<li>Files: <code>src/oubliai/stores/telnyx.py</code>, <code>tests/contracts/test_telnyx_store.py</code>. Depends 1,7-9; Wave 2 store lane. References exact KV schemas and native AsyncKeyValue interface.</li>
+<li>Explicit selected user namespace; adapter covers proven document get/put/delete/batch semantics, serialized TTL with documented expiry behavior. Use existing FastMCP storage wrappers for namespace/encryption where applicable. No Docket backend, CAS, queue, lock manager or silent namespace creation.</li>
+<li>QA: <code>uv run pytest tests/contracts/test_telnyx_store.py -q</code>: two-user isolation, expiry, partial batch failure, absent credential denied, setup creates namespace only when invoked. Surface capability limits in Store UI.</li>
+<li>Evidence: <code>task-13-store.json</code>. Commit if requested: <code>feat(store): add account-owned KV document adapter</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 14. Complete fax and email operation/workflow contracts</p>
+<ul>
+<li>Files: <code>src/oubliai/domains/fax.py</code>, <code>src/oubliai/domains/email.py</code>, <code>tests/domains/test_fax_email.py</code>. Depends 6,7,9,10; Wave 3 communications lane. References E1 and tool inventory below.</li>
+<li>Generated tools are reused; add only upload/media orchestration and native task tracking where needed. First-class PDF send/receive/status/preview; email domains/DNS verification/inbox/search/reply/drafts/send/events. Agentic email runs through facilitator/native runtime, not a new autonomous polling engine. Fetch exact DNS records; never replace existing domain MX automatically.</li>
+<li>QA: <code>uv run pytest tests/domains/test_fax_email.py -q</code>: binary PDF upload and fax status; inbound fax; email reply preserves IDs/thread, DNS incomplete status, attachment failure and duplicate event handling. Templates/schema are not proof of delivery; controlled live channel test has separate status.</li>
+<li>Evidence: <code>task-14-fax-email.json</code>. Commit if requested: <code>feat(channels): integrate fax and agentic email workflows</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 15. Complete messaging, verification and number support</p>
+<ul>
+<li>Files: <code>src/oubliai/domains/messaging.py</code>, <code>tests/domains/test_messaging.py</code>. Depends 6,7,9,10; Wave 3 communications lane.</li>
+<li>SMS/MMS, WhatsApp, RCS, Verify, number inventory/ordering/configuration and registration use generated operations. Preserve channel identifiers and documented paging/status differences; no fabricated universal thread API or fallback channel send. Native prompts document multi-step operations.</li>
+<li>QA: <code>uv run pytest tests/domains/test_messaging.py -q</code>: each channel&#39;s correct endpoint/payload/media, status transition and refusal/error; wrong-channel reply rejected; unavailable capability explicit; number-order acceptance not confused with completion.</li>
+<li>Evidence: <code>task-15-messaging.json</code>. Commit if requested: <code>feat(channels): cover messaging and number operations</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 16. Complete voice, video management and event ingestion</p>
+<ul>
+<li>Files: <code>src/oubliai/domains/voice.py</code>, <code>src/oubliai/domains/video.py</code>, <code>src/oubliai/events.py</code>, <code>tests/domains/test_realtime.py</code>. Depends 6-11; Wave 3 realtime lane. References E1/E12.</li>
+<li>Generated Call Control/conference/room APIs; correlate asynchronous events by real provider IDs. Verify signatures/raw bodies per documented channel before accepting receiver events; dedupe exact IDs, retain source, principal and time. Public routes cannot select arbitrary other-user inboxes. Native tasks track slow jobs; no code-mode long-lived event loop. Call roles come from documented caller/callee/supervisor relationships, not assumed AI-agent whisper semantics.</li>
+<li>QA: <code>uv run pytest tests/domains/test_realtime.py -q</code>: lifecycle out-of-order/duplicate event, raw signature tampering, supervisor role request and room token lifecycle. Text injection acknowledgment not falsely labeled spoken audio. Room management never starts a Meeting Bot.</li>
+<li>Evidence: <code>task-16-realtime.json</code>. Commit if requested: <code>feat(realtime): integrate documented call and room controls</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 17. Add third-party meeting bot and facilitator attendance</p>
+<ul>
+<li>Files: <code>src/oubliai/domains/meetings.py</code>, <code>tests/domains/test_meetings.py</code>. Depends 11,12,16; Wave 3 meetings lane. References E11 and exact meeting inventory.</li>
+<li>Native session create/schedule/stop, speak/chat, event/transcript pagination, recordings/artifact generation. Assistant attachment uses native contract; do not pass incompatible schedule/barge flags. Durable native task observer persists cursor and terminal state with principal binding; no guarantee of exactly-once non-idempotent speech/artifact creation. Polling interval is a chosen responsiveness budget, not a measured latency guarantee.</li>
+<li>QA: <code>uv run pytest tests/domains/test_meetings.py -q</code>: waiting/admission-denied/active/end; null cursor retains previous cursor; retry idempotency key does not rejoin; restart resumes transcript; artifact pending/failure/incomplete data shown; Telnyx Room URL rejected by our supported-platform workflow.</li>
+<li>Evidence: <code>task-17-meetings.json</code>. Commit if requested: <code>feat(meetings): orchestrate native external meeting sessions</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 18. Complete AI agents, voice, inference, training and RAG</p>
+<ul>
+<li>Files: <code>src/oubliai/domains/ai.py</code>, small focused modules as needed, <code>tests/domains/test_ai.py</code>. Depends 6-10,12; Wave 3 AI lane.</li>
+<li>Reuse full assistant/test/version/Mission/conversation/memory/tool/MCP/integration APIs; inference and speech variants; fine-tuning jobs; RAG sources/collections/embedding/search/clusters. Long jobs use provider job IDs + native Tasks, not a new scheduler. Streaming inference uses a verified adapter when needed; do not blanket-disable it or route tokens through the model twice.</li>
+<li>QA: <code>uv run pytest tests/domains/test_ai.py -q</code>: create/read/update schema fixtures, test job lifecycle, model rejection, RAG pending-&gt;ready/search and failed ingestion, cancel, paginated memory, stream termination. No claim of arbitrary training capabilities beyond documented job/model support.</li>
+<li>Evidence: <code>task-18-ai.json</code>. Commit if requested: <code>feat(ai): cover agent inference training and RAG operations</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 19. Complete storage and remaining API coverage</p>
+<ul>
+<li>Files: <code>src/oubliai/domains/storage.py</code>, <code>tests/domains/test_storage.py</code>, <code>tests/contracts/test_remaining_operations.py</code>. Depends 6-10,13; Wave 3 storage lane.</li>
+<li>KV/SQL/CloudFS/media/migrations and bucket management use provider; object operations use documented Telnyx S3 auth/SDK separately. Treat SQL as potentially mutating irrespective of POST/read labels. Remaining account/billing/networking/wireless/etc operations stay fully discoverable and usable through the common inspector/forms; don&#39;t create unrelated bespoke subsystems.</li>
+<li>QA: <code>uv run pytest tests/domains/test_storage.py tests/contracts/test_remaining_operations.py -q</code>: object bytes and signed URL contract, credential rejection, KV/SQL errors, migration pending/stop. Every inventory row reconciled; disabled alternate protocols retain reasons and cannot be falsely marked enabled.</li>
+<li>Evidence: <code>task-19-storage-coverage.json</code>. Commit if requested: <code>feat(storage): integrate native storage and remaining catalog</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 20. Build the reusable official AppBridge embedding adapter</p>
+<ul>
+<li>Files: <code>web/src/embed.ts</code>, <code>web/src/host.ts</code>, <code>web/tests/embed.spec.ts</code>; minimal authenticated backend glue in client package. Depends 4,10; Wave 4 embed lane. References E4-E6.</li>
+<li>Adapt official basic-host with MCP metadata/resource/input/result flow, CSP and origin validation, user-scoped backend forwarding, cancellation and teardown. Parent application owns mount container, auth connection and optional existing agent; browser receives no account-wide Telnyx key. Framework-neutral entry with small React example only.</li>
+<li>QA: <code>npm --prefix web run test:e2e -- embed.spec.ts</code>: two embedded sessions render and execute independent actions; denied resource/origin rejected; unmount closes intervals/bridge/media owned by component. Native generator final result renders without invented transport.</li>
+<li>Evidence: <code>task-20-embed.png</code>, <code>task-20-actions.json</code>. Commit if requested: <code>feat(embed): integrate official MCP AppBridge</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 21. Apply host design tokens through native styling</p>
+<ul>
+<li>Files: <code>web/src/theme.ts</code>, <code>resources/ui-style-guide.md</code>, <code>web/tests/theme.spec.ts</code>. Depends 20; Wave 4 theme lane. References E7 and official host-context styles.</li>
+<li>Map provided tokens to supported host variables and Prefab Theme/CSS, handle fonts/CSP, light/dark, dimensions and updates. Recipes refer to semantic tokens; no hard-coded Telnyx branding overriding host. Missing tokens use native defaults. Do not scrape parent DOM or invent automatic arbitrary component-library conversion.</li>
+<li>QA: <code>npm --prefix web run test:e2e -- theme.spec.ts</code>: computed styles + screenshots for two host themes and runtime switch; narrow/mobile, focus, keyboard and error states visible; no active media restart on theme update.</li>
+<li>Evidence: <code>task-21-themes/</code>. Commit if requested: <code>feat(theme): inherit integrator design tokens</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 22. Build native Generative UI domain recipes and actions</p>
+<ul>
+<li>Files: <code>src/oubliai/apps/</code>, <code>resources/recipes/</code>, <code>tests/integration/test_apps.py</code>, <code>web/tests/domains.spec.ts</code>. Depends 14-19; Wave 4 recipes lane. References E4/E5/E7 and inventory.</li>
+<li>One shared list/detail/form/action pattern, specialized recipes for communications/AI/storage. FastMCPApp owns UI/backend visibility; native FormInput/Choice/FileUpload and declarative CallTool/SetState/SetInterval drive actual interactions. Use structured output and a short text summary, not the entire payload echoed into the conversation. Native GenerativeUI changes layout at request time; no new TelnyxUI subclass/data-reference engine.</li>
+<li>QA: <code>uv run pytest tests/integration/test_apps.py -q</code> and <code>npm --prefix web run test:e2e -- domains.spec.ts</code>: every requested area has a discoverable view, real mock-backed action and failure state; malformed generated code reports native sandbox failure; blocked imports rejected; component lookup uses installed API.</li>
+<li>Evidence: <code>task-22-domain-views/</code>. Commit if requested: <code>feat(apps): add generative domain workspace recipes</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 23. Integrate stable native voice/video media surfaces</p>
+<ul>
+<li>Files: <code>web/src/media/</code>, <code>web/tests/media.spec.ts</code>, targeted browser-token backend. Depends 16,20; Wave 4 media lane. References E12 + verified Telnyx Video SDK documentation.</li>
+<li>Use existing SDKs for softphone and room participation, short-lived browser credentials and teardown. Generated UI controls stable media widgets; mic/camera grant and host CSP/network checked. Monitor/whisper/barge topology must be proven on a controlled call, not inferred from an enum. No bot in Telnyx Rooms. Phone-supervisor fallback remains available where supported.</li>
+<li>QA: <code>npm --prefix web run test:e2e -- media.spec.ts</code>: fake devices verify UI lifecycle only; controlled live loopback verifies audible monitor and each role separately, ICE connection and mute/end. Denied permissions/CDN/network produce actionable state; no call gets labeled connected solely from REST acceptance.</li>
+<li>Evidence: <code>task-23-media-capabilities.json</code> includes per-host live/unverified statuses. Commit if requested: <code>feat(media): integrate official real-time browser SDKs</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 24. Assemble Store, Omni Inbox and facilitator workspace</p>
+<ul>
+<li>Files: <code>src/oubliai/apps/workspace.py</code>, <code>web/src/workspace.ts</code>, <code>tests/integration/test_workspace.py</code>, <code>web/tests/workspace.spec.ts</code>. Depends 12-23; Wave 4 lead.</li>
+<li>Single domain navigation/catalog Store, linked native account records and signed event history, explicit per-channel/source context and user-owned preferences. Facilitator chat is optional when host already supplies agent. Contact links explicit; historical coverage indicators say what is actually loaded. Host can embed one view or whole workspace. Feature-disabled cards explain reason; no enabling unsupported adapters.</li>
+<li>QA: <code>uv run pytest tests/integration/test_workspace.py -q</code>; <code>npm --prefix web run test:e2e -- workspace.spec.ts</code>: fax-&gt;detail/send, email thread-&gt;draft/reply, meeting-&gt;artifact, RAG-&gt;search, Store-&gt;operation; two-user isolation and absent channel history are visibly correct. Agent-generated view receives theme and actual tool events.</li>
+<li>Evidence: <code>task-24-workspace/</code>. Commit if requested: <code>feat(workspace): compose unified communications and AI app</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 25. Package the native server/client/app for integrators</p>
+<ul>
+<li>Files: <code>Dockerfile</code>, <code>compose.yaml</code>, <code>.env.example</code>, <code>README.md</code>, <code>examples/embed/</code>, <code>docs/integration.md</code>. Depends 24; Wave 5 delivery lane.</li>
+<li>Native fastmcp.json, pinned dependencies, Deno/Pyodide assets, optional Redis worker profile, HTTP URL configuration, discoverability card. Reuse native CLI; document three integration modes (MCP host, Python service, browser embedding) and required tokens/host permissions. No publishing, git remote, license choice or client config edits without user authorization.</li>
+<li>QA: <code>uv run fastmcp inspect fastmcp.json</code>, <code>npm --prefix web run build</code>, <code>docker compose build</code>; start only project services, curl health/readiness, execute packaged example and tear down owned resources. Fail missing production auth/state configuration explicitly.</li>
+<li>Evidence: <code>task-25-package.json</code> and teardown receipt. Commit if requested: <code>build: package documented integration surfaces</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 26. Run coverage, capability and context/performance regression gates</p>
+<ul>
+<li>Files: <code>tests/contracts/test_coverage.py</code>, <code>tests/performance/</code>, <code>docs/coverage.md</code>, <code>docs/compatibility.md</code>. Depends 24; Wave 5 verification lane.</li>
+<li>Reconcile source operations to adapters, scope/policy, view/common-form availability, serialization tests and disabled status; native feature matrix has test/profile/exclusion evidence. Benchmark fixed fixture catalog and outputs, native fingerprint drift, concurrent clients and account cache isolation. No claim every provider can be enabled simultaneously.</li>
+<li>QA: <code>uv run pytest tests/contracts tests/performance -q</code>: four tools/byte/search caps; added unmatched spec operation fails; disabled entry not counted callable; response-schema change requires reviewed fingerprint; 20 concurrent mocked requests preserve user identity and finish without leaked clients.</li>
+<li>Evidence: <code>task-26-coverage.json</code>, <code>task-26-benchmarks.json</code>. Commit if requested: <code>test: enforce coverage and context budgets</code>.</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 27. Exercise packaged product and produce the release evidence</p>
+<ul>
+<li>Files: <code>tests/e2e/</code>, <code>docs/release-evidence.md</code>. Depends 25-26; Wave 5 QA lead.</li>
+<li>Execute all automated commands in verification strategy, real HTTP client and real renderer interactions. Separately run authorized live read-only and controlled telecom/meeting/agent/media workflows. Unavailable credential/entitlement/host prerequisites are blocked capabilities, never passed by a mock. Run visual QA on actual generated outputs and two embed themes.</li>
+<li>QA: full suite/build/type/lint success; happy/edge/regression scenarios above; every owned process/browser/container stopped. No implementation-complete declaration while a required supported path remains blocked; report the exact remaining contract instead.</li>
+<li>Evidence: <code>task-27-release.json</code>, screenshot directory, <code>task-27-teardown.txt</code>. Commit if requested: <code>test: verify integrated product release</code>.</li>
+</ul>
+</li>
+</ul>
+</section><section class="chapter-section" id="20-final-verification-wave"><div class="eyebrow">20 / Section</div><h2>Final verification wave</h2>
+<p>Run these read-only verifier lanes in parallel after all implementation tasks. Every issue must cite a requirement and failing evidence; artifact counts alone are not passes.</p>
+<ul>
+<li><input disabled="" type="checkbox"> F1. Plan compliance audit<ul>
+<li>Compare every scope/domain/native-feature row to coverage report, exact adapter/schema tests and app action evidence. Independently recompute inventory counts from source. Reject unexplained exclusions, disabled-as-working entries, or mock-only live claims. Evidence: <code>F1-compliance.md</code>.</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> F2. Code quality review<ul>
+<li>Inspect composition and shared state for duplicated framework implementations, broad retry/caching bugs, per-user auth leakage, unnecessary module/class layers and oversized modules. Run lint/type/unit checks. Native framework extensions must have an evidenced need. Evidence: <code>F2-quality.md</code>.</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> F3. Real manual QA<ul>
+<li>Use packaged HTTP server, native client and actual browser AppBridge host. Exercise fax/email/messaging/meeting/AI/RAG/storage workflows, renderer, two themes, denied inputs and teardown. Check live capability statuses separately. Evidence: <code>F3-qa.md</code> plus HTTP/action logs/screenshots.</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> F4. Scope fidelity<ul>
+<li>Verify no Telnyx Room meeting bot, no default duplicate MCP proxy, &lt;=4 model tools, BYOK key/OAuth contract, facilitator honest capability report, all requested domain UI and design-token integration. Reject unnecessary custom runtime/queue/search/rendering protocols. Evidence: <code>F4-scope.md</code>.</li>
+</ul>
+</li>
+</ul>
+</section><section class="chapter-section" id="21-commit-strategy"><div class="eyebrow">21 / Section</div><h2>Commit strategy</h2>
+<p>This planning run does not initialize git, commit, tag, publish or choose a license. During implementation, commit only if the user requests it; use task-sized verified increments and existing repository style. Preserve original spec and user changes. No empty wave-marker commits or automatic release tags. Exclude credentials and ephemeral runtime artifacts; keep small redacted evidence and source manifests.</p>
+</section><section class="chapter-section" id="22-success-criteria"><div class="eyebrow">22 / Section</div><h2>Success criteria</h2>
+<p>The plan-writing deliverable is complete when this document contains the ordered server/client/app work, exact domain tool examples, complete source-operation accounting rules, native feature dispositions, parallel lanes and evidence-backed limitations, and a read-only consistency review has been incorporated. This does not mark the future implementation complete.</p>
+<p>The product is complete only when:</p>
+<ul>
+<li>Every operation in the pinned source is accounted for, normal enabled operations have working adapters and common UI access, and special disabled entries are visibly labeled with exact prerequisites.</li>
+<li>All requested communications, external meeting bot, AI agents/voice/inference/training/RAG and storage have tested domain views and correct actions.</li>
+<li>The model-visible default is at most four tools with the generator directly advertised; context/performance budgets are measured and met without losing output/schema correctness.</li>
+<li>BYOK key and OAuth paths, client capability handlers, tenant isolation, native task persistence and resource lifecycles pass real transport tests.</li>
+<li>External agents can render and interact; embedded applications can mount themed views; facilitator text/tool/UI claims have the corresponding native-runtime evidence. A blocked facilitator UI bridge is reported as incomplete rather than hidden.</li>
+<li>Actual browser media support is reported per host/version/network; only tested capabilities are claimed. Meeting bots are not implemented for Telnyx Rooms.</li>
+<li>Full tests/build/type/lint and all F1-F4 verdicts pass, with teardown receipts for owned resources and no reliance on fabricated provider guarantees.</li>
+</ul>
+</section><div class="pager"><a href="transparency.html">← Evidence &amp; limitations</a><a href="index.html">Back to overview →</a></div><footer class="footer">Oubliai implementation dossier · Prometheus planning artifact · 4 October 2026<br>FastMCP 4.0.10 / MCP 2.2.0 / Prefab 0.20.2 research baseline. Independent reviewer unavailable; see the transparency chapter. No account credentials included.</footer></main></div><script>document.documentElement.classList.add('js');document.querySelector('.chapter-select').addEventListener('change',event=>{location.href=event.target.value});const field=document.querySelector('#search');field.addEventListener('input',()=>{const q=field.value.trim().toLocaleLowerCase();let hits=0;for(const section of document.querySelectorAll('.chapter-section')){const match=section.textContent.toLocaleLowerCase().includes(q);section.hidden=!match;if(match)hits++}document.querySelector('#no-results').hidden=hits>0});</script></body></html>

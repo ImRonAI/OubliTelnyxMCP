@@ -1,0 +1,31 @@
+# Local transcripts and agent state (never commit)
+2026-10-06-225942-claudecodetransprict.txt
+*transprict*.txt
+*.transcript.txt
+.omo/
+.playwright-mcp/
+.screen_monitor/
+.listen/
+.yolo_detections/
+.codegraph
+.DS_Store
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+
+# Node
+node_modules/
+test-results/
+playwright-report/
+deno-cache/

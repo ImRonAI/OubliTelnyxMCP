@@ -1,0 +1,193 @@
+<!DOCTYPE html><html lang="en" class="scroll-smooth"><head>
+<meta charset="UTF-8" /><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%230c0d11%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%277%27 fill=%27%2334d399%27/%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Evidence &amp; limitations · Oubliai build dossier</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  if (window.tailwind) tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', 'system-ui', 'sans-serif'],
+          display: ['Outfit', 'Inter', 'sans-serif'],
+          mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+        },
+        colors: {
+          ink: {
+            950: '#070809', 900: '#0c0d11', 850: '#101218', 800: '#15171f',
+            700: '#1c1f29', 600: '#262a36', 500: '#404657', 400: '#6b7186',
+            300: '#9aa0b4', 200: '#c4c8d6', 100: '#e6e8ef',
+          }
+        },
+        animation: {
+          'fade-in': 'fadeIn .5s ease-out',
+          'fade-in-up': 'fadeInUp .6s ease-out',
+          'glow': 'glow 4s ease-in-out infinite',
+          'pulse-dot': 'pulseDot 2.2s ease-in-out infinite',
+        },
+        keyframes: {
+          fadeIn:   { '0%':{opacity:0}, '100%':{opacity:1} },
+          fadeInUp: { '0%':{opacity:0, transform:'translateY(8px)'}, '100%':{opacity:1, transform:'translateY(0)'} },
+          glow:     { '0%,100%':{opacity:0.5}, '50%':{opacity:0.85} },
+          pulseDot: { '0%,100%':{transform:'scale(1)', opacity:1}, '50%':{transform:'scale(1.4)', opacity:0.6} },
+        },
+      }
+    }
+  }
+</script>
+
+<meta name="description" content="What the source proves, what we propose to build, and exactly which combinations remain unverified."><style>
+:root{--bg:#070809;--nav:#0c0d11;--surface:#101218;--raised:#15171f;--line:#262a36;--fg:#e6e8ef;--body:#c4c8d6;--muted:#9aa0b4;--accent:#34d399;--warning:#fcd34d;--space:4px;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--body);font:16px/1.8 Inter,system-ui,sans-serif}a{color:var(--accent);text-underline-offset:4px}a:hover{color:#a7f3d0}a:focus-visible,input:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px}h1,h2,h3,h4{font-family:Outfit,Inter,system-ui,sans-serif;color:var(--fg);line-height:1.2;letter-spacing:-.025em}h1{font-size:clamp(32px,4vw,48px);margin:16px 0}h2{font-size:27px;margin:0 0 24px}h3{font-size:20px;margin:36px 0 12px}h4{font-size:18px}p,ul,ol{max-width:76ch}li{margin:8px 0}p{margin:16px 0 24px}strong{color:var(--fg)}code{font:12px/1.6 'JetBrains Mono',ui-monospace,monospace;color:#a7f3d0;background:var(--raised);border:1px solid var(--line);border-radius:4px;padding:2px 5px;overflow-wrap:anywhere}pre{margin:24px 0;padding:24px;background:#0a0b0f;border:1px solid var(--line);border-radius:10px;overflow:auto;max-width:100%;font:13px/1.8 'JetBrains Mono',monospace}pre code{border:0;padding:0;background:none;overflow-wrap:normal;white-space:pre}.skip{position:absolute;left:16px;top:-100px;z-index:10}.skip:focus{top:8px;background:var(--nav);padding:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:256px;padding:28px 20px;background:var(--nav);border-right:1px solid var(--line);overflow-y:auto}.brand{font:600 22px Outfit,system-ui;color:var(--fg);letter-spacing:-.04em;text-decoration:none}.brand em{color:var(--accent);font-style:normal}.small{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}.sidebar .small{margin:8px 0 28px}.sidebar nav a{display:flex;gap:12px;padding:10px 12px;margin:4px 0;border-radius:6px;color:var(--body);text-decoration:none;font-size:13px;line-height:1.5;border:1px solid transparent}.sidebar nav a span{font:11px 'JetBrains Mono',monospace;color:var(--muted);padding-top:3px}.sidebar nav a:hover{background:var(--raised)}.sidebar nav a[aria-current]{background:#123127;border-color:#225542;color:#a7f3d0}.side-footer{margin-top:32px;border-top:1px solid var(--line);padding:20px 12px;font-size:12px;color:var(--muted)}.status{display:inline-block;border:1px solid #6b5520;background:#2a2110;color:var(--warning);font-size:11px;padding:4px 9px;border-radius:5px}.layout{margin-left:256px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:64px;padding:16px 40px;border-bottom:1px solid var(--line);background:var(--bg);position:sticky;top:0;z-index:2}.topbar p{margin:0;font-size:12px;color:var(--muted)}.topbar input{width:240px;border:1px solid var(--line);background:var(--nav);border-radius:6px;color:var(--fg);padding:9px 12px;font:13px Inter,system-ui}.content{max-width:1160px;margin:auto;padding:48px 48px 64px;min-width:0}.hero{padding-bottom:36px;border-bottom:1px solid var(--line);margin-bottom:40px;background:radial-gradient(ellipse at top right,rgba(52,211,153,.055),transparent 65%)}.eyebrow{font:11px 'JetBrains Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}.lead{font-size:18px;line-height:1.7;color:var(--muted);max-width:72ch}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:28px}.stats div{padding:16px 12px;border:1px solid var(--line);border-radius:6px;background:var(--nav)}.stats strong{font:600 24px Outfit,system-ui;display:block}.stats span{font-size:11px;color:var(--muted)}.note{border:1px solid var(--line);border-left:3px solid var(--warning);background:var(--nav);padding:16px 20px;border-radius:5px;margin:24px 0;font-size:14px}.toc{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:36px}.toc a{font-size:12px;padding:5px 10px;border:1px solid var(--line);border-radius:5px;text-decoration:none;color:var(--body)}.chapter-section{padding:12px 0 36px;scroll-margin-top:90px;min-width:0}.chapter-section+.chapter-section{padding-top:36px;border-top:1px solid var(--line)}.chapter-section>.eyebrow{margin-bottom:12px}.table-wrap{max-width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:24px 0;background:var(--nav)}table{border-collapse:collapse;width:100%;font-size:13px;line-height:1.65}th,td{text-align:left;vertical-align:top;padding:14px 16px;border-bottom:1px solid var(--line);min-width:145px}th{background:var(--raised);font-weight:600;color:var(--fg);font-size:11px;text-transform:uppercase;letter-spacing:.05em}tr:last-child td{border-bottom:0}table code{font-size:11px}.task-list li{margin-top:16px}input[type=checkbox]{accent-color:var(--accent)}blockquote{margin:20px 0;padding:12px 20px;border-left:3px solid var(--accent);background:var(--nav);font-size:14px}details{border:1px solid var(--line);border-radius:6px;background:var(--nav);padding:12px 16px;margin:12px 0}summary{cursor:pointer;color:var(--fg);font-weight:500;overflow-wrap:anywhere}.pager{border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;padding-top:28px;margin-top:32px}.pager a{text-decoration:none;font-size:13px}.footer{font-size:12px;color:var(--muted);margin-top:32px}.empty{padding:24px;border:1px dashed var(--line);border-radius:8px}.source-links{display:flex;flex-wrap:wrap;gap:16px;margin-top:20px;font-size:12px}[hidden]{display:none!important}
+@media(max-width:1100px){.content{padding:36px 28px}.topbar{padding:16px 28px}.stats{grid-template-columns:repeat(3,1fr)}}@media(max-width:900px){.sidebar{position:relative;width:auto;padding:20px;border-right:0;border-bottom:1px solid var(--line)}.sidebar .small{margin:4px 0 12px}.sidebar nav{display:flex;flex-wrap:wrap;gap:4px}.sidebar nav a{padding:7px 9px;font-size:12px;margin:0}.side-footer{display:none}.layout{margin:0}.topbar{position:relative;flex-wrap:wrap}.topbar input{width:100%}.content{padding:32px 20px}.stats{grid-template-columns:repeat(2,1fr)}.lead{font-size:16px}th,td{padding:12px;min-width:130px}h2{font-size:24px}.pager{flex-wrap:wrap}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}@media print{html,body{background:white!important;color:#111!important}.sidebar,.topbar,.toc,.pager{display:none}.layout{margin:0}.content{padding:0;max-width:none}.hero{background:none}.chapter-section{break-inside:auto}.chapter-section h2{break-after:avoid}h1,h2,h3,strong{color:#111}.table-wrap{overflow:visible}table{font-size:10px}th,td{min-width:0;padding:6px}pre{white-space:pre-wrap;background:#f5f5f5;color:#111}code{color:#064e3b;background:#f4f4f4}.chapter-section[hidden]{display:block!important}.note,blockquote{background:#f8f8f8;color:#111}.stats div{background:white}.stats span,.footer,.lead{color:#444}}
+ .content h1{font-size:clamp(32px,4vw,48px);font-weight:600;line-height:1.15}.content h2{font-size:27px;font-weight:600;line-height:1.25}.content h3{font-size:20px;font-weight:600;line-height:1.4}.content h4{font-size:18px;font-weight:600}.content a{color:var(--accent)}.content a:hover{color:#a7f3d0}.content ul{list-style:disc;padding-left:24px}.content ol{list-style:decimal;padding-left:24px}.content pre{font-family:'JetBrains Mono',ui-monospace,monospace}.content code{font-family:'JetBrains Mono',ui-monospace,monospace}.content li>p{margin-bottom:12px}.content p,.content li,.content a{overflow-wrap:anywhere}
+.sidebar{width:224px;padding:24px 16px}.layout{margin-left:224px}.content{max-width:none;width:100%;margin:0;padding:40px clamp(24px,2.5vw,48px) 64px}.content p,.content ul,.content ol,.lead{max-width:none}.chapter-select{display:none;background:var(--raised);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:10px 12px;font:14px Inter,system-ui;width:100%}.chapter-select:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media(max-width:900px){.sidebar{width:auto;padding:16px 20px}.layout{margin-left:0}.content{padding:28px 20px 48px}.content h2{font-size:24px}.chapter-select{display:block}.js .sidebar nav{display:none}.sidebar nav{overflow-x:auto;flex-wrap:nowrap}.sidebar nav a{flex:0 0 auto}.topbar{padding:12px 20px}.topbar label{width:100%}.topbar input{width:100%}}
+@media print{.layout{margin:0}.content{padding:0;width:100%}.chapter-select{display:none}}
+</style></head><body><a class="skip" href="#main">Skip to content</a><aside class="sidebar"><a class="brand" href="index.html">oubliai<em>.</em></a><div class="small">Telnyx × FastMCP / Build dossier</div><select class="chapter-select" aria-label="Choose chapter"><option value="index.html" >01 · Product overview</option><option value="server.html" >02 · Server &amp; chaining</option><option value="client.html" >03 · Client &amp; facilitator</option><option value="app.html" >04 · App &amp; embedding</option><option value="inventory.html" >05 · Telnyx tool inventory</option><option value="features.html" >06 · FastMCP feature coverage</option><option value="roadmap.html" >07 · Build order &amp; verification</option><option value="transparency.html" selected>08 · Evidence &amp; limitations</option><option value="complete.html" >09 · Complete specification</option></select><nav aria-label="Chapters"><a href="index.html" ><span>01</span>Product overview</a><a href="server.html" ><span>02</span>Server &amp; chaining</a><a href="client.html" ><span>03</span>Client &amp; facilitator</a><a href="app.html" ><span>04</span>App &amp; embedding</a><a href="inventory.html" ><span>05</span>Telnyx tool inventory</a><a href="features.html" ><span>06</span>FastMCP feature coverage</a><a href="roadmap.html" ><span>07</span>Build order &amp; verification</a><a href="transparency.html" aria-current="page"><span>08</span>Evidence &amp; limitations</a><a href="complete.html" ><span>09</span>Complete specification</a></nav><div class="side-footer"><span class="status">Plan · not implemented</span><p>Source-grounded architecture.<br>Native framework first.<br>Compatibility gates explicit.</p><a href="source-plan.md">Markdown source</a></div></aside><div class="layout"><header class="topbar"><p>08 / 9 &nbsp; Evidence &amp; limitations</p><label><span class="small">Find on this page </span><input id="search" type="search" placeholder="Filter sections…" aria-label="Filter sections on this page"></label></header><main id="main" class="content"><section class="hero" id="00-chapter"><div class="eyebrow">Implementation plan / October 2026</div><h1>No hidden assumptions.</h1><p class="lead">What the source proves, what we propose to build, and exactly which combinations remain unverified.</p><div class="source-links"><a href="complete.html">Read every implementation detail</a><a href="transparency.html">Evidence & limitations</a><a href="source-plan.md" download>Download Markdown</a></div></section><nav class="toc" aria-label="On this page"><a href="#01-what-is-verified-now">What is verified now</a><a href="#02-what-is-proposed-application-glue">What is proposed application glue</a><a href="#03-compatibility-gates-that-must-pass">Compatibility gates that must pass</a><a href="#04-things-the-plan-explicitly-does-not-claim">Things the plan explicitly does not claim</a><a href="#05-review-and-document-status">Review and document status</a><a href="#06-evidence-keys-and-reading-order">Evidence keys and reading order</a></nav><div id="no-results" class="empty" hidden>No matching sections. Clear the search to restore the full chapter.</div><section class="chapter-section" id="01-what-is-verified-now"><div class="eyebrow">01 / Section</div><h2>What is verified now</h2>
+<p>The source plan is grounded in the local Telnyx schema, installed FastMCP 4.0.10, MCP 2.2.0 and Prefab 0.20.2, plus official documentation. The local schema contains 933 paths, 1,382 operations and 96 webhook reference definitions. Earlier answers mixed paths and operations; this document uses operation counts where stated.</p>
+<p>A no-network FastMCP composition probe produced the four requested model tools and retained native UI metadata on the directly advertised generator. A child arithmetic tool executed through Code Mode. The initial probe listing was 6,527 bytes. The probe did not call Telnyx or exercise a browser UI.</p>
+<p>Native GenerativeUI&#39;s actual source registers code/data execution, component lookup and the renderer resource. Prefab exposes themes and CSS. Official AppBridge documentation exposes a host-supplied tool-handler mode, so the embed can keep its connection and long-lived account credential in the application backend.</p>
+</section><section class="chapter-section" id="02-what-is-proposed-application-glue"><div class="eyebrow">02 / Section</div><h2>What is proposed application glue</h2>
+<p>Domain recipes, the Store workspace page, source-aware Omni Inbox, per-user credential binding, small client packaging, event correlation and explicit policy are the code we plan to build around those existing primitives. They are not already shipped framework features. The plan minimizes this glue and reuses native lifecycle, auth, stores, task management and UI actions.</p>
+<p>The requested Telnyx KV adapter must be contract-tested. It can store account-owned documents/preferences, but its existence does not establish transactional isolation or make it a supported Docket backend. Namespace setup is explicit; the first ordinary user read must not silently create account resources.</p>
+</section><section class="chapter-section" id="03-compatibility-gates-that-must-pass"><div class="eyebrow">03 / Section</div><h2>Compatibility gates that must pass</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Gate</th>
+<th>What the existing evidence supports</th>
+<th>What still needs real proof</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OAuth for Oubliai</td>
+<td>Telnyx advertises OAuth/DCR/PKCE.</td>
+<td>Correct resource-bound issuer/audience and a complete user login/credential-forwarding path; never disable audience checks.</td>
+</tr>
+<tr>
+<td>Facilitator tool execution</td>
+<td>Telnyx has assistant chat and MCP/tool configuration.</td>
+<td>Native runtime authenticates as the right user and calls the compact execution surface.</td>
+</tr>
+<tr>
+<td>Facilitator-generated widget delivery</td>
+<td>Assistant chat returns text and optionally text deltas.</td>
+<td>Real generator/tool UI payload or artifact reaches AppBridge. Text success alone is insufficient.</td>
+</tr>
+<tr>
+<td>Native generator embedding</td>
+<td>Renderer metadata and official AppBridge API exist.</td>
+<td>Browser host load, input/partial/final lifecycle, actions, CSP and teardown on the actual versions.</td>
+</tr>
+<tr>
+<td>Host design-system matching</td>
+<td>Host style variables and native Prefab themes exist.</td>
+<td>Token mapping, first-render computed styles, fonts and live theme switching in two host fixtures.</td>
+</tr>
+<tr>
+<td>Live media</td>
+<td>Telnyx browser SDK and permission-request primitives exist.</td>
+<td>Actual host permission grants, SDK signaling/ICE, audio/video, supervisor topology and teardown.</td>
+</tr>
+<tr>
+<td>Special API protocols</td>
+<td>Spec identifies alternate hosts, streams and socket operations.</td>
+<td>Correct official adapter/wire semantics. Disabled entries stay visibly disabled until proven.</td>
+</tr>
+<tr>
+<td>Channel webhook ingestion</td>
+<td>Endpoint/event references exist for parts of the platform.</td>
+<td>Signing/event contract for each actual channel, raw body verification, account correlation, delivery behavior.</td>
+</tr>
+</tbody></table></div>
+</section><section class="chapter-section" id="04-things-the-plan-explicitly-does-not-claim"><div class="eyebrow">04 / Section</div><h2>Things the plan explicitly does not claim</h2>
+<ul>
+<li>Zero model context use. Discovery, schemas and chosen results necessarily consume context; we measure and bound them.</li>
+<li>Automatic rollback of a remote tool chain or exactly-once Telnyx mutations after ambiguous failure.</li>
+<li>A native all-channel shared inbox, complete historical channel data, or automatic phone/email identity matching.</li>
+<li>Mic/WebRTC forbidden in every MCP Apps host—or guaranteed in every host. Permissions are host-dependent and tested.</li>
+<li>Native Meeting Bot support for Telnyx Rooms. The user requested external meeting platforms only.</li>
+<li>A general-purpose training platform beyond the actual model/job constraints of documented Telnyx fine-tuning operations.</li>
+<li>Every auth provider, transform and storage backend enabled simultaneously. Alternative FastMCP profiles are accounted for without bloating the default product.</li>
+</ul>
+</section><section class="chapter-section" id="05-review-and-document-status"><div class="eyebrow">05 / Section</div><h2>Review and document status</h2>
+<p>This is an implementation plan and a document deliverable, not a running product. Test commands and implementation files in the roadmap describe future work unless explicitly labeled as an already-run local probe.</p>
+<p>Independent read-only review was attempted, but the available reviewer endpoint returned an authentication error. No independent approval is claimed. Document-browser checks and screenshots, when recorded in the local QA report, prove only the readability/navigation of this HTML dossier. They do not prove the future Telnyx server, facilitator, client or media integrations.</p>
+<p>The earlier plan and its accumulating addenda are superseded by the rewritten plan. Where a requested capability cannot be established using the native runtime, the implementation must report the exact blocker instead of quietly inventing a replacement.</p>
+</section><section class="chapter-section" id="06-evidence-keys-and-reading-order"><div class="eyebrow">06 / Section</div><h2>Evidence keys and reading order</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Primary source</th>
+<th>What it proves / limits</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>E1</td>
+<td><code>openapi.json</code>, <code>paths</code>, <code>components</code>, <code>webhooks</code>; original <code>fastmcp-llms.txt</code> and <code>fastmcp-llms-full.txt</code></td>
+<td>Endpoint/schema inventory, not successful execution or account entitlement. Use <code>(method,path)</code> as operation identity, not operationId alone.</td>
+</tr>
+<tr>
+<td>E2</td>
+<td><a href="https://gofastmcp.com/integrations/openapi">https://gofastmcp.com/integrations/openapi</a> ; local <code>docs/fastmcp/openapi-integration.md</code>; installed <code>fastmcp/server/providers/openapi/{provider,components,routing}.py</code></td>
+<td><code>OpenAPIProvider</code>, <code>from_openapi</code>, ordered RouteMap, name/component hooks, flattened schemas, client-based requests.</td>
+</tr>
+<tr>
+<td>E3</td>
+<td><a href="https://gofastmcp.com/servers/transforms/code-mode">https://gofastmcp.com/servers/transforms/code-mode</a> ; <code>docs/fastmcp/code-mode.md</code>; installed <code>fastmcp/experimental/transforms/code_mode.py</code></td>
+<td>Native Search/GetSchemas/execute, bounded Monty execution, intermediates stay in execution. Experimental API; does not promise persistent workflow execution.</td>
+</tr>
+<tr>
+<td>E4</td>
+<td><a href="https://gofastmcp.com/apps/generative">https://gofastmcp.com/apps/generative</a> ; installed <code>fastmcp/apps/generative.py:53-159</code></td>
+<td>Native generator takes <code>code</code> and optional <code>data</code>; registers renderer metadata and component lookup. No built-in LLM, tool-result-reference resolver, or Telnyx client inside the sandbox.</td>
+</tr>
+<tr>
+<td>E5</td>
+<td><a href="https://gofastmcp.com/apps/fastmcp-app">https://gofastmcp.com/apps/fastmcp-app</a> ; <code>docs/fastmcp/fastmcp-app.md</code></td>
+<td>Provider composition; model/app visibility; function-reference CallTool resolution. Visibility is not a substitute for authorization.</td>
+</tr>
+<tr>
+<td>E6</td>
+<td><a href="https://modelcontextprotocol.io/extensions/apps/build">https://modelcontextprotocol.io/extensions/apps/build</a> ; <a href="https://apps.extensions.modelcontextprotocol.io/api/classes/app-bridge.AppBridge.html">https://apps.extensions.modelcontextprotocol.io/api/classes/app-bridge.AppBridge.html</a> ; <a href="https://github.com/modelcontextprotocol/ext-apps/tree/main/examples/basic-host">https://github.com/modelcontextprotocol/ext-apps/tree/main/examples/basic-host</a></td>
+<td>Official embedding bridge and example sandbox host; tool/resource forwarding; input/result notifications. Use this rather than hand-rolled postMessage plumbing.</td>
+</tr>
+<tr>
+<td>E7</td>
+<td><a href="https://prefab.prefect.io/docs/styling/themes">https://prefab.prefect.io/docs/styling/themes</a> ; <a href="https://prefab.prefect.io/docs/reference/app">https://prefab.prefect.io/docs/reference/app</a> ; installed <code>prefab_ui/app.py:123-176</code>, <code>prefab_ui/themes/base.py:113-222</code></td>
+<td>Theme/CSS/mode/assets; explicit token mapping is possible. Arbitrary parent-app CSS does not automatically enter an iframe.</td>
+</tr>
+<tr>
+<td>E8</td>
+<td><code>docs/fastmcp/{tasks,sessions,storage-backends,http-deployment,auth,authorization}.md</code>; <a href="https://gofastmcp.com/clients/client">https://gofastmcp.com/clients/client</a></td>
+<td>Native task extension, Docket backends, user state, auth, client. Neither Telnyx KV nor EventStore is a substitute for Docket&#39;s queue.</td>
+</tr>
+<tr>
+<td>E9</td>
+<td><code>docs/telnyx-oauth-as-metadata.json</code>; <a href="https://api.telnyx.com/.well-known/oauth-authorization-server">https://api.telnyx.com/.well-known/oauth-authorization-server</a></td>
+<td>Telnyx advertises OAuth/DCR/PKCE; does not prove issuance for Oubliai&#39;s resource/audience.</td>
+</tr>
+<tr>
+<td>E10</td>
+<td><a href="https://developers.telnyx.com/api-reference/assistants/assistant-chat-beta">https://developers.telnyx.com/api-reference/assistants/assistant-chat-beta</a> ; <code>openapi.json</code> assistant chat / MCP server / integration secret schemas</td>
+<td>Existing assistant runtime and chat API. End-to-end MCP tool use, credential propagation and UI-result forwarding still need the compatibility gate.</td>
+</tr>
+<tr>
+<td>E11</td>
+<td><code>openapi.json</code> <code>/meeting_sessions*</code>; <code>/Users/tims-stuff/.agents/skills/telnyx-meeting-bot/SKILL.md</code>; <a href="https://github.com/team-telnyx/ai/blob/main/guides/meeting-bot.md">https://github.com/team-telnyx/ai/blob/main/guides/meeting-bot.md</a></td>
+<td>Third-party meeting lifecycle, assistant attachment, transcript/artifact contracts; not Telnyx Room bot integration.</td>
+</tr>
+<tr>
+<td>E12</td>
+<td><a href="https://github.com/team-telnyx/webrtc/tree/main/packages/js">https://github.com/team-telnyx/webrtc/tree/main/packages/js</a> ; <a href="https://developers.telnyx.com/docs/development/webrtc/js-sdk/how-to/configure-network-firewall">https://developers.telnyx.com/docs/development/webrtc/js-sdk/how-to/configure-network-firewall</a> ; installed <code>fastmcp/apps/config.py:21-82</code></td>
+<td>Browser audio SDK and requested microphone permissions; host grants/network/device remain runtime conditions.</td>
+</tr>
+</tbody></table></div>
+</section><div class="pager"><a href="roadmap.html">← Build order &amp; verification</a><a href="complete.html">Complete specification →</a></div><footer class="footer">Oubliai implementation dossier · Prometheus planning artifact · 4 October 2026<br>FastMCP 4.0.10 / MCP 2.2.0 / Prefab 0.20.2 research baseline. Independent reviewer unavailable; see the transparency chapter. No account credentials included.</footer></main></div><script>document.documentElement.classList.add('js');document.querySelector('.chapter-select').addEventListener('change',event=>{location.href=event.target.value});const field=document.querySelector('#search');field.addEventListener('input',()=>{const q=field.value.trim().toLocaleLowerCase();let hits=0;for(const section of document.querySelectorAll('.chapter-section')){const match=section.textContent.toLocaleLowerCase().includes(q);section.hidden=!match;if(match)hits++}document.querySelector('#no-results').hidden=hits>0});</script></body></html>

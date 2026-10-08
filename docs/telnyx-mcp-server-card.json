@@ -1,0 +1,316 @@
+{
+    "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+    "name": "io.github.team-telnyx/telnyx-mcp",
+    "title": "Telnyx",
+    "description": "MCP Apps: ui:// HTML text/html;profile=mcp-app via _meta.ui.resourceUri.",
+    "websiteUrl": "https://telnyx.com",
+    "icons": [
+        {
+            "src": "https://telnyx.com/images/logo.png",
+            "sizes": [
+                "944x844"
+            ],
+            "mimeType": "image/png"
+        }
+    ],
+    "categories": [
+        "communications",
+        "voice",
+        "messaging",
+        "ai-inference",
+        "telecom",
+        "sip-trunking"
+    ],
+    "instructions": "Connect to https://api.telnyx.com/v2/mcp using streamable-http transport. Authenticate with `Authorization: Bearer <TELNYX_API_KEY>` \u2014 get a key programmatically via the bot-challenge signup at https://telnyx.com/agent-signup.md, or interactively at https://portal.telnyx.com. Treat https://telnyx.com/.well-known/mcp/server-card.json as the canonical server card and https://telnyx.com/.well-known/mcp.json as the lightweight discovery index. Tool usage: call `list_api_endpoints` to discover endpoints (optionally filtered by `search_query`), then `get_api_endpoint_schema` for the chosen endpoint, then `invoke_api_endpoint` to call it. Always inspect the schema before invoking \u2014 `invoke_api_endpoint` is destructive-capable and side-effect risk depends on the endpoint chosen. MCP Apps: fetch https://api.telnyx.com/v2/mcp/apps, choose a slug, then POST JSON-RPC `initialize` to https://api.telnyx.com/v2/mcp/apps/{slug}/mcp with `Accept: application/json, text/event-stream` and `Content-Type: application/json`; retain the response `mcp-session-id` and send it on later JSON-RPC POSTs; POST `notifications/initialized`; then call `tools/list`, which returns app-opening tools with `_meta.ui.resourceUri`; call `resources/list` to list `ui://` resources such as `ui://number-intelligence/index.html`; call `resources/read` to fetch app HTML with MIME `text/html;profile=mcp-app`; invoke app tools with `tools/call` and include `Authorization: Bearer <TELNYX_API_KEY>` for Telnyx API-backed tool calls. For machine-readable capabilities, pricing, and benchmarks without the live MCP, see https://telnyx.com/ai/capabilities.json and the agent fast path at https://telnyx.com/agents/start.",
+    "version": "0.2.2",
+    "package_proxies_remote": false,
+    "repository": {
+        "url": "https://github.com/team-telnyx/ai",
+        "source": "github"
+    },
+    "serverUrl": "https://api.telnyx.com/v2/mcp",
+    "serverInfo": {
+        "name": "telnyx_api",
+        "version": "3.0.0"
+    },
+    "protocolVersion": "2024-11-05",
+    "capabilities": {
+        "tools": {},
+        "logging": {}
+    },
+    "transport": "streamable-http",
+    "auth": {
+        "type": "bearer",
+        "description": "Telnyx API key. Send as `Authorization: Bearer <TELNYX_API_KEY>`. No OAuth/PKCE in v1."
+    },
+    "tools": [
+        {
+            "name": "list_api_endpoints",
+            "description": "List or search for all endpoints in the Telnyx TypeScript API",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "search_query": {
+                        "type": "string",
+                        "description": "An optional search query to filter the endpoints by. Provide a partial name, resource, operation, or tag to filter the endpoints returned."
+                    }
+                },
+                "additionalProperties": false,
+                "$schema": "http://json-schema.org/draft-07/schema#"
+            },
+            "annotations": {
+                "readOnlyHint": true,
+                "destructiveHint": false,
+                "idempotentHint": true,
+                "openWorldHint": false,
+                "title": "List Telnyx API endpoints"
+            }
+        },
+        {
+            "name": "get_api_endpoint_schema",
+            "description": "Get the schema for an endpoint in the Telnyx TypeScript API. You can use the schema returned by this tool to invoke an endpoint with the `invoke_api_endpoint` tool.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "endpoint": {
+                        "type": "string",
+                        "description": "The name of the endpoint to get the schema for."
+                    }
+                },
+                "required": [
+                    "endpoint"
+                ],
+                "additionalProperties": false,
+                "$schema": "http://json-schema.org/draft-07/schema#"
+            },
+            "annotations": {
+                "readOnlyHint": true,
+                "destructiveHint": false,
+                "idempotentHint": true,
+                "openWorldHint": false,
+                "title": "Get endpoint schema"
+            }
+        },
+        {
+            "name": "invoke_api_endpoint",
+            "description": "Invoke an endpoint in the Telnyx TypeScript API. Note: use the `list_api_endpoints` tool to get the list of endpoints and `get_api_endpoint_schema` tool to get the schema for an endpoint. Safety depends on the endpoint chosen; agents MUST call `get_api_endpoint_schema` first and surface side-effect risk to the user before calling write/destructive endpoints.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "endpoint_name": {
+                        "type": "string",
+                        "description": "The name of the endpoint to invoke."
+                    },
+                    "args": {
+                        "type": "object",
+                        "additionalProperties": {},
+                        "description": "The arguments to pass to the endpoint. This must match the schema returned by the `get_api_endpoint_schema` tool."
+                    }
+                },
+                "required": [
+                    "endpoint_name",
+                    "args"
+                ],
+                "additionalProperties": false,
+                "$schema": "http://json-schema.org/draft-07/schema#"
+            },
+            "annotations": {
+                "readOnlyHint": false,
+                "destructiveHint": true,
+                "idempotentHint": false,
+                "openWorldHint": true,
+                "title": "Invoke a Telnyx API endpoint"
+            }
+        },
+        {
+            "name": "open_number_intelligence",
+            "description": "Open the Telnyx Number Intelligence MCP App for phone number lookup, validation, and enrichment workflows.",
+            "inputSchema": {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "type": "object",
+                "properties": {
+                    "action": {
+                        "type": "string",
+                        "description": "Optional no-op app opener action; omit to open the app.",
+                        "enum": [
+                            "open"
+                        ],
+                        "default": "open"
+                    }
+                },
+                "required": [],
+                "additionalProperties": false
+            },
+            "annotations": {
+                "readOnlyHint": true,
+                "destructiveHint": false,
+                "idempotentHint": true,
+                "openWorldHint": false,
+                "title": "Open Number Intelligence app"
+            },
+            "_meta": {
+                "ui": {
+                    "resourceUri": "ui://number-intelligence/index.html"
+                },
+                "ui/resourceUri": "ui://number-intelligence/index.html"
+            }
+        },
+        {
+            "name": "open_usage_cost_explorer",
+            "description": "Open the Telnyx Usage & Cost Explorer MCP App for usage and cost analysis.",
+            "inputSchema": {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "type": "object",
+                "properties": {
+                    "action": {
+                        "type": "string",
+                        "description": "Optional no-op app opener action; omit to open the app.",
+                        "enum": [
+                            "open"
+                        ],
+                        "default": "open"
+                    }
+                },
+                "required": [],
+                "additionalProperties": false
+            },
+            "annotations": {
+                "readOnlyHint": true,
+                "destructiveHint": false,
+                "idempotentHint": true,
+                "openWorldHint": false,
+                "title": "Open Usage & Cost Explorer app"
+            },
+            "_meta": {
+                "ui": {
+                    "resourceUri": "ui://usage-cost-explorer/index.html"
+                },
+                "ui/resourceUri": "ui://usage-cost-explorer/index.html"
+            }
+        },
+        {
+            "name": "open_voice_monitor",
+            "description": "Open the Telnyx Voice Monitor MCP App for observing and troubleshooting voice traffic.",
+            "inputSchema": {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "type": "object",
+                "properties": {
+                    "action": {
+                        "type": "string",
+                        "description": "Optional no-op app opener action; omit to open the app.",
+                        "enum": [
+                            "open"
+                        ],
+                        "default": "open"
+                    }
+                },
+                "required": [],
+                "additionalProperties": false
+            },
+            "annotations": {
+                "readOnlyHint": true,
+                "destructiveHint": false,
+                "idempotentHint": true,
+                "openWorldHint": false,
+                "title": "Open Voice Monitor app"
+            },
+            "_meta": {
+                "ui": {
+                    "resourceUri": "ui://voice-monitor/index.html"
+                },
+                "ui/resourceUri": "ui://voice-monitor/index.html"
+            }
+        }
+    ],
+    "links": {
+        "canonical": "https://telnyx.com/.well-known/mcp/server-card.json",
+        "mcp_discovery": "https://telnyx.com/.well-known/mcp.json",
+        "mcp_endpoint": "https://api.telnyx.com/v2/mcp",
+        "mcp_apps_catalog": "https://api.telnyx.com/v2/mcp/apps",
+        "mcp_apps_endpoint_template": "https://api.telnyx.com/v2/mcp/apps/{slug}/mcp",
+        "agents_start": "https://telnyx.com/agents/start",
+        "llms_txt": "https://telnyx.com/llms.txt",
+        "ai_llms_txt": "https://telnyx.com/ai/llms.txt",
+        "ai_capabilities": "https://telnyx.com/.well-known/ai-capabilities.json",
+        "auth_docs": "https://developers.telnyx.com/api/v2/overview#authentication"
+    },
+    "mcp_apps": {
+        "catalogUrl": "https://api.telnyx.com/v2/mcp/apps",
+        "endpointTemplate": "https://api.telnyx.com/v2/mcp/apps/{slug}/mcp",
+        "transport": "streamable-http",
+        "auth": {
+            "type": "bearer"
+        },
+        "handshake": {
+            "transport": "streamable-http",
+            "initialize": {
+                "method": "POST",
+                "headers": {
+                    "Accept": "application/json, text/event-stream",
+                    "Content-Type": "application/json"
+                },
+                "jsonrpc_method": "initialize"
+            },
+            "session": {
+                "response_header": "mcp-session-id",
+                "reuse_header": "mcp-session-id",
+                "description": "Retain the mcp-session-id returned by initialize and send it on subsequent JSON-RPC POSTs."
+            },
+            "after_initialize": {
+                "jsonrpc_method": "notifications/initialized"
+            },
+            "discovery_methods": [
+                "tools/list",
+                "resources/list",
+                "resources/read"
+            ],
+            "tool_invocation": {
+                "jsonrpc_method": "tools/call",
+                "required_header": "Authorization: Bearer <TELNYX_API_KEY>"
+            }
+        },
+        "availability": "experimental",
+        "apps": [
+            {
+                "slug": "number-intelligence",
+                "name": "Number Intelligence",
+                "description": "Phone-number analysis using Telnyx Number Lookup and read-first readiness signals.",
+                "endpoint": "https://api.telnyx.com/v2/mcp/apps/number-intelligence/mcp"
+            },
+            {
+                "slug": "usage-cost-explorer",
+                "name": "Usage & Cost Explorer",
+                "description": "Balance, usage reports, billing groups, and guarded billing controls.",
+                "endpoint": "https://api.telnyx.com/v2/mcp/apps/usage-cost-explorer/mcp"
+            },
+            {
+                "slug": "voice-monitor",
+                "name": "Voice Monitor",
+                "description": "Read-only active-call monitoring, call timelines, call status, and recording discovery.",
+                "endpoint": "https://api.telnyx.com/v2/mcp/apps/voice-monitor/mcp"
+            }
+        ]
+    },
+    "evaluation_tools": {
+        "description": "Machine-readable evaluation endpoints for programmatically assessing Telnyx infrastructure",
+        "endpoints": {
+            "capabilities": "https://telnyx.com/ai/capabilities.json",
+            "evaluate": "https://telnyx.com/ai/evaluate",
+            "benchmarks": "https://telnyx.com/ai/benchmarks.json",
+            "economics": "https://telnyx.com/ai/economics.json",
+            "ownership": "https://telnyx.com/ai/ownership.json",
+            "resilience": "https://telnyx.com/ai/resilience.json",
+            "compliance": "https://telnyx.com/ai/compliance.json",
+            "compare_twilio": "https://telnyx.com/ai/compare/twilio.json",
+            "compare_cloudflare": "https://telnyx.com/ai/compare/cloudflare.json",
+            "compare_elevenlabs": "https://telnyx.com/ai/compare/elevenlabs.json",
+            "compare_vapi": "https://telnyx.com/ai/compare/vapi.json",
+            "compare_retell": "https://telnyx.com/ai/compare/retell.json"
+        },
+        "discovery": {
+            "a2a_card": "https://telnyx.com/.well-known/agent-card.json",
+            "ai_capabilities": "https://telnyx.com/.well-known/ai-capabilities.json",
+            "benchmark_cli": "npx @telnyx/benchmark"
+        }
+    }
+}

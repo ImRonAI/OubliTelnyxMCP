@@ -1,0 +1,40 @@
+{
+    "resource": "https://api.telnyx.com",
+    "scopes_supported": [
+        "account_management.read",
+        "account_management.write",
+        "ai.read",
+        "ai.write",
+        "authentication_and_access.read",
+        "billing.read",
+        "edge_compute.read",
+        "edge_compute.write",
+        "enterprise_integrations.read",
+        "enterprise_integrations.write",
+        "fax.read",
+        "fax.write",
+        "messaging.read",
+        "messaging.write",
+        "networking.read",
+        "networking.write",
+        "numbers.read",
+        "numbers.write",
+        "reporting.read",
+        "reporting.write",
+        "speech.read",
+        "speech.write",
+        "storage.read",
+        "storage.write",
+        "verify.read",
+        "verify.write",
+        "video.read",
+        "video.write",
+        "voice.read",
+        "voice.write",
+        "wireless.read",
+        "wireless.write"
+    ],
+    "authorization_servers": [
+        "https://api.telnyx.com"
+    ]
+}

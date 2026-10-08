@@ -1,0 +1,205 @@
+{
+  "kind": "SDK fixture, not live LLM/telecom",
+  "results": [
+    {
+      "fourTools": [
+        "execute",
+        "generate_prefab_ui",
+        "get_schema",
+        "search"
+      ],
+      "uiUri": "ui://prefab/generative.html",
+      "resourceBytes": 471,
+      "csp": {
+        "connectDomains": [
+          "https://cdn.jsdelivr.net",
+          "https://pypi.org",
+          "https://files.pythonhosted.org"
+        ],
+        "resourceDomains": [
+          "https://cdn.jsdelivr.net"
+        ]
+      },
+      "rendererExport": "function"
+    },
+    {
+      "nativeChaining": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "SDK feasibility fixture",
+            "version": "4.0.10"
+          }
+        },
+        "resultType": "complete",
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"result\":7}"
+          }
+        ],
+        "structuredContent": {
+          "result": 7
+        },
+        "isError": false
+      }
+    },
+    {
+      "actualUI": {
+        "type": "dynamic-tool",
+        "toolName": "generate_prefab_ui",
+        "toolCallId": "native-ui-call",
+        "state": "output-available",
+        "input": {
+          "code": "from prefab_ui.app import PrefabApp\nfrom prefab_ui.components import Column, Heading, Text\nwith PrefabApp() as app:\n    with Column():\n        Heading(\"Native SDK proof\")\n        Text(\"Seven is the verified fixture outcome.\")"
+        },
+        "output": {
+          "_meta": {
+            "io.modelcontextprotocol/serverInfo": {
+              "name": "SDK feasibility fixture",
+              "version": "4.0.10"
+            }
+          },
+          "resultType": "complete",
+          "content": [
+            {
+              "type": "text",
+              "text": "[Rendered Prefab UI]"
+            }
+          ],
+          "structuredContent": {
+            "$prefab": {
+              "version": "0.3"
+            },
+            "view": {
+              "cssClass": "pf-app-root",
+              "type": "Div",
+              "children": [
+                {
+                  "cssClass": "pf-app-root",
+                  "type": "Div",
+                  "children": [
+                    {
+                      "type": "Column",
+                      "children": [
+                        {
+                          "content": "Native SDK proof",
+                          "type": "Heading",
+                          "level": 1
+                        },
+                        {
+                          "content": "Seven is the verified fixture outcome.",
+                          "type": "Text"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "isError": false
+        },
+        "title": "Generate Prefab Ui",
+        "toolMetadata": {
+          "clientName": "ai-sdk-mcp-client",
+          "toolName": "generate_prefab_ui",
+          "title": "Generate Prefab Ui",
+          "app": {
+            "resourceUri": "ui://prefab/generative.html",
+            "csp": {
+              "connectDomains": [
+                "https://cdn.jsdelivr.net",
+                "https://pypi.org",
+                "https://files.pythonhosted.org"
+              ],
+              "resourceDomains": [
+                "https://cdn.jsdelivr.net"
+              ]
+            },
+            "mimeType": "text/html;profile=mcp-app"
+          }
+        }
+      }
+    },
+    {
+      "agentModelCalls": 2,
+      "uiPart": {
+        "type": "dynamic-tool",
+        "toolName": "generate_prefab_ui",
+        "toolCallId": "native-ui-call",
+        "state": "output-available",
+        "input": {
+          "code": "from prefab_ui.app import PrefabApp\nfrom prefab_ui.components import Column, Heading, Text\nwith PrefabApp() as app:\n    with Column():\n        Heading(\"Native SDK proof\")\n        Text(\"Seven is the verified fixture outcome.\")"
+        },
+        "output": {
+          "_meta": {
+            "io.modelcontextprotocol/serverInfo": {
+              "name": "SDK feasibility fixture",
+              "version": "4.0.10"
+            }
+          },
+          "resultType": "complete",
+          "content": [
+            {
+              "type": "text",
+              "text": "[Rendered Prefab UI]"
+            }
+          ],
+          "structuredContent": {
+            "$prefab": {
+              "version": "0.3"
+            },
+            "view": {
+              "cssClass": "pf-app-root",
+              "type": "Div",
+              "children": [
+                {
+                  "cssClass": "pf-app-root",
+                  "type": "Div",
+                  "children": [
+                    {
+                      "type": "Column",
+                      "children": [
+                        {
+                          "content": "Native SDK proof",
+                          "type": "Heading",
+                          "level": 1
+                        },
+                        {
+                          "content": "Seven is the verified fixture outcome.",
+                          "type": "Text"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "isError": false
+        },
+        "title": "Generate Prefab Ui",
+        "toolMetadata": {
+          "clientName": "ai-sdk-mcp-client",
+          "toolName": "generate_prefab_ui",
+          "title": "Generate Prefab Ui",
+          "app": {
+            "resourceUri": "ui://prefab/generative.html",
+            "csp": {
+              "connectDomains": [
+                "https://cdn.jsdelivr.net",
+                "https://pypi.org",
+                "https://files.pythonhosted.org"
+              ],
+              "resourceDomains": [
+                "https://cdn.jsdelivr.net"
+              ]
+            },
+            "mimeType": "text/html;profile=mcp-app"
+          }
+        }
+      }
+    }
+  ],
+  "verdict": "CONFIRMED: native agent loop, metadata, structured generator result and native renderer interface"
+}

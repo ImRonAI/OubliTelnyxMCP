@@ -1,0 +1,54 @@
+{
+  "pages": [
+    {
+      "file": "index.html",
+      "bytes": 19395,
+      "sections": 7
+    },
+    {
+      "file": "server.html",
+      "bytes": 32160,
+      "sections": 13
+    },
+    {
+      "file": "client.html",
+      "bytes": 27395,
+      "sections": 10
+    },
+    {
+      "file": "app.html",
+      "bytes": 29808,
+      "sections": 12
+    },
+    {
+      "file": "inventory.html",
+      "bytes": 317778,
+      "sections": 3
+    },
+    {
+      "file": "features.html",
+      "bytes": 23363,
+      "sections": 2
+    },
+    {
+      "file": "roadmap.html",
+      "bytes": 58628,
+      "sections": 9
+    },
+    {
+      "file": "transparency.html",
+      "bytes": 26418,
+      "sections": 7
+    },
+    {
+      "file": "complete.html",
+      "bytes": 110411,
+      "sections": 23
+    }
+  ],
+  "operationCount": 1382,
+  "implementationTasks": 27,
+  "verificationTasks": 4,
+  "sourcePlan": "source-plan.md",
+  "sourceSchema": "telnyx-openapi.json"
+}
