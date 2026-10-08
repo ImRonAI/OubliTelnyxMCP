@@ -1,0 +1,4 @@
+allowBuilds:
+  # Same as packages/app: the prebuilt @esbuild/<platform> binary resolves
+  # without a postinstall script, so the lifecycle script stays disabled.
+  esbuild: false
