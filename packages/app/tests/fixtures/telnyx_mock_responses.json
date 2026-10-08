@@ -111,5 +111,32 @@
         ]
       }
     }
+  },
+  "POST /v2/telephony_credentials/credential-fixture-001/token": {
+    "status": 201,
+    "content_type": "text/plain",
+    "body": "voice-token-fixture"
+  },
+  "POST /v2/telephony_credentials/credential-malformed/token": {
+    "status": 201,
+    "content_type": "text/plain",
+    "body": ""
+  },
+  "POST /v2/rooms/room-fixture-001/actions/generate_join_client_token": {
+    "status": 201,
+    "body": {
+      "data": {
+        "token": "room-token-fixture",
+        "token_expires_at": "2026-10-07T23:30:00Z",
+        "refresh_token": "room-refresh-token-fixture",
+        "refresh_token_expires_at": "2026-10-08T00:20:00Z"
+      }
+    }
+  },
+  "POST /v2/rooms/room-malformed/actions/generate_join_client_token": {
+    "status": 201,
+    "body": {
+      "data": {}
+    }
   }
 }

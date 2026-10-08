@@ -70,6 +70,13 @@ def _make_handler(responses: dict[str, dict[str, Any]]):
                     ]
                 },
             )
+        content_type = entry.get("content_type")
+        if content_type == "text/plain":
+            return httpx2.Response(
+                entry["status"],
+                content=str(entry["body"]),
+                headers={"content-type": content_type},
+            )
         return httpx2.Response(entry["status"], json=entry["body"])
 
     return telnyx
