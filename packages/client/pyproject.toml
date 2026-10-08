@@ -4,6 +4,7 @@ version="0.0.0"
 requires-python=">=3.12"
 dependencies=[
     "fastmcp>=4.0.10,<5",
+    "fastmcp-tasks>=4.0.10,<5",
     "httpx2>=2.13,<3",
     "mcp>=2.2.0,<3",
     "py-key-value-aio>=0.4.6,<1",
@@ -22,3 +23,4 @@ where=["src"]
 [tool.pytest.ini_options]
 asyncio_mode="auto"
 testpaths=["tests"]
+markers=["deno: requires the Deno runtime"]
