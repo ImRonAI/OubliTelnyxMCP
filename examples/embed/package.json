@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit",
     "build": "node build.mjs",
     "serve": "node serve.mjs",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test -c tests/playwright.config.ts"
   },
   "dependencies": {
     "oubliai-app": "link:../../packages/app",

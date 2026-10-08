@@ -207,15 +207,16 @@ export class WorkspaceEmbed {
 
     const bridge = newAppBridge(this.serverInfo, iframe);
     const view: MountedView = { bridge, iframe, initialized: false };
-    const previousOnInitialized = bridge.oninitialized;
-    bridge.oninitialized = (params) => {
+    // `addEventListener("initialized", …)` is the documented composable path
+    // (`app-bridge.d.ts` deprecates replacing `oninitialized`); `initializeApp`
+    // keeps its own `oninitialized` hook untouched.
+    bridge.addEventListener("initialized", () => {
       view.initialized = true;
       debug.bridgeInitialized = true;
       debug.state = "rendered";
-      previousOnInitialized?.(params);
       // Push the integrator's tokens once the view is listening.
       void applyThemeWithPrefab(bridge, this.tokens, getTheme());
-    };
+    });
     const previousOnClose = bridge.onclose;
     bridge.onclose = () => {
       debug.bridgeClosed = true;
