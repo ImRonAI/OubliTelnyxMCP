@@ -3,8 +3,6 @@ import {
   type AppBridge,
 } from "@modelcontextprotocol/ext-apps/app-bridge";
 import {
-  callTool,
-  hasAppHtml,
   initializeApp,
   loadSandboxProxy,
   log,
@@ -13,32 +11,22 @@ import {
 } from "./implementation.js";
 import {
   connectToServer,
-  readUiResource,
   type ConnectionDescriptor,
 } from "./connection.js";
+import { mintVoiceToken } from "../media/credentials.js";
+import { mountMediaPanel } from "../media/panel.js";
+import { createVoiceSession } from "../media/voice.js";
+import { createOubliaiMcpClient } from "../mcp/client.js";
+import {
+  isWorkspaceDomain,
+  WORKSPACE_DOMAINS,
+  type WorkspaceDomain,
+} from "../workspace/domains.js";
+import { buildRenderPlan } from "../workspace/render-plan.js";
 import { HOST_STYLE_VARIABLES } from "./host-styles.js";
 import { getTheme, toggleTheme } from "./theme.js";
 
-/** Domains exposed as FastMCP workspaces by the Oubliai server. */
-const WORKSPACES = [
-  "numbers",
-  "messaging",
-  "fax",
-  "verify",
-  "video",
-  "meetings",
-  "email",
-  "voice",
-  "ai",
-  "rag",
-  "speech",
-  "storage",
-  "training",
-  "platform",
-] as const;
-
 const RENDERER_TOOL_NAME = "generate_prefab_ui";
-const EXECUTE_TOOL_NAME = "execute";
 
 interface HostDebugState {
   state: "idle" | "connected" | "rendered" | "error";
@@ -82,7 +70,7 @@ async function unmount(view: MountedView): Promise<void> {
 async function renderWorkspace(
   serverInfo: ServerInfo,
   rendererUri: string,
-  domain: string,
+  domain: WorkspaceDomain,
   container: HTMLElement,
 ): Promise<void> {
   if (mounted) {
@@ -99,13 +87,7 @@ async function renderWorkspace(
 
   // The real workspace tool result (structuredContent `$prefab`) is what the
   // view receives; the renderer resource supplies its HTML.
-  const toolCallInfo = callTool(serverInfo, EXECUTE_TOOL_NAME, {
-    code: `return await call_tool('${domain}_workspace', {})`,
-  });
-  toolCallInfo.appResourcePromise = readUiResource(serverInfo, rendererUri);
-  if (!hasAppHtml(toolCallInfo)) {
-    throw new Error("Renderer resource was not attached to the tool call");
-  }
+  const toolCallInfo = buildRenderPlan(serverInfo, domain, rendererUri);
 
   const { csp, permissions } = await toolCallInfo.appResourcePromise;
   const bridge = newAppBridge(serverInfo, iframe);
@@ -125,6 +107,7 @@ async function renderWorkspace(
 
 interface HostControls {
   banner: HTMLElement;
+  mediaContainer: HTMLElement;
   select: HTMLSelectElement;
   viewContainer: HTMLElement;
 }
@@ -140,7 +123,7 @@ function buildControls(app: HTMLElement): HostControls {
   placeholder.value = "";
   placeholder.textContent = "Select a workspace…";
   select.appendChild(placeholder);
-  for (const domain of WORKSPACES) {
+  for (const domain of WORKSPACE_DOMAINS) {
     const option = document.createElement("option");
     option.value = domain;
     option.textContent = domain;
@@ -164,15 +147,17 @@ function buildControls(app: HTMLElement): HostControls {
   controls.append(select, themeButton);
   const viewContainer = document.createElement("div");
   viewContainer.id = "view";
-  app.append(banner, controls, viewContainer);
+  const mediaContainer = document.createElement("div");
+  mediaContainer.id = "media";
+  app.append(banner, controls, viewContainer, mediaContainer);
 
-  return { banner, select, viewContainer };
+  return { banner, mediaContainer, select, viewContainer };
 }
 
 async function main(): Promise<void> {
   const app = document.getElementById("app");
   if (!app) throw new Error("Missing #app container");
-  const { banner, select, viewContainer } = buildControls(app);
+  const { banner, mediaContainer, select, viewContainer } = buildControls(app);
 
   const response = await fetch("/api/connection");
   if (!response.ok) {
@@ -196,11 +181,27 @@ async function main(): Promise<void> {
     return;
   }
 
+  const authorization =
+    connection.headers["Authorization"] ?? connection.headers["authorization"];
+  const bearerPrefix = "Bearer ";
+  if (!authorization?.startsWith(bearerPrefix)) {
+    fail("Connection does not provide bearer authorization", banner);
+    return;
+  }
+  const mediaClient = await createOubliaiMcpClient({
+    url: connection.url,
+    token: authorization.slice(bearerPrefix.length),
+  });
+  mountMediaPanel(mediaContainer, {
+    createVoiceSession,
+    mintVoiceToken: (credentialId) => mintVoiceToken(mediaClient, credentialId),
+  });
+
   hostState.state = "connected";
 
   select.addEventListener("change", () => {
     const domain = select.value;
-    if (!domain) return;
+    if (!isWorkspaceDomain(domain)) return;
     banner.hidden = true;
     renderWorkspace(serverInfo, rendererUri, domain, viewContainer).catch(
       (error: unknown) => {
@@ -213,6 +214,7 @@ async function main(): Promise<void> {
     "pagehide",
     () => {
       void mounted?.bridge.close();
+      void mediaClient.close();
     },
     { once: true },
   );
