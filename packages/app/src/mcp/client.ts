@@ -9,6 +9,8 @@ export type OubliaiMcpClientOptions = {
   readonly token: string;
 };
 
+export type Connection = OubliaiMcpClientOptions;
+
 export function createOubliaiMcpClient({
   url,
   token,
