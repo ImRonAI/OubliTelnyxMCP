@@ -2,7 +2,7 @@ import type { AddressInfo } from "node:net";
 
 import type { MCPClient } from "@ai-sdk/mcp";
 import express from "express";
-import { expect, inject, test } from "vitest";
+import { expect, inject, test, vi } from "vitest";
 
 import { createModel } from "../../src/agent/model.js";
 import {
@@ -147,7 +147,7 @@ test("POST /api/chat streams execute UI data and closes its MCP client", async (
   expect(response.status).toBe(200);
   expect(response.body).toContain('"toolName":"execute"');
   expect(response.body).toContain('"$prefab"');
-  expect(closed).toBe(true);
+  await vi.waitFor(() => expect(closed).toBe(true));
 });
 
 test("POST /api/chat closes the MCP client when model streaming fails", async () => {
@@ -201,7 +201,7 @@ test("POST /api/chat creates and closes one MCP client per request", async () =>
   // Then
   expect([first.status, second.status]).toEqual([200, 200]);
   expect(createCount).toBe(2);
-  expect(closeCount).toBe(2);
+  await vi.waitFor(() => expect(closeCount).toBe(2));
 });
 
 test("development connection requires explicit opt-in and complete credentials", () => {
