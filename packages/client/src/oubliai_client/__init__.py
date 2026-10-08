@@ -6,7 +6,7 @@ from oubliai_client.catalog import (
     list_model_visible_tools,
     search,
 )
-from oubliai_client.connection import OubliaiConnection, connect
+from oubliai_client.connection import OubliaiConnection, connect, server_summary
 
 __all__ = [
     "MODEL_VISIBLE_TOOLS",
@@ -19,4 +19,5 @@ __all__ = [
     "list_model_visible_tools",
     "oauth",
     "search",
+    "server_summary",
 ]

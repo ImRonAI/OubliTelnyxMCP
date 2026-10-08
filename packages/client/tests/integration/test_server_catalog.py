@@ -1,23 +1,15 @@
-from fastmcp.server.auth.providers.jwt import StaticTokenVerifier
-from fastmcp.utilities.tests import asgi_client
-from fastmcp_tasks import TasksExtension
+from fastmcp import Client
+from fastmcp.client.transports import ClientTransport
 
 from oubliai_client import MODEL_VISIBLE_TOOLS, get_schema, list_model_visible_tools, search
-from oubliai_server import build_server
 
 
-async def test_authenticated_server_catalog_uses_client_wrappers() -> None:
-    server = build_server(
-        auth=StaticTokenVerifier(
-            tokens={"user-token": {"client_id": "client", "scopes": []}}
-        ),
-        tasks=TasksExtension(url="memory://"),
-    )
-
-    async with asgi_client(server, auth="user-token") as client:
-        tools = await list_model_visible_tools(client)
-        search_result = await search(client, "list available phone numbers")
-        schema_result = await get_schema(client, ["ListAvailablePhoneNumbers"])
+async def test_authenticated_server_catalog_uses_client_wrappers(
+    http_client: Client[ClientTransport],
+) -> None:
+    tools = await list_model_visible_tools(http_client)
+    search_result = await search(http_client, "list available phone numbers")
+    schema_result = await get_schema(http_client, ["ListAvailablePhoneNumbers"])
 
     assert tuple(tool.name for tool in tools) == MODEL_VISIBLE_TOOLS
     assert "ListAvailablePhoneNumbers" in search_result.content[0].text

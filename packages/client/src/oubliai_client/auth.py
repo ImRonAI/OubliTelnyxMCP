@@ -15,10 +15,31 @@ def bearer(token: str) -> BearerAuth:
 
 def oauth(
     *,
+    mcp_url: str | None = None,
     scopes: str | list[str] | None = None,
+    client_name: str = "FastMCP Client",
     token_storage: AsyncKeyValue | None = None,
+    additional_client_metadata: dict[str, object] | None = None,
+    callback_port: int | None = None,
+    callback_host: str = "localhost",
+    callback_timeout: float = 300.0,
+    client_metadata_url: str | None = None,
+    client_id: str | None = None,
+    client_secret: str | None = None,
 ) -> OAuth:
-    return OAuth(scopes=scopes, token_storage=token_storage)
+    return OAuth(
+        mcp_url=mcp_url,
+        scopes=scopes,
+        client_name=client_name,
+        token_storage=token_storage,
+        additional_client_metadata=additional_client_metadata,
+        callback_port=callback_port,
+        callback_host=callback_host,
+        callback_timeout=callback_timeout,
+        client_metadata_url=client_metadata_url,
+        client_id=client_id,
+        client_secret=client_secret,
+    )
 
 
 def file_token_storage(directory: str | Path) -> FileTreeStore:
