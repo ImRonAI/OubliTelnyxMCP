@@ -16,6 +16,11 @@ import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import type { McpUiResourceCsp } from "@modelcontextprotocol/ext-apps";
 
+import {
+  createChatRouter,
+  devConnectionFromEnv,
+} from "../agent/route.js";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -32,6 +37,12 @@ const SERVERS: string[] = process.env.SERVERS
 // ============ Host Server (port 8080) ============
 const hostApp = express();
 hostApp.use(cors());
+hostApp.use(express.json());
+hostApp.use(
+  createChatRouter({
+    connectionFor: () => devConnectionFromEnv(process.env),
+  }),
+);
 
 // Exclude sandbox.html from host server
 hostApp.use((req, res, next) => {
