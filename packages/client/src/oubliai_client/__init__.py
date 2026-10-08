@@ -7,6 +7,18 @@ from oubliai_client.catalog import (
     search,
 )
 from oubliai_client.connection import OubliaiConnection, connect, server_summary
+from oubliai_client.group import group, group_from_mcp_config
+from oubliai_client.handlers import (
+    LogRecorder,
+    NotificationRecorder,
+    ProgressEvent,
+    ProgressRecorder,
+    cancel,
+    decline,
+    elicitation_handler,
+    roots,
+    sampling_handler,
+)
 
 __all__ = [
     "MODEL_VISIBLE_TOOLS",
@@ -20,6 +32,17 @@ __all__ = [
     "oauth",
     "search",
     "server_summary",
+    "LogRecorder",
+    "NotificationRecorder",
+    "ProgressEvent",
+    "ProgressRecorder",
+    "cancel",
+    "decline",
+    "elicitation_handler",
+    "group",
+    "group_from_mcp_config",
+    "roots",
+    "sampling_handler",
 ]
 
 from oubliai_client.tasks import (
