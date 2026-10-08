@@ -26,7 +26,30 @@ a user-owned acceptance gate. Fill-in sections are completed as each wave lands.
 
 ## Client (`packages/client`)
 
-_(filled in when T2.x land: public API, test counts, failure coverage)_
+Package `oubliai_client` (`packages/client/src/oubliai_client`), a thin layer over FastMCP's
+`fastmcp.Client`; nothing in it bypasses the documented client API. Public surface
+(`__init__.__all__`): `connect`/`OubliaiConnection`/`server_summary` (connection), `bearer`,
+`oauth(mcp_url=...)`, `file_token_storage` (auth; FastMCP `BearerAuth`/`OAuth`/FileTree storage),
+`MODEL_VISIBLE_TOOLS`, `list_model_visible_tools`, `search`, `get_schema`, `execute` (catalog),
+`WORKSPACE_DOMAINS`, `WorkspacePayload`, `open_workspace` (workspaces: `execute` → `$prefab` 0.3),
+`RENDERER_URI`, `RENDERER_MIME`, `RendererResource`, `find_renderer_resource`,
+`read_renderer_resource`, `generate_ui` (ui), `ToolTask`, `call_tool_task`,
+`await_telnyx_resource_task`, `wait_for` (tasks; `fastmcp_tasks` API), `ProgressRecorder`,
+`LogRecorder`, `NotificationRecorder`, `elicitation_handler`, `decline`, `cancel`,
+`sampling_handler`, `roots` (handlers), `group`, `group_from_mcp_config` (FastMCP `ClientGroup`).
+
+Tests: **47 passed** (`DENO_NO_PACKAGE_JSON=1 ../../.venv/bin/python -m pytest -q`): 11 unit, 5
+contract, 18 integration-style tests (parametrised cases make up the rest). `tests/conftest.py`
+builds the **real** server (`real_server`) with FastMCP's `StaticTokenVerifier` and an
+`httpx2.MockTransport` for Telnyx, so every integration test exercises the actual `/mcp` HTTP path.
+Proven: `tools/list` returns exactly the 4 model-visible tools; the connected bearer reaches Telnyx
+unchanged (`test_byok.py`); wrong token → connection rejected, Telnyx 4xx surfaces as a tool error,
+malformed input and unknown tool names are rejected (`test_failures.py`); `await_telnyx_resource`
+task completes, cancels, exhausts, and `wait_for` times out (`test_tasks.py`, scenario C2); all 14
+workspaces return `$prefab` 0.3 and the renderer resource has MIME `text/html;profile=mcp-app`
+(scenario C3). The renderer round-trip is marked `deno` because Prefab's bundler needs Deno.
+Not verified live: OAuth consent through the client (`oauth()` only constructs FastMCP's `OAuth`),
+real telecom delivery (README "What is NOT verified live").
 
 ## Application (`packages/app`)
 
@@ -34,7 +57,11 @@ _(filled in: toolchain, module map, what Playwright proved against the real serv
 
 ## Examples
 
-_(filled in)_
+`examples/python/workspace_demo.py` reads root `mcp.json`, connects with the real client API
+(`summarize`, `show_catalog`, `open_numbers`, `renderer_info`, `track_number_order`) and is pinned
+by `test_demo_against_fixture.py` (**5 passed**) against the same real-server fixture as the client
+tests. `examples/embed` embeds a workspace through the `packages/app` host and the official
+two-origin sandbox (see its README; e2e evidence recorded when the wave lands).
 
 ## Deployment readiness
 
