@@ -18,7 +18,7 @@ def _status_handler(
         received.append(request)
         assert request.url.path == path
         status = statuses[min(len(received) - 1, len(statuses) - 1)]
-        return httpx2.Response(200, json={"data": {"id": "x", "status": status}})
+        return httpx2.Response(200, json={"data": {"id": request.url.path.rsplit("/", 1)[-1], "status": status}})
 
     return handler
 
@@ -27,7 +27,7 @@ async def test_await_telnyx_resource_task_completes(real_server) -> None:
     received: list[httpx2.Request] = []
     handler = _status_handler(
         ["pending", "pending", "success"],
-        "/v2/number_orders/no-1",
+        "/v2/number_orders/5bd1ad8e-5e2d-4c74-9b0a-1f3f3a3c7f01",
         received,
     )
 
@@ -35,14 +35,14 @@ async def test_await_telnyx_resource_task_completes(real_server) -> None:
         task = await await_telnyx_resource_task(
             client,
             kind="number_order",
-            resource_id="no-1",
+            resource_id="5bd1ad8e-5e2d-4c74-9b0a-1f3f3a3c7f01",
             poll_interval_seconds=0.01,
         )
         result = await task
 
     assert result.structured_content == {
         "kind": "number_order",
-        "resource_id": "no-1",
+        "resource_id": "5bd1ad8e-5e2d-4c74-9b0a-1f3f3a3c7f01",
         "status": "success",
         "polls": 3,
     }
@@ -53,7 +53,7 @@ async def test_wait_for_returns_completed_result(real_server) -> None:
     received: list[httpx2.Request] = []
     handler = _status_handler(
         ["pending", "provision_ok"],
-        "/v2/storage/kvs/ns-1",
+        "/v2/storage/kvs/9f1c2b7e-0d2a-4e5b-8a7c-2b4f6d8e0a13",
         received,
     )
 
@@ -61,14 +61,14 @@ async def test_wait_for_returns_completed_result(real_server) -> None:
         task = await await_telnyx_resource_task(
             client,
             kind="kv_namespace",
-            resource_id="ns-1",
+            resource_id="9f1c2b7e-0d2a-4e5b-8a7c-2b4f6d8e0a13",
             poll_interval_seconds=0.01,
         )
         result = await wait_for(task, timeout=5.0)
 
     assert result.structured_content == {
         "kind": "kv_namespace",
-        "resource_id": "ns-1",
+        "resource_id": "9f1c2b7e-0d2a-4e5b-8a7c-2b4f6d8e0a13",
         "status": "provision_ok",
         "polls": 2,
     }

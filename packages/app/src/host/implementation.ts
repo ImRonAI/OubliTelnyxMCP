@@ -133,6 +133,7 @@ async function getUiResource(serverInfo: ServerInfo, uri: string): Promise<UiRes
   }
 
   const content = resource.contents[0];
+  // oubliai: `noUncheckedIndexedAccess` guard; the reference indexes without checking.
   if (!content) {
     throw new Error(`Resource not found: ${uri}`);
   }
@@ -242,6 +243,7 @@ export async function initializeApp(
   // Schedule tool call result (or cancellation) to be sent to MCP App
   resultPromise.then(
     (result) => {
+      // oubliai: the reference logs the full result; it carries the user's Telnyx data.
       log.info("Sending tool call result to MCP App");
       appBridge.sendToolResult(result);
     },
@@ -324,6 +326,7 @@ export function newAppBridge(
   // alongside displayMode there would race the layout). Height stays
   // flexible (maxHeight) so the view can keep driving it via sendSizeChanged.
   const iframeResizeObserver = new ResizeObserver(([entry]) => {
+    // oubliai: `noUncheckedIndexedAccess` guard.
     if (!entry) return;
     const width = Math.round(entry.contentRect.width);
     if (width > 0) {
@@ -374,6 +377,8 @@ export function newAppBridge(
     // `box-sizing: border-box` is applied to the outer iframe element, then we
     // must add border thickness to `width` and `height` to compute the actual
     // necessary width and height (in order to prevent a resize feedback loop).
+    // oubliai: the reference animates the resize with `iframe.animate(...)`; the
+    // sizes are applied directly so layout is deterministic for the e2e asserts.
     const style = getComputedStyle(iframe);
     const isBorderBox = style.boxSizing === "border-box";
 
