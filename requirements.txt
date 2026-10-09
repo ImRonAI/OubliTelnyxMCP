@@ -1,5 +1,11 @@
-# Horizon/pip entry for the Python MCP server (Python >=3.12). Pins mirror
-# packages/server/pyproject.toml; server.py puts packages/server/src on sys.path.
+# Horizon/pip entry for the Python MCP server (Python >=3.12).
+# Horizon runs `uv pip install --system -r requirements.txt` from the repository root, then
+# `fastmcp inspect <entrypoint>`. Installing packages/server puts `oubliai_server` in
+# site-packages so either entrypoint form works:
+#   server.py:create_server
+#   packages/server/src/oubliai_server/__main__.py:create_server
+# The pins below mirror packages/server/pyproject.toml (the package also declares them).
+./packages/server
 fastmcp[apps,code-mode,tasks]>=4.0.10,<5
 mcp>=2.2.0,<3
 prefab-ui>=0.20.2,<1

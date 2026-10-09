@@ -89,7 +89,10 @@ def test_repo_root_entrypoint_reexports_the_server_factory():
         if line.strip() and not line.startswith("#")
     }
     pyproject = tomllib.loads((PACKAGE_ROOT / "pyproject.toml").read_text())
-    assert requirements == set(pyproject["project"]["dependencies"])
+    # Horizon installs this file with `uv pip install -r`; the local package line is what puts
+    # `oubliai_server` in site-packages, the pins mirror the manifest for installers that drop extras.
+    assert "./packages/server" in requirements
+    assert requirements - {"./packages/server"} == set(pyproject["project"]["dependencies"])
     spec = importlib.util.spec_from_file_location("root_server", REPO_ROOT / "server.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)

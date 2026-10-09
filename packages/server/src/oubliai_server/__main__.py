@@ -18,7 +18,14 @@ so browser-facing deployments start with `python -m oubliai_server`.
 
 import json
 import os
+import sys
+from pathlib import Path
 from typing import Any
+
+# Ensure packages/server/src is importable when invoked directly via file path
+_SERVER_SRC = Path(__file__).resolve().parent.parent
+if str(_SERVER_SRC) not in sys.path:
+    sys.path.insert(0, str(_SERVER_SRC))
 
 import fastmcp
 from fastmcp import FastMCP
