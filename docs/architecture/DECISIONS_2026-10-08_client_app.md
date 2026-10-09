@@ -53,7 +53,58 @@ real telecom delivery (README "What is NOT verified live").
 
 ## Application (`packages/app`)
 
-_(filled in: toolchain, module map, what Playwright proved against the real server)_
+Toolchain: node ≥ 22, pnpm, TypeScript strict NodeNext, esbuild (`build.mjs` → `dist/host`,
+`dist/sandbox`, `dist/serve.js`), vitest 5 for contracts, `@playwright/test` 1.63 for e2e. Pinned
+runtime deps: `ai` 7.0.127, `@ai-sdk/mcp` 2.0.66, `@ai-sdk/openai-compatible` 3.0.66,
+`@modelcontextprotocol/{client,core,server}` 2.3.0, `@modelcontextprotocol/ext-apps` 2.0.3,
+`zod` 4.2.0, `@telnyx/webrtc` 2.27.10, `@telnyx/video` 1.0.2.
+
+Module map (`src/`): `mcp/` (`createOubliaiMcpClient({url, token})` over
+`StreamableHTTPClientTransport` with `requestInit.headers`, `listModelVisibleToolNames`,
+`callExecute`, `readRendererResource`); `agent/` (`createModel` → `createOpenAICompatible` from
+`OUBLIAI_MODEL_*` or `ModelNotConfiguredError`; `createFacilitator` = native `ToolLoopAgent` +
+`stepCountIs`; `extractToolParts` keeps `toolMetadata.app`; `createChatRouter` POST `/api/chat`
+→ 400 / 503 `model_not_configured` / 401 `no_connection` / `pipeUIMessageStreamToResponse`);
+`host/` (official ext-apps basic-host vendored verbatim except `// oubliai:` edits: ports, build-time
+`__OUBLIAI_ALLOWED_REFERRER__`, `/healthz`, dev-only `/api/connection`, chat-route mount);
+`workspace/` (`WORKSPACE_DOMAINS` = the 14 server domains, `openWorkspace`, `buildRenderPlan`);
+`theme/` (`applyTheme`/`applyThemeWithPrefab` → `sendHostContextChange`; Prefab variables ride
+the `McpUiHostContext` index signature because `McpUiStyles` is a closed 76-key record);
+`media/` (`mintVoiceToken`/`mintRoomToken` via `execute` under the user's token,
+`createVoiceSession` TelnyxRTC gated on `getUserMedia`, `createVideoSession` via
+`@telnyx/video` `initialize()` — the installed `.d.ts` has no `createLocalParticipant`).
+
+Tests: `pnpm typecheck` clean; vitest **55 passed / 11 files** against the real server fixture
+(`tests/fixtures/static_token_server.py` = real `build_server` + mocked Telnyx, bearer
+`e2e-token`); Playwright **22 passed** (`host-smoke`, `media-permissions` ×3, `workspaces` ×15,
+`host-policy-denial` ×3). Proven against the real server over HTTP:
+- `tools/list` returns exactly the 4 model-visible tools; `splitMCPAppTools` appVisible = 0;
+  hidden `<12hex>_<name>` backends remain callable by name, which is how Prefab view actions
+  reach Telnyx with the user's auth (not a permission bypass: same bearer).
+- Scenario A1: `ToolLoopAgent` + `MockLanguageModelV4` drives `execute`, result keeps
+  `structuredContent` and `toolMetadata.app` (`tests/contracts/agent.test.ts`).
+- Scenario A2: every one of the 14 workspaces mounts the official sandbox on `:8081` with `csp=`
+  from the renderer resource `_meta`, AppBridge initialises, and the view shows a value from that
+  domain's mocked Telnyx list response (13 fixture entries added, each shaped from the
+  operation's 200 schema in `docs/reference/telnyx/openapi.json`). Theme toggle flips
+  `html[data-theme]` on host and view; dark palette measured in the live DOM as `oklch(0.985 0 0)`
+  text on `oklch(0.145 0 0)` background. Screenshots `test-results/workspace-numbers-{light,dark}.png`.
+- Scenario A3: sandbox embedding from a foreign loopback origin (`http://[::1]:8080`) is refused
+  by the vendored `sandbox.ts` referrer check (page error "Embedding domain not allowed", no inner
+  iframe); a renderer resource whose MIME is rewritten on the wire to `text/html` is refused by the
+  vendored `implementation.ts` check (`lastError: Unsupported MIME type: text/html`, no mount).
+- Media: permission denial mints nothing and connects nothing; grant mints one token and starts
+  one voice session; `pagehide` disconnects exactly once.
+
+Finding: the Prefab renderer (`prefab_ui/renderer/app.html`) registers no
+`ui/resource-teardown` handler, so `teardownResource({})` rejects with "Method not found". The
+vendored `unmount()` originally aborted before removing the iframe; it now uses the try/catch
+shown in the installed `app-bridge.d.ts` teardown example and still calls `close()` + removes the
+frame. Renderer behaviour, not changed. `tsconfig.json` excludes `src/host` and `tests/e2e` from
+`tsc` (pre-existing); Playwright's transform compiles the specs.
+
+Side fix while wiring the host: the server Prefab view paginated twice
+(`70f441f server(apps): avoid duplicate workspace pagination`).
 
 ## Examples
 
@@ -61,7 +112,13 @@ _(filled in: toolchain, module map, what Playwright proved against the real serv
 (`summarize`, `show_catalog`, `open_numbers`, `renderer_info`, `track_number_order`) and is pinned
 by `test_demo_against_fixture.py` (**5 passed**) against the same real-server fixture as the client
 tests. `examples/embed` embeds a workspace through the `packages/app` host and the official
-two-origin sandbox (see its README; e2e evidence recorded when the wave lands).
+two-origin sandbox: `src/index.html` + `src/embed.ts` (`WorkspaceEmbed` connect/open/close/
+setTheme/closeOnPageHide), served on `:8090` by `serve.mjs`, bundling the `packages/app` TypeScript
+sources directly via `link:` (one SDK copy, nothing forked, no `packages/app` changes). Playwright
+**3 passed** (`tests/embed.spec.ts`): connect, 14 options, sandbox mount with CSP, inner view
+shows the fixture number before and after theme toggle, Close → `teardownResource` then
+`close()` (iframe count 0), `pagehide` closes the bridge, rejected token → error banner and no
+iframe, `:8081/index.html` → 404. Screenshot `examples/embed/test-results/embed-numbers.png`.
 
 ## Deployment readiness
 

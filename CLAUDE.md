@@ -22,7 +22,12 @@ uv pip install --python ../../.venv -e '.[dev]'
 DENO_NO_PACKAGE_JSON=1 ../../.venv/bin/python -m pytest -q
 ../../.venv/bin/python -m pytest tests/unit/test_passthrough_auth.py::test_refuses_without_user_token
 ```
-`packages/client` has no dev extra or tests yet. If these commands don't match a package's current manifest, trust the manifest. Don't invent output.
+Other packages (same pattern; counts as of 2026-10-09):
+- `packages/client`: `uv pip install --python ../../.venv -e '.[dev]'` then `DENO_NO_PACKAGE_JSON=1 ../../.venv/bin/python -m pytest -q` (47 passed; `deno` marker for the renderer round-trip).
+- `examples/python`: `DENO_NO_PACKAGE_JSON=1 ../../.venv/bin/python -m pytest -q` (5 passed).
+- `packages/app`: `pnpm install && pnpm typecheck && pnpm test` (vitest 55 passed against the real-server fixture `tests/fixtures/static_token_server.py`) `&& pnpm build && DENO_NO_PACKAGE_JSON=1 pnpm test:e2e` (Playwright 22 passed; host :8080, sandbox :8081).
+- `examples/embed`: `pnpm install && DENO_NO_PACKAGE_JSON=1 pnpm test:e2e` (Playwright 3 passed; page :8090, reuses the app sandbox :8081). Requires `packages/app` built first.
+If these commands don't match a package's current manifest, trust the manifest. Don't invent output.
 
 Run over HTTP from `packages/server` with `python -m oubliai_server` (`fastmcp run fastmcp.json` runs the same factory but cannot pass the browser CORS middleware; see `OUBLIAI_BROWSER_ORIGINS` below). Variable checklist: `packages/server/.env.example`.
 ```bash
