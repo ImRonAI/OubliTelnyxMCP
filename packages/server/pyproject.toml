@@ -2,7 +2,7 @@
 name="oubliai-server"
 version="0.0.0"
 requires-python=">=3.12"
-dependencies=["fastmcp[apps,code-mode]>=4.0.10,<5","mcp>=2.2.0,<3","prefab-ui>=0.20.2,<1","httpx2>=2.13,<3"]
+dependencies=["fastmcp[apps,code-mode,tasks]>=4.0.10,<5","mcp>=2.2.0,<3","prefab-ui>=0.20.2,<1","httpx2>=2.13,<3","py-key-value-aio[filetree,redis,wrappers-encryption]>=0.4.6,<1"]
 
 [project.optional-dependencies]
 dev=["pytest>=8","pytest-asyncio>=0.24"]

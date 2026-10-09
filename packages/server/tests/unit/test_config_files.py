@@ -81,8 +81,15 @@ def test_repo_root_entrypoint_reexports_the_server_factory():
     install packages/server and expose the same `create_server` factory as `fastmcp.json`."""
     import importlib.util
 
-    requirements = (REPO_ROOT / "requirements.txt").read_text().splitlines()
-    assert "./packages/server" in [line.strip() for line in requirements]
+    import tomllib
+
+    requirements = {
+        line.strip()
+        for line in (REPO_ROOT / "requirements.txt").read_text().splitlines()
+        if line.strip() and not line.startswith("#")
+    }
+    pyproject = tomllib.loads((PACKAGE_ROOT / "pyproject.toml").read_text())
+    assert requirements == set(pyproject["project"]["dependencies"])
     spec = importlib.util.spec_from_file_location("root_server", REPO_ROOT / "server.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)

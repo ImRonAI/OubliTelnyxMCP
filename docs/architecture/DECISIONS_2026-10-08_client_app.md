@@ -134,7 +134,11 @@ src/oubliai_server/__main__.py:create_server` shows 4 tools / 29 resources — t
 Because Horizon detects `requirements.txt`/`pyproject.toml` and a `server.py` at the repository
 root, the root carries `requirements.txt` (`./packages/server`) and `server.py` re-exporting
 `create_server`; entrypoint `server.py:create_server` gives the identical 4/29 inventory
-(pinned by `test_repo_root_entrypoint_reexports_the_server_factory`).
+(pinned by `test_repo_root_entrypoint_reexports_the_server_factory`, which also asserts the root
+`requirements.txt` equals the `pyproject.toml` dependency list). First Horizon build failed: the
+manifest lacked `fastmcp[tasks]` (`fastmcp_tasks`) and the `py-key-value-aio`
+`filetree`/`redis`/`wrappers-encryption` extras the storage module imports — the dev venv had them
+transitively. Fixed and re-proved with a clean `uv venv` install from `requirements.txt`.
 
 **Environment (all verified against installed FastMCP 4.0.10 settings and `__main__.py`).**
 
