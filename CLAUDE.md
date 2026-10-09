@@ -37,7 +37,9 @@ OUBLIAI_STORAGE_ENCRYPTION_KEY=<Fernet key> OUBLIAI_STORAGE_URL=redis://... \
 FASTMCP_HTTP_HOST_ORIGIN_PROTECTION=true FASTMCP_HTTP_ALLOWED_HOSTS='["mcp.example.com"]' \
 ../../.venv/bin/fastmcp run fastmcp.json --port 8000
 ```
-Environment, all read by `__main__.create_server` / FastMCP:
+Environment, all read by `__main__.create_server` / FastMCP. Two auth modes, chosen by whether `OUBLIAI_TELNYX_API_KEY` is set:
+- **Single-tenant (demo):** `OUBLIAI_TELNYX_API_KEY` (the operator's own Telnyx key, used for every upstream call via `make_telnyx_client(api_key=...)`) + `OUBLIAI_ACCESS_TOKEN` (>=24-char random secret; `/mcp` is gated by FastMCP's `StaticTokenVerifier` with that single bearer). The OAuthProxy variables below are then not required. Everyone holding the access token acts as that Telnyx account — only for one operator's own account.
+- **Per-user BYOK (default):** the OAuthProxy variables below; the connected user's own Telnyx token is forwarded.
 - `OUBLIAI_BASE_URL`, `OUBLIAI_TELNYX_CLIENT_ID`, `OUBLIAI_TELNYX_CLIENT_SECRET`, `OUBLIAI_JWT_SIGNING_KEY`, `OUBLIAI_ALLOWED_CLIENT_REDIRECT_URIS` (JSON list) — OAuthProxy.
 - `OUBLIAI_BROWSER_ORIGINS` (optional JSON list of exact origins, e.g. `["https://app.cato-labs.com"]`): browser hosts such as the `packages/app` page call `/mcp` cross-origin and FastMCP emits no CORS headers by itself. When set, `python -m oubliai_server` adds the FastMCP-documented `CORSMiddleware` (MCP headers allowed, `mcp-session-id` exposed) via `run(middleware=..., allowed_origins=...)` — `runtime/cors.py`. `"*"` is refused. `fastmcp run fastmcp.json` cannot pass middleware, so browser-facing deployments must use the module entry point.
 - `OUBLIAI_STORAGE_ENCRYPTION_KEY` (required Fernet key; `python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'`) and `OUBLIAI_STORAGE_URL` (`memory://`, `file://<path>`, `redis://…`/`rediss://…`; unset = `FileTreeStore` under `fastmcp.settings.home/oubliai-storage`) — `runtime/storage.py::build_client_storage`, always wrapped in `FernetEncryptionWrapper`, passed as OAuthProxy `client_storage`.

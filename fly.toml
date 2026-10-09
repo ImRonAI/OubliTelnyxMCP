@@ -1,6 +1,8 @@
 # Fly Launch configuration for the Oubliai MCP server.
-# Runtime secrets are set with `fly secrets set` (never here): OUBLIAI_TELNYX_CLIENT_ID,
-# OUBLIAI_TELNYX_CLIENT_SECRET, OUBLIAI_JWT_SIGNING_KEY, OUBLIAI_STORAGE_ENCRYPTION_KEY.
+# Runtime secrets are set with `fly secrets set` (never here).
+#   single-tenant demo mode: OUBLIAI_TELNYX_API_KEY, OUBLIAI_ACCESS_TOKEN
+#   per-user OAuth mode:     OUBLIAI_TELNYX_CLIENT_ID, OUBLIAI_TELNYX_CLIENT_SECRET,
+#                            OUBLIAI_JWT_SIGNING_KEY, OUBLIAI_STORAGE_ENCRYPTION_KEY
 app = "oubliai-mcp"
 primary_region = "lax"
 

@@ -33,8 +33,9 @@ from fastmcp import FastMCP
 from oubliai_server.auth.provider import build_auth
 from oubliai_server.runtime.cors import browser_cors_middleware, browser_origins_from_env
 from oubliai_server.runtime.storage import ENCRYPTION_KEY_ENV, build_client_storage
+from oubliai_server.runtime.http import make_telnyx_client
 from oubliai_server.server import build_server
-from oubliai_server.spec import load_telnyx_spec
+from oubliai_server.spec import default_base_url, load_telnyx_spec
 
 REQUIRED_ENV = (
     "OUBLIAI_BASE_URL",
@@ -61,10 +62,39 @@ def _require_host_origin_protection() -> None:
         )
 
 
+SINGLE_TENANT_API_KEY_ENV = "OUBLIAI_TELNYX_API_KEY"
+SINGLE_TENANT_ACCESS_TOKEN_ENV = "OUBLIAI_ACCESS_TOKEN"
+_MIN_ACCESS_TOKEN_LENGTH = 24
+
+
+def _single_tenant_server(spec: dict[str, Any], api_key: str) -> FastMCP:
+    """Single-tenant mode: the server's own Telnyx key is used upstream and `/mcp` is gated by
+    FastMCP's `StaticTokenVerifier` with one shared bearer (`OUBLIAI_ACCESS_TOKEN`).
+
+    Use for a single operator's own account only: every caller who holds the access token
+    acts as that account. For per-user accounts use the OAuthProxy mode (default)."""
+    from fastmcp.server.auth.providers.jwt import StaticTokenVerifier
+
+    access_token = os.environ.get(SINGLE_TENANT_ACCESS_TOKEN_ENV, "")
+    if len(access_token) < _MIN_ACCESS_TOKEN_LENGTH:
+        raise SystemExit(
+            f"{SINGLE_TENANT_ACCESS_TOKEN_ENV} must be set to a random secret of at least "
+            f"{_MIN_ACCESS_TOKEN_LENGTH} characters when {SINGLE_TENANT_API_KEY_ENV} is used."
+        )
+    auth = StaticTokenVerifier(
+        tokens={access_token: {"client_id": "oubliai-operator", "scopes": []}}
+    )
+    client = make_telnyx_client(default_base_url(spec), api_key=api_key)
+    return build_server(spec, client=client, auth=auth, mask_error_details=True)
+
+
 def create_server() -> FastMCP:
-    env = _require_env()
     _require_host_origin_protection()
     spec = load_telnyx_spec()
+    api_key = os.environ.get(SINGLE_TENANT_API_KEY_ENV)
+    if api_key:
+        return _single_tenant_server(spec, api_key)
+    env = _require_env()
     auth = build_auth(
         spec,
         base_url=env["OUBLIAI_BASE_URL"],

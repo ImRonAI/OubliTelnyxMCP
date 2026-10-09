@@ -97,3 +97,30 @@ def test_repo_root_entrypoint_reexports_the_server_factory():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     assert module.create_server is entry.create_server
+
+
+def test_create_server_single_tenant_mode_needs_only_key_and_access_token(monkeypatch):
+    """With `OUBLIAI_TELNYX_API_KEY` + `OUBLIAI_ACCESS_TOKEN` set, the OAuthProxy variables are
+    not required: `/mcp` is gated by FastMCP's `StaticTokenVerifier` and Telnyx calls use the
+    server key (single-tenant demo mode)."""
+    from fastmcp.server.auth.providers.jwt import StaticTokenVerifier
+
+    for name in entry.REQUIRED_ENV:
+        monkeypatch.delenv(name, raising=False)
+    monkeypatch.setenv("OUBLIAI_TELNYX_API_KEY", "KEY_demo")
+    monkeypatch.setenv("OUBLIAI_ACCESS_TOKEN", "shared-access-token-123456")
+    monkeypatch.setenv("OUBLIAI_STORAGE_URL", "memory://")
+    monkeypatch.setattr(fastmcp.settings, "http_host_origin_protection", True)
+    server = entry.create_server()
+    assert isinstance(server.auth, StaticTokenVerifier)
+    assert "shared-access-token-123456" in server.auth.tokens
+
+
+def test_single_tenant_mode_refuses_short_access_token(monkeypatch):
+    for name in entry.REQUIRED_ENV:
+        monkeypatch.delenv(name, raising=False)
+    monkeypatch.setenv("OUBLIAI_TELNYX_API_KEY", "KEY_demo")
+    monkeypatch.setenv("OUBLIAI_ACCESS_TOKEN", "short")
+    monkeypatch.setattr(fastmcp.settings, "http_host_origin_protection", True)
+    with pytest.raises(SystemExit, match="OUBLIAI_ACCESS_TOKEN"):
+        entry.create_server()
