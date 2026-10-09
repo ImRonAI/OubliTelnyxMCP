@@ -7,6 +7,7 @@ import {
   type Resource,
   type Tool,
 } from "@modelcontextprotocol/client";
+// oubliai: `.js` suffixes on relative imports are required by the NodeNext module setting.
 import { getTheme, onThemeChange } from "./theme.js";
 import { HOST_STYLE_VARIABLES } from "./host-styles.js";
 
