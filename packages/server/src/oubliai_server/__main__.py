@@ -64,28 +64,42 @@ def _require_host_origin_protection() -> None:
 
 SINGLE_TENANT_API_KEY_ENV = "OUBLIAI_TELNYX_API_KEY"
 SINGLE_TENANT_ACCESS_TOKEN_ENV = "OUBLIAI_ACCESS_TOKEN"
+PLATFORM_AUTH_ENV = "OUBLIAI_PLATFORM_AUTH"
 _MIN_ACCESS_TOKEN_LENGTH = 24
 
 
 def _single_tenant_server(spec: dict[str, Any], api_key: str) -> FastMCP:
-    """Single-tenant mode: the server's own Telnyx key is used upstream and `/mcp` is gated by
-    FastMCP's `StaticTokenVerifier` with one shared bearer (`OUBLIAI_ACCESS_TOKEN`).
+    """Single-tenant mode: the server's own Telnyx key is used for every upstream call.
 
-    Use for a single operator's own account only: every caller who holds the access token
-    acts as that account. For per-user accounts use the OAuthProxy mode (default)."""
-    from fastmcp.server.auth.providers.jwt import StaticTokenVerifier
+    Callers are gated one of two ways:
+    - `OUBLIAI_ACCESS_TOKEN`: FastMCP's `StaticTokenVerifier` with that one shared bearer.
+    - `OUBLIAI_PLATFORM_AUTH=true`: no server-side verifier (`FastMCP(auth=None)`) because the
+      hosting platform authenticates callers in front of `/mcp` (Prefect Horizon's
+      `fastmcp-cloud` auth mode) and replaces the bearer with its own.
 
-    access_token = os.environ.get(SINGLE_TENANT_ACCESS_TOKEN_ENV, "")
-    if len(access_token) < _MIN_ACCESS_TOKEN_LENGTH:
-        raise SystemExit(
-            f"{SINGLE_TENANT_ACCESS_TOKEN_ENV} must be set to a random secret of at least "
-            f"{_MIN_ACCESS_TOKEN_LENGTH} characters when {SINGLE_TENANT_API_KEY_ENV} is used."
-        )
-    auth = StaticTokenVerifier(
-        tokens={access_token: {"client_id": "oubliai-operator", "scopes": []}}
-    )
+    Use for a single operator's own account only: every authenticated caller acts as that
+    account. For per-user accounts use the OAuthProxy mode (default)."""
     client = make_telnyx_client(default_base_url(spec), api_key=api_key)
-    return build_server(spec, client=client, auth=auth, mask_error_details=True)
+    access_token = os.environ.get(SINGLE_TENANT_ACCESS_TOKEN_ENV, "")
+    if access_token:
+        from fastmcp.server.auth.providers.jwt import StaticTokenVerifier
+
+        if len(access_token) < _MIN_ACCESS_TOKEN_LENGTH:
+            raise SystemExit(
+                f"{SINGLE_TENANT_ACCESS_TOKEN_ENV} must be a random secret of at least "
+                f"{_MIN_ACCESS_TOKEN_LENGTH} characters."
+            )
+        auth = StaticTokenVerifier(
+            tokens={access_token: {"client_id": "oubliai-operator", "scopes": []}}
+        )
+        return build_server(spec, client=client, auth=auth, mask_error_details=True)
+    if os.environ.get(PLATFORM_AUTH_ENV, "").lower() == "true":
+        return build_server(spec, client=client, auth=None, mask_error_details=True)
+    raise SystemExit(
+        f"{SINGLE_TENANT_API_KEY_ENV} is set: also set {SINGLE_TENANT_ACCESS_TOKEN_ENV} "
+        f"(shared bearer) or {PLATFORM_AUTH_ENV}=true (the hosting platform authenticates "
+        "callers). The server never runs without caller authentication."
+    )
 
 
 def create_server() -> FastMCP:

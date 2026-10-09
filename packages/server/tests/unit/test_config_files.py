@@ -124,3 +124,31 @@ def test_single_tenant_mode_refuses_short_access_token(monkeypatch):
     monkeypatch.setattr(fastmcp.settings, "http_host_origin_protection", True)
     with pytest.raises(SystemExit, match="OUBLIAI_ACCESS_TOKEN"):
         entry.create_server()
+
+
+def test_single_tenant_mode_delegates_caller_auth_to_platform_when_opted_in(monkeypatch):
+    """Hosted behind a platform login (Prefect Horizon `fastmcp-cloud` mode) the platform
+    authenticates callers and the server must not add a second bearer check:
+    `OUBLIAI_TELNYX_API_KEY` + `OUBLIAI_PLATFORM_AUTH=true` -> FastMCP `auth=None`."""
+    for name in entry.REQUIRED_ENV:
+        monkeypatch.delenv(name, raising=False)
+    monkeypatch.delenv("OUBLIAI_ACCESS_TOKEN", raising=False)
+    monkeypatch.setenv("OUBLIAI_TELNYX_API_KEY", "KEY_demo")
+    monkeypatch.setenv("OUBLIAI_PLATFORM_AUTH", "true")
+    monkeypatch.setenv("OUBLIAI_STORAGE_URL", "memory://")
+    monkeypatch.setattr(fastmcp.settings, "http_host_origin_protection", True)
+    server = entry.create_server()
+    assert server.auth is None
+
+
+def test_single_tenant_mode_without_access_token_or_platform_opt_in_refuses(monkeypatch):
+    """Never run open by accident: with the API key set, either a shared bearer or an explicit
+    platform-auth opt-in is required."""
+    for name in entry.REQUIRED_ENV:
+        monkeypatch.delenv(name, raising=False)
+    monkeypatch.delenv("OUBLIAI_ACCESS_TOKEN", raising=False)
+    monkeypatch.delenv("OUBLIAI_PLATFORM_AUTH", raising=False)
+    monkeypatch.setenv("OUBLIAI_TELNYX_API_KEY", "KEY_demo")
+    monkeypatch.setattr(fastmcp.settings, "http_host_origin_protection", True)
+    with pytest.raises(SystemExit, match="OUBLIAI_ACCESS_TOKEN|OUBLIAI_PLATFORM_AUTH"):
+        entry.create_server()
