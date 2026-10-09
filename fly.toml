@@ -1,0 +1,36 @@
+# Fly Launch configuration for the Oubliai MCP server.
+# Runtime secrets are set with `fly secrets set` (never here): OUBLIAI_TELNYX_CLIENT_ID,
+# OUBLIAI_TELNYX_CLIENT_SECRET, OUBLIAI_JWT_SIGNING_KEY, OUBLIAI_STORAGE_ENCRYPTION_KEY.
+app = "oubliai-mcp"
+primary_region = "lax"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  OUBLIAI_BASE_URL = "https://oubliai-mcp.fly.dev"
+  OUBLIAI_ALLOWED_CLIENT_REDIRECT_URIS = '["https://claude.ai/api/mcp/auth_callback","http://localhost:*"]'
+  FASTMCP_HTTP_HOST_ORIGIN_PROTECTION = "true"
+  FASTMCP_HTTP_ALLOWED_HOSTS = '["oubliai-mcp.fly.dev"]'
+  # Single machine: FileTree storage persists on the volume below across restarts.
+  OUBLIAI_STORAGE_URL = "file:///data/oubliai-storage"
+
+[[mounts]]
+  source = "oubliai_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  # Keep one machine up: OAuth state and task Docket are in-process on a single instance.
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+  [[http_service.checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "20s"
+    method = "GET"
+    path = "/.well-known/oauth-protected-resource/mcp"
