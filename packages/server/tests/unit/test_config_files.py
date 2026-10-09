@@ -74,3 +74,16 @@ def test_env_example_names_every_required_variable_and_no_values():
         key, _, value = line.partition("=")
         if key in secrets:
             assert value == "", f"{key} must be left blank in .env.example"
+
+
+def test_repo_root_entrypoint_reexports_the_server_factory():
+    """Horizon reads `requirements.txt` and `server.py` at the repository root; they must
+    install packages/server and expose the same `create_server` factory as `fastmcp.json`."""
+    import importlib.util
+
+    requirements = (REPO_ROOT / "requirements.txt").read_text().splitlines()
+    assert "./packages/server" in [line.strip() for line in requirements]
+    spec = importlib.util.spec_from_file_location("root_server", REPO_ROOT / "server.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    assert module.create_server is entry.create_server

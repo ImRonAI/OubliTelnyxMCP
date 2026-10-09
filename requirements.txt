@@ -1,0 +1,3 @@
+# Horizon/pip entry for the Python MCP server. The real manifest is packages/server/pyproject.toml;
+# this installs that package (and its pinned dependencies) from the repository root.
+./packages/server
