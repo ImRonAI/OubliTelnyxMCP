@@ -348,6 +348,47 @@ export function newAppBridge(
   // sending requests immediately after the initialization handshake, so any
   // handlers registered after connect() might miss early requests.
 
+  appBridge.oncalltool = async (params, extra) => {
+    log.info("Tool call from View:", params.name);
+    const direct = (await serverInfo.client.callTool(params, {
+      signal: extra.mcpReq.signal,
+    })) as CallToolResult;
+    const firstBlock = direct.content?.[0];
+    const firstText =
+      direct.isError && firstBlock && "text" in firstBlock && typeof firstBlock.text === "string"
+        ? firstBlock.text
+        : "";
+    if (!firstText.startsWith("Unknown tool:")) {
+      return direct;
+    }
+    const code = `return await call_tool(${JSON.stringify(params.name)}, ${JSON.stringify(params.arguments ?? {})})`;
+    const viaExecute = (await serverInfo.client.callTool(
+      { name: "execute", arguments: { code } },
+      { signal: extra.mcpReq.signal },
+    )) as CallToolResult;
+    const execBlock = viaExecute.content?.[0];
+    if (
+      !viaExecute.isError &&
+      !viaExecute.structuredContent &&
+      execBlock &&
+      "text" in execBlock &&
+      typeof execBlock.text === "string"
+    ) {
+      try {
+        const parsed: unknown = JSON.parse(execBlock.text);
+        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+          return {
+            ...viaExecute,
+            structuredContent: parsed as Record<string, unknown>,
+          };
+        }
+      } catch {
+        // leave text result as-is
+      }
+    }
+    return viaExecute;
+  };
+
   appBridge.onmessage = async (params, _extra) => {
     log.info("Message from MCP App:", params);
     callbacks?.onMessage?.(params);

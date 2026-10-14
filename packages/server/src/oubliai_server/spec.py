@@ -5,8 +5,16 @@ import os
 from pathlib import Path
 from typing import Any
 
-# packages/server/src/oubliai_server/spec.py -> repository root
-_REPO_ROOT = Path(__file__).resolve().parents[4]
+def _find_repo_root() -> Path:
+    rel = Path("docs") / "reference" / "telnyx" / "openapi.json"
+    for base in (Path(__file__).resolve(), Path.cwd().resolve(), Path("/app/applet")):
+        for candidate in (base, *base.parents):
+            if (candidate / rel).is_file():
+                return candidate
+    return Path(__file__).resolve().parents[4]
+
+
+_REPO_ROOT = _find_repo_root()
 CANONICAL_SPEC_PATH = _REPO_ROOT / "docs" / "reference" / "telnyx" / "openapi.json"
 # RFC 8414 metadata served at https://api.telnyx.com/.well-known/oauth-authorization-server.
 # Used ONLY for `scopes_supported`: live Telnyx rejects the schema's single `admin` scope
