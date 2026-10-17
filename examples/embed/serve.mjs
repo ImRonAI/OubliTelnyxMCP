@@ -33,7 +33,12 @@ app.get("/healthz", (_req, res) => {
 app.get("/api/connection", (_req, res) => {
   const url = process.env.OUBLIAI_MCP_URL;
   const token = process.env.OUBLIAI_TOKEN;
-  if (process.env.OUBLIAI_DEV_CONNECTION !== "1" || !url || !token) {
+  if (
+    process.env.NODE_ENV === "production" ||
+    process.env.OUBLIAI_DEV_CONNECTION !== "1" ||
+    !url ||
+    !token
+  ) {
     res.status(404).json({ error: "connection not configured" });
     return;
   }
@@ -42,7 +47,7 @@ app.get("/api/connection", (_req, res) => {
 
 app.use(express.static(DIST));
 
-const server = app.listen(PORT, (error) => {
+const server = app.listen(PORT, "localhost", (error) => {
   if (error) {
     console.error("Error starting embed server:", error);
     process.exit(1);

@@ -92,9 +92,9 @@ def _single_tenant_server(spec: dict[str, Any], api_key: str) -> FastMCP:
         auth = StaticTokenVerifier(
             tokens={access_token: {"client_id": "oubliai-operator", "scopes": []}}
         )
-        return build_server(spec, client=client, auth=auth, mask_error_details=True)
+        return build_server(spec, client=client, auth=auth)
     if os.environ.get(PLATFORM_AUTH_ENV, "").lower() == "true":
-        return build_server(spec, client=client, auth=None, mask_error_details=True)
+        return build_server(spec, client=client, auth=None)
     raise SystemExit(
         f"{SINGLE_TENANT_API_KEY_ENV} is set: also set {SINGLE_TENANT_ACCESS_TOKEN_ENV} "
         f"(shared bearer) or {PLATFORM_AUTH_ENV}=true (the hosting platform authenticates "
@@ -118,7 +118,7 @@ def create_server() -> FastMCP:
         allowed_client_redirect_uris=json.loads(env["OUBLIAI_ALLOWED_CLIENT_REDIRECT_URIS"]),
         client_storage=build_client_storage(),
     )
-    return build_server(spec, auth=auth, mask_error_details=True)
+    return build_server(spec, auth=auth)
 
 
 def run_options() -> dict[str, Any]:

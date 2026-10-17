@@ -21,7 +21,7 @@ async def test_default_model_visible_tools(telnyx_spec):
     server = build_server(telnyx_spec, client=_offline_client())
     async with Client(server) as client:
         names = sorted(tool.name for tool in await client.list_tools())
-    assert names == ["execute", "generate_prefab_ui", "get_schema", "search"]
+    assert names == ["execute", "generate_prefab_ui", "get_schema", "search", "search_prefab_components", "tags"]
 
 
 async def test_generative_ui_keeps_app_metadata(telnyx_spec):

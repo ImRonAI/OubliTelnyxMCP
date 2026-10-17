@@ -80,7 +80,7 @@ async def test_workspace_entry_reachable_via_execute(telnyx_spec, app):
     async with asgi_client(server, auth="user-token") as client:
         listed = sorted(tool.name for tool in await client.list_tools())
         result = await client.call_tool("execute", {"code": f"return await call_tool('{entry}', {{}})"})
-    assert listed == ["execute", "generate_prefab_ui", "get_schema", "search"]
+    assert listed == ["execute", "generate_prefab_ui", "get_schema", "search", "search_prefab_components", "tags"]
     payload = result.structured_content
     assert payload["$prefab"] == {"version": "0.3"}
     refs = _tool_refs(payload, [])

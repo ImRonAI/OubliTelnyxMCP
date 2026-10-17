@@ -29,22 +29,23 @@ async with connect("http://127.0.0.1:8000/mcp", auth=bearer("user-token")) as co
     ...
 ```
 
-Real Telnyx OAuth login (browser flow):
+OAuth login (browser flow) with encrypted token storage:
 
 ```python
+import os
 from pathlib import Path
 from oubliai_client import connect, oauth, file_token_storage
 
-async with connect(
-    url,
-    auth=oauth(mcp_url=url, token_storage=file_token_storage(Path.home() / ".oubliai" / "tokens")),
-) as conn:
+storage = file_token_storage(Path.home() / ".oubliai" / "tokens", os.environ["OUBLIAI_CLIENT_TOKEN_KEY"])
+async with connect(url, auth=oauth(token_storage=storage)) as conn:
     ...
 ```
 
-The first run opens the consent page; tokens persist in the `FileTreeStore`
-directory. `bearer(token)` and `oauth(**kwargs)` return `fastmcp.client.auth`
-objects; `file_token_storage(directory)` returns a `FileTreeStore`.
+The first run opens the server's sign-in page; tokens persist encrypted on disk.
+Generate the key once with `python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"`.
+`bearer(token)` and `oauth(**kwargs)` return `fastmcp.client.auth` objects;
+`file_token_storage(directory, key)` returns a `FernetEncryptionWrapper` around a
+`FileTreeStore` (FastMCP docs, clients/auth/oauth, "Token Storage").
 
 ## Catalog
 

@@ -7,6 +7,7 @@ Telnyx OAuth login (user gate).
 """
 
 import asyncio
+import os
 import json
 from collections.abc import Mapping
 from pathlib import Path
@@ -74,16 +75,10 @@ async def track_number_order(
     connection: OubliaiConnection,
     order_id: str,
     *,
-    poll_seconds: float = 1.0,
     recorder: ProgressRecorder | None = None,
 ) -> None:
-    task = await await_telnyx_resource_task(
-        connection,
-        kind="number_order",
-        resource_id=order_id,
-        poll_interval_seconds=poll_seconds,
-    )
-    result = await wait_for(task, timeout=30.0)
+    task = await await_telnyx_resource_task(connection, kind="number_order", resource_id=order_id)
+    result = await wait_for(task, timeout=60.0)
     payload: Mapping[str, Any] = result.structured_content or {}
     print(f"number order {order_id}: {payload.get('status')} (polls={payload.get('polls')})")
     if recorder is not None:
@@ -92,12 +87,10 @@ async def track_number_order(
 
 async def main() -> None:
     url = _mcp_url()
-    print(f"NOTE: this performs a real Telnyx OAuth login against {url}")
-    print(f"Tokens persist under {TOKEN_DIR} (FileTreeStore).")
-    async with connect(
-        url,
-        auth=oauth(mcp_url=url, token_storage=file_token_storage(TOKEN_DIR)),
-    ) as connection:
+    print(f"NOTE: this performs a real OAuth login against {url}")
+    print(f"Tokens persist encrypted under {TOKEN_DIR}.")
+    storage = file_token_storage(TOKEN_DIR, os.environ["OUBLIAI_CLIENT_TOKEN_KEY"])
+    async with connect(url, auth=oauth(token_storage=storage)) as connection:
         await summarize(connection)
         await show_catalog(connection)
         await open_numbers(connection)

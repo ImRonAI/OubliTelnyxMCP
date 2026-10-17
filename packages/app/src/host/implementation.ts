@@ -1,4 +1,4 @@
-import { RESOURCE_MIME_TYPE, getToolUiResourceUri, type McpUiSandboxProxyReadyNotification, AppBridge, PostMessageTransport, type McpUiResourceCsp, type McpUiResourcePermissions, buildAllowAttribute, type McpUiUpdateModelContextRequest, type McpUiMessageRequest } from "@modelcontextprotocol/ext-apps/app-bridge";
+import { RESOURCE_MIME_TYPE, getToolUiResourceUri, isToolVisibilityModelOnly, type McpUiSandboxProxyReadyNotification, AppBridge, PostMessageTransport, type McpUiResourceCsp, type McpUiResourcePermissions, buildAllowAttribute, type McpUiUpdateModelContextRequest, type McpUiMessageRequest } from "@modelcontextprotocol/ext-apps/app-bridge";
 import {
   Client,
   SSEClientTransport,
@@ -294,7 +294,11 @@ export function newAppBridge(
   options?: AppBridgeOptions,
 ): AppBridge {
   const serverCapabilities = serverInfo.client.getServerCapabilities();
-  const appBridge = new AppBridge(serverInfo.client, IMPLEMENTATION, {
+  // oubliai: `null` client + manual handlers (the documented "Without MCP client" form) so
+  // the host can enforce the MCP Apps rule: "Host MUST reject `tools/call` requests from
+  // apps for tools that don't include "app" in visibility". With a client, `connect()`
+  // installs an unchecked `tools/call` forwarder.
+  const appBridge = new AppBridge(null, IMPLEMENTATION, {
     openLinks: {},
     serverTools: serverCapabilities?.tools,
     serverResources: serverCapabilities?.resources,
@@ -313,6 +317,25 @@ export function newAppBridge(
       availableDisplayModes: ["inline", "fullscreen"],
     },
   });
+
+  const { client } = serverInfo;
+  // Tools absent from `tools/list` (app backends behind CodeMode, addressed by identity)
+  // carry no visibility the host can read; the server's auth applies to them as to any call.
+  appBridge.oncalltool = async (params, extra) => {
+    const tool = serverInfo.tools.get(params.name);
+    if (tool && isToolVisibilityModelOnly(tool)) {
+      throw new Error(`Tool "${params.name}" is not available to apps`);
+    }
+    return client.request({ method: "tools/call", params }, { signal: extra.mcpReq.signal });
+  };
+  if (serverCapabilities?.resources) {
+    appBridge.onreadresource = async (params, extra) =>
+      client.request({ method: "resources/read", params }, { signal: extra.mcpReq.signal });
+    appBridge.onlistresources = async (params, extra) =>
+      client.request({ method: "resources/list", params }, { signal: extra.mcpReq.signal });
+    appBridge.onlistresourcetemplates = async (params, extra) =>
+      client.request({ method: "resources/templates/list", params }, { signal: extra.mcpReq.signal });
+  }
 
   // Listen for theme changes (from toggle or system) and notify the app
   onThemeChange((newTheme) => {

@@ -12,9 +12,11 @@ import httpx2
 from fastmcp import FastMCP
 from fastmcp.server.lifespan import lifespan
 from fastmcp.apps.generative import GenerativeUI
-from fastmcp.experimental.transforms.code_mode import CodeMode
+from fastmcp.experimental.transforms.code_mode import CodeMode, GetSchemas, GetTags, Search
 from fastmcp.server.providers.openapi import MCPType, OpenAPIProvider, RouteMap
 from fastmcp.utilities.openapi import HTTPRoute
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 
 from fastmcp_tasks import TasksExtension
 
@@ -45,8 +47,9 @@ def build_operations(
 ) -> FastMCP:
     """Telnyx operations generated from the schema, discoverable only through CodeMode.
 
-    `mask_error_details` must match the parent's: FastMCP warns at mount time otherwise,
-    because upstream error details would leak through the mounted child.
+    `mask_error_details` defaults to FastMCP's own default (off), so Telnyx error bodies and
+    sandbox errors reach the model. Pass the parent's value: FastMCP warns at mount time
+    when the two differ.
     """
     excluded_routes = foreign_server_routes(spec)
 
@@ -72,7 +75,14 @@ def build_operations(
     for domain_app in ALL_APPS:
         operations.add_provider(domain_app)
     register_task_tools(operations)
-    operations.add_transform(CodeMode(max_tool_calls=max_tool_calls))
+    # Schema tags (213 Telnyx categories) are on every tool; code-mode.md "Three-Stage":
+    # "If your tools use tags, add GetTags" so search can be narrowed by category.
+    operations.add_transform(
+        CodeMode(
+            discovery_tools=[GetTags(), Search(), GetSchemas()],
+            max_tool_calls=max_tool_calls,
+        )
+    )
     return operations
 
 
@@ -106,10 +116,15 @@ def build_server(
 
     server = FastMCP(
         SERVER_NAME,
-        providers=[GenerativeUI(include_components_tool=False)],
+        providers=[GenerativeUI()],
         lifespan=close_owned_client,
         **fastmcp_kwargs,
     )
+    # http-deployment.md, "Health Checks": custom routes are unauthenticated by design.
+    @server.custom_route("/health", methods=["GET"])
+    async def health(_: Request) -> JSONResponse:
+        return JSONResponse({"status": "healthy"})
+
     server.add_extension(tasks if tasks is not None else build_tasks_extension())
     server.mount(
         build_operations(spec, client, mask_error_details=fastmcp_kwargs.get("mask_error_details"))

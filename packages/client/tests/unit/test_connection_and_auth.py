@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pytest
+from cryptography.fernet import Fernet
 from fastmcp import Client, FastMCP
 from fastmcp.client.auth import BearerAuth, OAuth
 from fastmcp.client.transports import StreamableHttpTransport
@@ -50,14 +51,14 @@ def test_connect_rejects_non_http_url() -> None:
 
 
 def test_auth_helpers_return_native_fastmcp_providers(tmp_path: Path) -> None:
-    storage = file_token_storage(tmp_path / "tokens")
+    storage = file_token_storage(tmp_path / "tokens", Fernet.generate_key())
 
     assert isinstance(bearer("secret"), BearerAuth)
     assert isinstance(oauth(scopes=["openid"], token_storage=storage), OAuth)
 
 
 def test_oauth_passes_documented_provider_options(tmp_path: Path) -> None:
-    storage = file_token_storage(tmp_path / "tokens")
+    storage = file_token_storage(tmp_path / "tokens", Fernet.generate_key())
     provider = oauth(
         mcp_url="https://example.test/mcp",
         scopes="openid profile",
@@ -89,7 +90,7 @@ async def test_server_summary_uses_negotiated_public_metadata() -> None:
 
 async def test_file_token_storage_persists_values(tmp_path: Path) -> None:
     directory = tmp_path / "tokens"
-    storage = file_token_storage(directory)
+    storage = file_token_storage(directory, Fernet.generate_key())
 
     await storage.put("https://example.test/tokens", {"access_token": "redacted"})
 
@@ -97,3 +98,5 @@ async def test_file_token_storage_persists_values(tmp_path: Path) -> None:
         "access_token": "redacted"
     }
     assert directory.is_dir()
+    on_disk = "".join(f.read_text() for f in directory.rglob("*.json"))
+    assert "redacted" not in on_disk

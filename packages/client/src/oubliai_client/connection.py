@@ -1,4 +1,5 @@
 import datetime
+import inspect
 import ssl
 from collections.abc import Sequence
 from typing import Literal, TypeAlias, cast
@@ -48,6 +49,16 @@ def connect(
     extensions: Sequence[ClientExtension] | None = None,
 ) -> OubliaiConnection:
     if isinstance(target, Client):
+        configured = {
+            key
+            for key, value in locals().items()
+            if key != "target" and value != _CONNECT_DEFAULTS[key]
+        }
+        if configured:
+            raise TypeError(
+                f"connect() received an existing Client; options {sorted(configured)} would be "
+                "ignored. Configure the Client itself, or pass a URL."
+            )
         return target
     transport = StreamableHttpTransport(target, auth=auth)
     return cast(
@@ -74,6 +85,13 @@ def connect(
             extensions=extensions,
         ),
     )
+
+
+_CONNECT_DEFAULTS = {
+    name: parameter.default
+    for name, parameter in inspect.signature(connect).parameters.items()
+    if name != "target"
+}
 
 
 def server_summary(client: OubliaiConnection) -> dict[str, str | None]:

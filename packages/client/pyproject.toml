@@ -3,11 +3,13 @@ name="oubliai-client"
 version="0.0.0"
 requires-python=">=3.12"
 dependencies=[
-    "fastmcp>=4.0.10,<5",
-    "fastmcp-tasks>=4.0.10,<5",
-    "httpx2>=2.13,<3",
-    "mcp>=2.2.0,<3",
-    "py-key-value-aio>=0.4.6,<1",
+    "fastmcp==4.1.0",
+    "fastmcp-tasks==4.1.0",
+    "httpx2==2.13.1",
+    "mcp==2.3.0",
+    "mcp-types==2.3.0",
+    "cryptography>=43",
+    "py-key-value-aio[filetree,wrappers-encryption]==0.4.6",
 ]
 
 [project.optional-dependencies]

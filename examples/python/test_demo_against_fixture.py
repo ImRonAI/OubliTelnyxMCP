@@ -1,6 +1,7 @@
 """Demo functions against the in-process server fixture; no live Telnyx calls."""
 
 from collections.abc import AsyncIterator, Callable
+from datetime import timedelta
 
 import httpx2
 import pytest
@@ -11,6 +12,7 @@ from fastmcp.utilities.tests import asgi_client
 from fastmcp_tasks import TasksExtension
 
 from oubliai_server import build_server
+from oubliai_server.runtime import tasks as server_tasks
 from oubliai_server.runtime.http import make_telnyx_client
 from oubliai_server.spec import load_telnyx_spec
 
@@ -115,7 +117,9 @@ async def test_renderer_info_prints_mime_and_uri(
 async def test_track_number_order_prints_success(
     real_server,
     capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    monkeypatch.setattr(server_tasks, "POLL_INTERVAL", timedelta(seconds=0.01))
     received: list[httpx2.Request] = []
     statuses = ["pending", "success"]
 
@@ -126,7 +130,7 @@ async def test_track_number_order_prints_success(
         return httpx2.Response(200, json={"data": {"id": "no-1", "status": status}})
 
     async with asgi_client(real_server(handler), auth="user-token") as client:
-        await track_number_order(client, "no-1", poll_seconds=0.01)
+        await track_number_order(client, "no-1")
 
     out = capsys.readouterr().out
     assert "no-1: success (polls=2)" in out

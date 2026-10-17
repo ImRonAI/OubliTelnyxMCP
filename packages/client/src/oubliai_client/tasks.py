@@ -1,3 +1,4 @@
+import asyncio
 from typing import Literal
 
 from fastmcp.client.client import CallToolResult
@@ -13,27 +14,20 @@ async def await_telnyx_resource_task(
     *,
     kind: ResourceKind,
     resource_id: str,
-    poll_interval_seconds: float | None = None,
-    max_polls: int | None = None,
 ) -> ToolTask:
-    arguments: dict[str, str | float | int] = {
-        "kind": kind,
-        "resource_id": resource_id,
-    }
-    if poll_interval_seconds is not None:
-        arguments["poll_interval_seconds"] = poll_interval_seconds
-    if max_polls is not None:
-        arguments["max_polls"] = max_polls
-    return await call_tool_task(connection, "await_telnyx_resource", arguments)
+    return await call_tool_task(
+        connection, "await_telnyx_resource", {"kind": kind, "resource_id": resource_id}
+    )
 
 
 async def wait_for(
     task: ToolTask,
     *,
-    timeout: float = 300.0,
+    timeout: float = 72 * 3600.0,
 ) -> CallToolResult:
-    await task.wait(timeout=timeout)
-    return await task.result()
+    """Drive the task to its result; answers `input_required` through the client's
+    handlers (clients/tasks.md: `task.result()`), bounded by `timeout`."""
+    return await asyncio.wait_for(task.result(), timeout)
 
 
 __all__ = [

@@ -25,9 +25,9 @@ primary_region = "lax"
   internal_port = 8080
   force_https = true
   # Keep one machine up: OAuth state and task Docket are in-process on a single instance.
+  # Fly recommends setting both auto options the same way.
   auto_stop_machines = "off"
-  auto_start_machines = true
-  min_machines_running = 1
+  auto_start_machines = false
   processes = ["app"]
 
   [[http_service.checks]]
@@ -35,4 +35,8 @@ primary_region = "lax"
     timeout = "5s"
     grace_period = "20s"
     method = "GET"
-    path = "/.well-known/oauth-protected-resource/mcp"
+    path = "/health"
+    # Fly checks the machine over the private network; the Host guard only accepts the
+    # public hostname, so send it explicitly (fly.toml reference, http_service.checks.headers).
+    [http_service.checks.headers]
+      Host = "oubliai-mcp.fly.dev"

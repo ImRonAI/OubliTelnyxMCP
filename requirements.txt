@@ -1,14 +1,14 @@
 # Horizon/pip entry for the Python MCP server (Python >=3.12).
 # Horizon runs `uv pip install --system -r requirements.txt` from the repository root, then
-# `fastmcp inspect <entrypoint>`. Installing packages/server puts `oubliai_server` in
-# site-packages so either entrypoint form works:
+# `fastmcp inspect <entrypoint>`. The package itself is not installed: both entrypoints put
+# packages/server/src on sys.path, so `spec.py` finds docs/reference/telnyx in the checkout.
 #   server.py:create_server
 #   packages/server/src/oubliai_server/__main__.py:create_server
-# The pins below mirror packages/server/pyproject.toml (the package also declares them).
-./packages/server
-fastmcp[apps,code-mode,tasks]>=4.0.10,<5
-mcp>=2.2.0,<3
-prefab-ui>=0.20.2,<1
-httpx2>=2.13,<3
-fastmcp-tasks>=4.0.10,<5
-py-key-value-aio[filetree,redis,wrappers-encryption]>=0.4.6,<1
+# Exact pins (Horizon resolves dependencies fresh on every build); keep them identical to
+# packages/server/pyproject.toml.
+fastmcp[apps,code-mode,tasks]==4.1.0
+mcp==2.3.0
+prefab-ui==0.20.2
+httpx2==2.13.1
+fastmcp-tasks==4.1.0
+py-key-value-aio[filetree,redis,wrappers-encryption]==0.4.6

@@ -18,9 +18,9 @@ Start the local server (or point `mcp.json` at a deployed host), then:
 ```
 
 `main()` reads `mcpServers.oubliai-telnyx.url` from the root `mcp.json`
-and authenticates with `oauth(mcp_url=url, token_storage=file_token_storage(~/.oubliai/tokens))`.
-The first run opens a browser consent page. **Running the demo performs a
-real Telnyx login — a user gate.**
+and authenticates with `oauth(token_storage=file_token_storage(~/.oubliai/tokens, $OUBLIAI_CLIENT_TOKEN_KEY))`
+(encrypted at rest). The first run opens the server's sign-in page. **Running the demo performs a
+real login — a user gate.**
 
 ## Test (no live login)
 

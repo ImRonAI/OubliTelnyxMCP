@@ -77,8 +77,10 @@ def test_env_example_names_every_required_variable_and_no_values():
 
 
 def test_repo_root_entrypoint_reexports_the_server_factory():
-    """Horizon reads `requirements.txt` and `server.py` at the repository root; they must
-    install packages/server and expose the same `create_server` factory as `fastmcp.json`."""
+    """Horizon reads `requirements.txt` and `server.py` at the repository root; they must pin
+    the manifest's dependencies exactly and expose the same `create_server` factory as
+    `fastmcp.json`. The package is imported from the checkout through `server.py`'s path shim
+    (installing a copy would move `spec.py` away from docs/reference/telnyx)."""
     import importlib.util
 
     import tomllib
@@ -89,10 +91,8 @@ def test_repo_root_entrypoint_reexports_the_server_factory():
         if line.strip() and not line.startswith("#")
     }
     pyproject = tomllib.loads((PACKAGE_ROOT / "pyproject.toml").read_text())
-    # Horizon installs this file with `uv pip install -r`; the local package line is what puts
-    # `oubliai_server` in site-packages, the pins mirror the manifest for installers that drop extras.
-    assert "./packages/server" in requirements
-    assert requirements - {"./packages/server"} == set(pyproject["project"]["dependencies"])
+    assert requirements == set(pyproject["project"]["dependencies"])
+    assert all("==" in requirement for requirement in requirements)
     spec = importlib.util.spec_from_file_location("root_server", REPO_ROOT / "server.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)

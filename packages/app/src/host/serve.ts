@@ -35,8 +35,11 @@ const SERVERS: string[] = process.env.SERVERS
   : ["http://localhost:3001/mcp"];
 
 // ============ Host Server (port 8080) ============
+// oubliai: no CORS on the host origin. The host page, `/api/connection` and `/api/chat`
+// are same-origin; a permissive CORS policy would let any website read the dev token.
+// Both servers bind loopback only (`localhost`), never every interface.
+const LOOPBACK = "localhost";
 const hostApp = express();
-hostApp.use(cors());
 hostApp.use(express.json());
 hostApp.use(
   createChatRouter({
@@ -71,7 +74,12 @@ hostApp.get("/healthz", (_req, res) => {
 hostApp.get("/api/connection", (_req, res) => {
   const mcpUrl = process.env.OUBLIAI_MCP_URL;
   const userToken = process.env.OUBLIAI_USER_TOKEN;
-  if (process.env.OUBLIAI_DEV_CONNECTION !== "1" || !mcpUrl || !userToken) {
+  if (
+    process.env.NODE_ENV === "production" ||
+    process.env.OUBLIAI_DEV_CONNECTION !== "1" ||
+    !mcpUrl ||
+    !userToken
+  ) {
     res.status(404).json({ error: "connection not configured" });
     return;
   }
@@ -166,7 +174,7 @@ sandboxApp.use((_req, res) => {
 });
 
 // ============ Start both servers ============
-hostApp.listen(HOST_PORT, (err) => {
+hostApp.listen(HOST_PORT, LOOPBACK, (err) => {
   if (err) {
     console.error("Error starting server:", err);
     process.exit(1);
@@ -174,7 +182,7 @@ hostApp.listen(HOST_PORT, (err) => {
   console.log(`Host server:    http://localhost:${HOST_PORT}`);
 });
 
-sandboxApp.listen(SANDBOX_PORT, (err) => {
+sandboxApp.listen(SANDBOX_PORT, LOOPBACK, (err) => {
   if (err) {
     console.error("Error starting server:", err);
     process.exit(1);

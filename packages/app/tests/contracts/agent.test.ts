@@ -177,12 +177,12 @@ test("prefab generator exposes released app metadata", async () => {
         app: {
           resourceUri: "ui://prefab/generative.html",
           mimeType: "text/html;profile=mcp-app",
-          csp: {
-            resourceDomains: ["https://cdn.jsdelivr.net"],
-          },
         },
       },
     ]);
+    // FastMCP 4.1.0 (#5612) keeps the GenerativeUI CSP on the renderer resource only; the
+    // host reads it from `resources/read` (`appResourcePromise`), not from tool metadata.
+    expect(extractToolParts(message)[0]?.app).not.toHaveProperty("csp");
   });
 });
 

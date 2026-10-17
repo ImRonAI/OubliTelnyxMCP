@@ -24,6 +24,7 @@ export type ChatRouteDeps = {
 };
 
 type DevConnectionEnv = {
+  readonly NODE_ENV?: string;
   readonly OUBLIAI_DEV_CONNECTION?: string;
   readonly OUBLIAI_MCP_URL?: string;
   readonly OUBLIAI_USER_TOKEN?: string;
@@ -33,6 +34,7 @@ export function devConnectionFromEnv(
   env: DevConnectionEnv,
 ): Connection | undefined {
   if (
+    env.NODE_ENV === "production" ||
     env.OUBLIAI_DEV_CONNECTION !== "1" ||
     !env.OUBLIAI_MCP_URL ||
     !env.OUBLIAI_USER_TOKEN
