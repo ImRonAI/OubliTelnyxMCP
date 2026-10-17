@@ -14,8 +14,8 @@
     "test:e2e": "playwright test -c tests/playwright.config.ts"
   },
   "dependencies": {
-    "oubliai-app": "link:../../packages/app",
-    "@modelcontextprotocol/ext-apps": "link:../../packages/app/node_modules/@modelcontextprotocol/ext-apps",
+    "oubliai-app": "*",
+    "@modelcontextprotocol/ext-apps": "2.0.3",
     "express": "^5.1.0"
   },
   "devDependencies": {

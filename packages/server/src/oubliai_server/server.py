@@ -5,15 +5,17 @@ CodeMode lives on the mounted operations server, and GenerativeUI is a provider 
 parent so its UI metadata stays directly advertised.
 """
 
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Sequence
 from typing import Any
 
 import httpx2
 from fastmcp import FastMCP
-from fastmcp.server.lifespan import lifespan
 from fastmcp.apps.generative import GenerativeUI
 from fastmcp.experimental.transforms.code_mode import CodeMode, GetSchemas, GetTags, Search
+from fastmcp.server.lifespan import lifespan
+from fastmcp.server.providers.addressing import parse_hashed_backend_name
 from fastmcp.server.providers.openapi import MCPType, OpenAPIProvider, RouteMap
+from fastmcp.tools.base import Tool
 from fastmcp.utilities.openapi import HTTPRoute
 from starlette.requests import Request
 from starlette.responses import JSONResponse
@@ -36,6 +38,23 @@ DEFAULT_MAX_TOOL_CALLS = 25
 # Schema tag on the OAuth handshake operations (authorize, token, introspect, register,
 # grants, JWKS, consent). They belong to the auth layer, not to the model's catalog.
 OAUTH_PROTOCOL_TAG = "OAuth Protocol"
+
+
+class _AppAwareCodeMode(CodeMode):
+    """CodeMode that also permits `execute` to dispatch identity-addressed (`<hash>_<name>`)
+    app backend tools when a gateway (e.g. Prefect Horizon) only routes `tools/list` names.
+
+    Bare app-only names remain excluded from `search`, `get_schema`, and `execute`.
+    """
+
+    @staticmethod
+    def _find_tool(name: str, tools: Sequence[Tool]) -> Tool | None:
+        found = CodeMode._find_tool(name, tools)
+        if found is not None:
+            return found
+        if parse_hashed_backend_name(name) is not None:
+            return Tool(name=name, parameters={"type": "object"})
+        return None
 
 
 def build_operations(
@@ -78,7 +97,7 @@ def build_operations(
     # Schema tags (213 Telnyx categories) are on every tool; code-mode.md "Three-Stage":
     # "If your tools use tags, add GetTags" so search can be narrowed by category.
     operations.add_transform(
-        CodeMode(
+        _AppAwareCodeMode(
             discovery_tools=[GetTags(), Search(), GetSchemas()],
             max_tool_calls=max_tool_calls,
         )

@@ -137,6 +137,28 @@ async def test_backends_are_not_reachable_through_execute(telnyx_spec):
     assert "numbers_list" in json.dumps([c.model_dump() for c in result.content])
 
 
+async def test_hashed_backends_are_reachable_through_execute_for_gateway_hosts(telnyx_spec):
+    """Identity-addressed (`<hash>_<name>`) backend calls succeed through `execute` for gateway proxies."""
+    received: list[httpx2.Request] = []
+
+    def telnyx(request: httpx2.Request) -> httpx2.Response:
+        received.append(request)
+        return httpx2.Response(200, json=ROWS)
+
+    server = _server(telnyx_spec, telnyx)
+    backend = hashed_backend_name(numbers_app.app.name, "numbers_list")
+    async with asgi_client(server, auth="user-token") as client:
+        result = await client.call_tool(
+            "execute",
+            {"code": f"return await call_tool('{backend}', {{'page_number': 2, 'page_size': 10}})"},
+        )
+    assert not result.is_error
+    (request,) = received
+    assert request.url.path == "/v2/phone_numbers"
+    assert dict(request.url.params) == {"page[number]": "2", "page[size]": "10"}
+    assert request.headers["authorization"] == "Bearer user-token"
+
+
 @pytest.mark.parametrize(
     ("app_module", "backend", "path"),
     [

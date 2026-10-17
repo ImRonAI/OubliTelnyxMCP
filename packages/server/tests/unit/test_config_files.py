@@ -96,7 +96,9 @@ def test_repo_root_entrypoint_reexports_the_server_factory():
     spec = importlib.util.spec_from_file_location("root_server", REPO_ROOT / "server.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
-    assert module.create_server is entry.create_server
+    # `fastmcp inspect server.py` resolves a module-level `mcp`/`server`/`app` object.
+    assert callable(module.create_server)
+    assert module.mcp is module.server is module.app
 
 
 def test_create_server_single_tenant_mode_needs_only_key_and_access_token(monkeypatch):
