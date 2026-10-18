@@ -12,3 +12,4 @@ prefab-ui==0.20.2
 httpx2==2.13.1
 fastmcp-tasks==4.1.0
 py-key-value-aio[filetree,redis,wrappers-encryption]==0.4.6
+deno==2.9.7

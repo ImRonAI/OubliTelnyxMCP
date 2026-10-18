@@ -24,6 +24,7 @@ from fastmcp_tasks import TasksExtension
 
 from oubliai_server.apps import ALL_APPS
 from oubliai_server.runtime.http import make_telnyx_client
+from oubliai_server.runtime.sandbox import prepare_prefab_sandbox_env
 from oubliai_server.runtime.tasks import build_tasks_extension, register_task_tools
 from oubliai_server.spec import (
     collision_names,
@@ -133,6 +134,7 @@ def build_server(
             if owned_client is not None:
                 await owned_client.aclose()
 
+    prepare_prefab_sandbox_env()
     server = FastMCP(
         SERVER_NAME,
         providers=[GenerativeUI()],
